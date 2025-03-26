@@ -1,0 +1,39 @@
+{
+  "name": "example-with-mdx",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "deploy": "vinxi build && cd .output && deployctl deploy --project=intergateio server/index.mjs"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "^2.3.0",
+    "@solid-primitives/context": "^0.3.0",
+    "@solidjs/meta": "^0.29.4",
+    "solid-js": "^1.9.5",
+    "solid-mdx": "^0.0.7"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "unist-util-mdx-define": "^1.1.1",
+    "vinxi": "^0.5.3",
+    "yaml": "^2.7.0",
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.1.0",
+    "@vinxi/plugin-mdx": "^3.7.1",
+    "estree-util-value-to-estree": "^3.3.2",
+    "mdast-util-frontmatter": "^2.0.1",
+    "micromark-extension-frontmatter": "^2.0.0",
+    "postcss": "^8.5.3",
+    "postcss-nested": "^7.0.2"
+  }
+}
