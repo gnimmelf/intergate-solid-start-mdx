@@ -1,6 +1,7 @@
 import { defineConfig } from "@solidjs/start/config";
 /* @ts-ignore */
 import pkgMdx from "@vinxi/plugin-mdx";
+import remarkBehead from 'remark-behead';
 import remarkParseFrontmatter from './scripts/remarkParseFrontmatter';
 
 const { default: mdx } = pkgMdx;
@@ -15,8 +16,8 @@ export default defineConfig({
         // Skip React default imports
       })({
         remarkPlugins: [
-          remarkParseFrontmatter,
-
+          [remarkBehead, {minDepth: 2}],
+          [remarkParseFrontmatter],
         ],
         jsx: true,
         jsxImportSource: "solid-js",

@@ -2,7 +2,10 @@
 title: Intergate.io
 intro: ECMAScript (/ˈɛkməskrɪpt/; ES)
 ---
+import { ArticleList } from "../components/ArticleList"
 
-# {frontmatter.title}
+# Welcome
 
 This is `index.mdx`.
+
+<ArticleList filterFn={(article) => article.id.startsWith('/blog/')}/>
