@@ -1,4 +1,5 @@
 //  https://github.com/solidjs/solid-start/blob/main/packages/start/src/router/lazyRoute.ts
+import camelcaseKeys from 'camelcase-keys';
 
 export type MdxMetaData = {
   title: string;
@@ -6,14 +7,14 @@ export type MdxMetaData = {
   [k: string]: any
 }
 
-export type MdxModule = {
+export type ModuleData = {
   meta: MdxMetaData
   id: string
   [k: string]: any
 }
 
-export async function getRouteComponentExport(id: string, $component: any, exported = "meta") {
-  let module: MdxModule
+export async function getRouteComponentExport(id: string, $component: any, exported = "meta"): Promise<ModuleData> {
+  let module;
 
   if (import.meta.env.DEV) {
     const manifest = import.meta.env.SSR
@@ -23,7 +24,7 @@ export async function getRouteComponentExport(id: string, $component: any, expor
     // import() throws if a module doesn't exist, which includes any
     // modules loaded by the route itself, so it's important we catch here
     try {
-      module = await manifest.inputs[$component.src].import<MdxModule>();
+      module = await manifest.inputs[$component.src].import();
     } catch (err) {
       throw err
     }
@@ -39,6 +40,6 @@ export async function getRouteComponentExport(id: string, $component: any, expor
 
   return {
     id,
-    meta: module[exported]
+    meta: camelcaseKeys(module[exported])
   }
 }

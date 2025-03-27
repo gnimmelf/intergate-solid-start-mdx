@@ -2,10 +2,12 @@
 title: Intergate.io
 intro: ECMAScript (/ˈɛkməskrɪpt/; ES)
 ---
-import { ArticleList } from "../components/ArticleList"
+import { TeaserList, defaultFilter } from "../components/TeaserList"
 
 # Welcome
 
 This is `index.mdx`.
 
-<ArticleList filterFn={(article) => article.id.startsWith('/blog/')}/>
+---
+
+<TeaserList path={'/blog/'} />
