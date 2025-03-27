@@ -1,37 +1,23 @@
 import { createResource, createContext, JSX, useContext } from "solid-js";
-import { RouteMatch, useCurrentMatches } from "@solidjs/router";
+import { RouteDescription, useCurrentMatches } from "@solidjs/router";
 import { Resource } from "solid-js/types/server/rendering.js";
-import importComponentModule from "~/utils/importComponentModule";
+import {getRouteComponentExport, type MdxModule} from "~/utils/getRouteComponentExport";
 
-export type FrontMatter = {
-  title: string;
-  intro: string;
-};
-
-export type PageData = {
-  frontmatter: FrontMatter;
-  path: string;
-};
-
-const Context = createContext<Resource<PageData>>();
+const Context = createContext<Resource<MdxModule>>();
 
 export function PageDataProvider(props: { children: JSX.Element }) {
   const matches = useCurrentMatches();
 
-  const [pageData] = createResource<PageData, RouteMatch>(
+  const [pageData] = createResource<MdxModule, RouteDescription>(
     () => {
       const m = matches();
-      return m[m.length - 1];
+      return m[m.length - 1]?.route;
     },
-    async (match): Promise<PageData> => {
-      const { $component } = match.route.key as { $component: any };
-      const module = await importComponentModule($component);
-      const { frontmatter } = module;
-      console.log(frontmatter);
-      return {
-        frontmatter,
-        path: match.path
-      };
+    async (route: any): Promise<MdxModule> => {
+      const { $component } = route.key as { $component: any };
+      const module = await getRouteComponentExport(route.id, $component);
+      console.log({ route, module });
+      return module
     },
     { deferStream: false }
   );

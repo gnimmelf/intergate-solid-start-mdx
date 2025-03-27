@@ -1,14 +1,19 @@
-import { FileRoutes } from "@solidjs/start/router";
+import { For } from "solid-js";
 import { Route } from "vinxi/dist/types/lib/fs-router";
-import { filterArticles } from "~/utils/filterArticles";
+import { filterRoutes } from "~/utils/filterRoutes";
 
 export function ArticleList(props: { filterFn: (route: Route) => boolean }) {
-  const articles = filterArticles(props.filterFn);
+  const articles = filterRoutes(props.filterFn);
 
   return (
-    <>
-      <p>Teasers</p>
-      <pre class="text-wrap">{JSON.stringify(articles(), null, 2)}</pre>
-    </>
+    <section>
+      <For each={articles()} fallback={<div>No items</div>}>
+        {(a, idx) => <div data-index={idx()}>
+            <pre>{JSON.stringify(a, null,2)}</pre>
+            {/* <title>{a.meta.title}</title>
+            <p>{a.meta.intro}</p> */}
+        </div>}
+      </For>
+    </section>
   );
 }

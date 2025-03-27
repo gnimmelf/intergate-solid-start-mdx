@@ -17,7 +17,7 @@ export default defineConfig({
       })({
         remarkPlugins: [
           [remarkBehead, {minDepth: 2}],
-          [remarkParseFrontmatter],
+          [remarkParseFrontmatter, {dataKey: 'meta'}],
         ],
         jsx: true,
         jsxImportSource: "solid-js",
