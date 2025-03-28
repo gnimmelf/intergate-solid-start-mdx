@@ -47,8 +47,6 @@ export default function plugin(options = {}) {
 
     // Add data as an export to the ast
     define(ast, vfile, { [options.dataKey]: valueToEstree(data, { preserveReferences: true }) }, options)
-
-    // console.log({ vfile })
   };
 };
 

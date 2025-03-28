@@ -16,7 +16,6 @@ export function PageDataProvider(props: { children: JSX.Element }) {
     async (route: any): Promise<MdxModule> => {
       const { $component } = route.key as { $component: any };
       const module = await getRouteComponentExport(route.id, $component);
-      console.log({ route, module });
       return module
     },
     { deferStream: false }
@@ -27,6 +26,5 @@ export function PageDataProvider(props: { children: JSX.Element }) {
 
 export const usePageData = () => {
   const pageData = useContext(Context)!;
-  console.log({ pageData: pageData() });
   return pageData;
 };

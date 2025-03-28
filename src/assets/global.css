@@ -1,0 +1,52 @@
+:root {
+  --font-sans: 'Rubik Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: 'Mona Space', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --animate-expand: expand 250ms cubic-bezier(0.32, 0.72, 0, 0.75);
+  --animate-collapse: collapse 250ms cubic-bezier(0.32, 0.72, 0, 0.75);
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+  --animate-in: enter 150ms ease;
+  --animate-out: exit 150ms ease;
+}
+
+html {
+  --ig-text-dark: #180F23;
+  --ig-text: #180F23;
+  --ig-bg: #F2F0FE;
+  --ig-100: #E6E2FD;
+  --ig-200: #D4CBFB;
+  --ig-300: #BCACF6;
+  --ig-400: #A888F1;
+  --ig-blue: #ABCAF5;
+  --ig-pink: #D3ABF5;
+  --ig-link: #7250C3;
+  --ig-link-hover: #562EB2;
+
+  scrollbar-color: var(--ig-300) var(--ig-100);
+}
+
+html.dark {
+  color-scheme: dark;
+  --ig-text: #E4DBF0;
+  --ig-bg: #18141F;
+  --ig-100: #252037;
+  --ig-200: #462F6A;
+  --ig-300: #573993;
+  --ig-400: #957FC7;
+  --ig-blue: #234C76;
+  --ig-pink: #933984;
+  --ig-link: #9F84DB;
+  --ig-link-hover: #B7A6DD;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+@font-face {
+  font-family: 'Mona Space';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src: url('/MonaspaceNeon-Regular-v1.101.woff2') format('woff2');
+}

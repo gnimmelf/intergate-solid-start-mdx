@@ -4,7 +4,6 @@ import { ModuleData } from "~/utils/getRouteComponentExport";
 
 export const defaultFilter = ({ meta }: ModuleData, idx: number) => {
   const publishedYear = new Date(meta.publishedAt).getFullYear();
-  console.log(idx, { publishedYear });
   return true; //publishedYear === 2025
 };
 

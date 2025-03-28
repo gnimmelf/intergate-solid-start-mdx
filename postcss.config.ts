@@ -1,8 +1,9 @@
 import nested from "postcss-nested"
 
+
 const config = {
   plugins: [
-    nested
+    nested(),
   ]
 }
 

@@ -3,9 +3,10 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { MetaProvider } from "@solidjs/meta";
 import { PageDataProvider } from "./components/PageDataContext";
-import "./app.css";
 import { Header } from "./components/Header";
 import { Article } from "./components/Article";
+import "./assets/global.css";
+import "./app.css";
 
 export default function App() {
   return (

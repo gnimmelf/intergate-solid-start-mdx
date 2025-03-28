@@ -9,7 +9,6 @@ export function getRoutesModuleData<T>(path: string, filter: (...args: any[]) =>
         const modules = await Promise.all(fileRoutes()
             .map(async (route) => {
                 const module = await getRouteComponentExport(route.id, route.$component)
-                console.log({ route, module })
                 return module
             }))
 

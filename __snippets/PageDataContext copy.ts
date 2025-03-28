@@ -54,9 +54,6 @@ const [PageDataProvider, useCurrentPageDataContext] = createContextProvider((pro
 
       const res = await module.import().catch((err: any) => console.error(err));
 
-      console.log({ res, module })
-      console.log({ DEV: import.meta.env.DEV, SSR: import.meta.env.SSR })
-
       return res
     },
     {
