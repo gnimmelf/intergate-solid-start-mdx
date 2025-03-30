@@ -1,12 +1,13 @@
 import { createSignal, onMount } from "solid-js";
+import { useTheme } from "./Theme";
 
 
 export function ToggleDarkMode() {
-  const [isDark, setIsDark] = createSignal(true);
+  const theme = useTheme()
 
   const toggleDarkMode = () => {
-    setIsDark(!isDark());
-    document.documentElement.classList.toggle("dark", isDark());
+    theme.toggleIsDark()
+    document.documentElement.setAttribute("data-theme", theme.isDark() ? 'dark' : '')
   };
 
   return <button onClick={toggleDarkMode}>Toggle Dark Mode</button>;

@@ -6,7 +6,7 @@ import { PageDataProvider } from "./components/PageDataContext";
 import { Header } from "./components/Header";
 import { Article } from "./components/Article";
 import "./assets/global.css";
-import "./app.css";
+import { ThemeProvider} from "./components/Theme";
 
 export default function App() {
   return (
@@ -15,10 +15,10 @@ export default function App() {
         <PageDataProvider>
           <MetaProvider>
             <Suspense>
-              <main>
+              <ThemeProvider>
                 <Header />
                 <Article>{props.children}</Article>
-              </main>
+              </ThemeProvider>
             </Suspense>
           </MetaProvider>
         </PageDataProvider>

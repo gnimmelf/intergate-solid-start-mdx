@@ -8,6 +8,7 @@
     "deploy": "vinxi build && cd .output && deployctl deploy --project=intergateio server/index.mjs"
   },
   "dependencies": {
+    "@kobalte/core": "^0.13.9",
     "@mdx-js/mdx": "^2.3.0",
     "@solid-primitives/context": "^0.3.0",
     "@solidjs/meta": "^0.29.4",

@@ -1,52 +1,43 @@
-:root {
-  --font-sans: 'Rubik Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-mono: 'Mona Space', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-
-  --animate-expand: expand 250ms cubic-bezier(0.32, 0.72, 0, 0.75);
-  --animate-collapse: collapse 250ms cubic-bezier(0.32, 0.72, 0, 0.75);
-  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
-  --animate-in: enter 150ms ease;
-  --animate-out: exit 150ms ease;
-}
+@import "./reset.css";
+@import "./variables.css";
 
 html {
-  --ig-text-dark: #180F23;
-  --ig-text: #180F23;
-  --ig-bg: #F2F0FE;
-  --ig-100: #E6E2FD;
-  --ig-200: #D4CBFB;
-  --ig-300: #BCACF6;
-  --ig-400: #A888F1;
-  --ig-blue: #ABCAF5;
-  --ig-pink: #D3ABF5;
-  --ig-link: #7250C3;
-  --ig-link-hover: #562EB2;
+  background: var(--ig-background-color);
+  font-optical-sizing: auto;
+  font-family: var(--ig-font-text);
+  overflow-x: hidden;
 
-  scrollbar-color: var(--ig-300) var(--ig-100);
+  scrollbar-color: color-mix(in hsl,
+      var(--ig-background-color) 50%,
+      var(--ig-tint-color-opposite)) color-mix(in hsl,
+      var(--ig-background-color) 95%,
+      var(--ig-tint-color-opposite));
 }
 
-html.dark {
-  color-scheme: dark;
-  --ig-text: #E4DBF0;
-  --ig-bg: #18141F;
-  --ig-100: #252037;
-  --ig-200: #462F6A;
-  --ig-300: #573993;
-  --ig-400: #957FC7;
-  --ig-blue: #234C76;
-  --ig-pink: #933984;
-  --ig-link: #9F84DB;
-  --ig-link-hover: #B7A6DD;
+code {
+  font-family: var(--ig-font-mono) !important;
 }
 
-.scrollbar-thin {
-  scrollbar-width: thin;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--ig-font-headings);
 }
 
-@font-face {
-  font-family: 'Mona Space';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src: url('/MonaspaceNeon-Regular-v1.101.woff2') format('woff2');
+article *[id] {
+  scroll-margin-top: 5rem;
+}
+
+body {
+  background-color: var(--ig-bg);
+  font-family: var(--ig-font-text);
+}
+
+@media screen and (max-width: 1100px) {
+  article *[id] {
+    scroll-margin-top: 7.5rem;
+  }
 }
