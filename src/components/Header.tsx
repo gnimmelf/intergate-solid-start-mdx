@@ -1,4 +1,4 @@
-import { MetaProvider, Title, Link, Meta } from "@solidjs/meta";
+import { createMemo, Show } from "solid-js";
 import { usePageData } from "./PageDataContext";
 import { ToggleDarkMode } from "./ToggleDarkMode";
 import css from "./Header.module.css";
@@ -6,9 +6,10 @@ import css from "./Header.module.css";
 export function Header() {
   const pageData = usePageData();
 
+  const isFrontPage = createMemo(() => pageData()?.path === "/");
+
   return (
     <header class={css["header"]}>
-      <Title>{pageData()?.meta.title}</Title>
       <nav>
         <menu class={css["links"]}>
           <a href="/">Index</a>
@@ -18,6 +19,10 @@ export function Header() {
           <ToggleDarkMode />
         </menu>
       </nav>
+
+      <Show when={isFrontPage()}>
+        <div>Frontpage!</div>
+      </Show>
 
       <div>
         <h1>{pageData()?.meta.title}</h1>

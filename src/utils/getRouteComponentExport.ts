@@ -7,13 +7,27 @@ export type MdxMetaData = {
   [k: string]: any
 }
 
-export type ModuleData = {
-  meta: MdxMetaData
+export type RouteComponent = {
+  src: string
+  import: Function
+}
+
+export type RouteData = {
+  $component: RouteComponent,
   id: string
   [k: string]: any
 }
 
-export async function getRouteComponentExport(id: string, $component: any, exported = "meta"): Promise<ModuleData> {
+export type ModuleData = {
+  meta: MdxMetaData
+  [k: string]: any
+}
+
+export type PageData = ModuleData & {
+  path: string
+}
+
+export async function getRouteComponentExport($component: RouteComponent, exported = "meta"): Promise<ModuleData> {
   let module;
 
   if (import.meta.env.DEV) {
@@ -39,7 +53,6 @@ export async function getRouteComponentExport(id: string, $component: any, expor
   }
 
   return {
-    id,
     meta: camelcaseKeys(module[exported])
   }
 }

@@ -1,5 +1,5 @@
-import { createSignal, onMount } from "solid-js";
-import { useTheme } from "./Theme";
+import { CgDarkMode } from 'solid-icons/cg'
+import { useTheme } from "./ThemeProvider";
 
 
 export function ToggleDarkMode() {
@@ -10,5 +10,5 @@ export function ToggleDarkMode() {
     document.documentElement.setAttribute("data-theme", theme.isDark() ? 'dark' : '')
   };
 
-  return <button onClick={toggleDarkMode}>Toggle Dark Mode</button>;
+  return <button onClick={toggleDarkMode}><CgDarkMode size={44}/></button>;
 }

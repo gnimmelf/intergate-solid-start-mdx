@@ -1,9 +1,10 @@
 header {
     display: flex;
     flex-flow: column;
-    & button {
-        cursor: pointer;
-    }
+}
+
+h1 {
+    font-size: var(--ig-header-height);
 }
 
 nav {

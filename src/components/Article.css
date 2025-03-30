@@ -1,0 +1,10 @@
+article.route {
+    width: clamp(200px, 600px, 800px);
+    margin: 0 auto;
+
+    & > section.mdx {
+      padding: 1rem;
+      border: 1px solid red;
+    }
+
+  }

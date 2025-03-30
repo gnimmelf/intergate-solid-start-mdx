@@ -5,8 +5,8 @@ import { MetaProvider } from "@solidjs/meta";
 import { PageDataProvider } from "./components/PageDataContext";
 import { Header } from "./components/Header";
 import { Article } from "./components/Article";
+import { ThemeProvider} from "./components/ThemeProvider";
 import "./assets/global.css";
-import { ThemeProvider} from "./components/Theme";
 
 export default function App() {
   return (

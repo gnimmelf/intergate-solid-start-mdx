@@ -1,22 +1,24 @@
 import { createMemo, For } from "solid-js";
-import { getRoutesModuleData } from "~/utils/getRoutesModuleData";
-import { ModuleData } from "~/utils/getRouteComponentExport";
+import { getRoutesPageData } from "~/utils/getRoutesPageData";
+import { type PageData } from "~/utils/getRouteComponentExport";
+import { Card } from "./Card";
+import css from "./TeaserList.module.css"
 
-export const defaultFilter = ({ meta }: ModuleData, idx: number) => {
+export const defaultFilter = ({ meta }: PageData, idx: number) => {
   const publishedYear = new Date(meta.publishedAt).getFullYear();
   return true; //publishedYear === 2025
 };
 
-export const defaultSort = (a: ModuleData, b: ModuleData) => {
+export const defaultSort = (a: PageData, b: PageData) => {
   return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
 };
 
 export function TeaserList(props: {
   path: string;
-  filter?: (a: ModuleData, idx?: number) => boolean;
-  sort?: (a: ModuleData, b: ModuleData) => number;
+  filter?: (a: PageData, idx?: number) => boolean;
+  sort?: (a: PageData, b: PageData) => number;
 }) {
-  const articles = getRoutesModuleData(
+  const articles = getRoutesPageData(
     props.path,
     props.filter || defaultFilter
   );
@@ -26,15 +28,17 @@ export function TeaserList(props: {
   );
 
   return (
-    <section>
+    <section class={css['container']}>
       <For each={sorted()} fallback={<div>No items</div>}>
         {(a, idx) => (
-          <div data-index={idx()}>
-            <p>{a.meta.title}</p>
-            <p>{a.meta.intro}</p>
-
-            <pre>{JSON.stringify(a, null, 2)}</pre>
-          </div>
+          <Card title={a.meta.title} idx={idx()}>
+            <>
+              <p>{a.meta.intro}</p>
+              <p>
+                <a href={a.path}>Read more</a>
+              </p>
+            </>
+          </Card>
         )}
       </For>
     </section>
