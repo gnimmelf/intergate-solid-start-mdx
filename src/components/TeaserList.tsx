@@ -2,7 +2,6 @@ import { createMemo, For } from "solid-js";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 import { type PageData } from "~/utils/getRouteComponentExport";
 import { Card } from "./Card";
-import css from "./TeaserList.module.css"
 
 export const defaultFilter = ({ meta }: PageData, idx: number) => {
   const publishedYear = new Date(meta.publishedAt).getFullYear();
@@ -28,7 +27,7 @@ export function TeaserList(props: {
   );
 
   return (
-    <section class={css['container']}>
+    <section>
       <For each={sorted()} fallback={<div>No items</div>}>
         {(a, idx) => (
           <Card title={a.meta.title} idx={idx()}>

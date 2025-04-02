@@ -8,8 +8,14 @@ const { default: mdx } = pkgMdx;
 export default defineConfig({
   extensions: ["mdx", "md"],
   vite: {
+    resolve: {
+      alias: {
+        // Panda-css: Must match ts-config::compilerOptions::paths
+        "styled-system": "/styled-system",
+      },
+    },
     css: {
-      postcss: './postcss.config.ts',
+      postcss: './postcss.config.cjs',
     },
     plugins: [
       mdx.withImports({

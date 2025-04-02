@@ -6,7 +6,7 @@ import { PageDataProvider } from "./components/PageDataContext";
 import { Header } from "./components/Header";
 import { Article } from "./components/Article";
 import { ThemeProvider} from "./components/ThemeProvider";
-import "./assets/global.css";
+import "./app.css";
 
 export default function App() {
   return (
