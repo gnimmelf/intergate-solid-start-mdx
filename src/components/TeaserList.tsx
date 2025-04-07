@@ -1,11 +1,18 @@
 import { createMemo, For } from "solid-js";
+import { wrap, container, box, linkOverlay } from "styled-system/patterns";
+import { css, cx } from "styled-system/css";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 import { type PageData } from "~/utils/getRouteComponentExport";
 import { Card } from "./Card";
 
-export const defaultFilter = ({ meta }: PageData, idx: number) => {
-  const publishedYear = new Date(meta.publishedAt).getFullYear();
-  return true; //publishedYear === 2025
+const styles = {
+  section: cx(
+    wrap({
+      justify: "space-between",
+      gap: "1rem"
+    })
+  ),
+  cardWrapper: cx(css({ pos: "relative" }), box({ minW: "xs", maxW: "md" })),
 };
 
 export const defaultSort = (a: PageData, b: PageData) => {
@@ -14,30 +21,30 @@ export const defaultSort = (a: PageData, b: PageData) => {
 
 export function TeaserList(props: {
   path: string;
+  style?: Record<string, string>
   filter?: (a: PageData, idx?: number) => boolean;
   sort?: (a: PageData, b: PageData) => number;
 }) {
-  const articles = getRoutesPageData(
-    props.path,
-    props.filter || defaultFilter
-  );
+  const articles = getRoutesPageData(props.path);
 
   const sorted = createMemo(() =>
     articles()?.toSorted(props.sort || defaultSort)
   );
 
   return (
-    <section>
+    <section class={cx(styles.section)}>
       <For each={sorted()} fallback={<div>No items</div>}>
         {(a, idx) => (
-          <Card title={a.meta.title} idx={idx()}>
-            <>
+          <div data-index={idx} class={styles.cardWrapper}>
+            <Card title={a.meta.title}>
               <p>{a.meta.intro}</p>
               <p>
-                <a href={a.path}>Read more</a>
+                <a class={linkOverlay()} href={a.path}>
+                  Read more
+                </a>
               </p>
-            </>
-          </Card>
+            </Card>
+          </div>
         )}
       </For>
     </section>

@@ -1,8 +1,19 @@
-import { defineConfig } from "@pandacss/dev";
+import { defineConfig } from '@pandacss/dev'
+import pandaPreset from '@pandacss/preset-panda'
+import themePreset from './style-extensions/preset-theme-ium';
+
+import { cardRecipe } from './style-extensions/recipe-card';
+
+const isProd = process.env.NODE_ENV?.startsWith('prod');
+
+
 
 export default defineConfig({
   // Whether to use css reset
   preflight: true,
+
+  // Shorten generated class-names
+  hash: isProd,
 
   // Where to look for your css declarations
   include: ["./src/**/*.{jsx,tsx}"],
@@ -12,8 +23,14 @@ export default defineConfig({
 
   // Useful for theme customization
   theme: {
-    extend: {},
+    extend: {
+      slotRecipes: {
+        card: cardRecipe
+      }
+    },
   },
+
+  presets: [pandaPreset, themePreset],
 
   // The output directory for your css system
   outdir: "styled-system",

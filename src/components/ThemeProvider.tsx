@@ -1,5 +1,5 @@
 import { usePageData } from "./PageDataContext";
-import { createContext, useContext, JSX } from "solid-js";
+import { createContext, useContext, JSXElement } from "solid-js";
 import { createStore, Store } from "solid-js/store";
 import { isServer } from "solid-js/web";
 
@@ -20,7 +20,7 @@ const themeData = {
 const ThemeContext = createContext(themeData);
 
 // Create the provider component
-export function ThemeProvider(props: { children: JSX.Element }) {
+export function ThemeProvider(props: { children: JSXElement }) {
   const pageData = usePageData()
   return (
     <ThemeContext.Provider value={themeData}>
@@ -32,7 +32,7 @@ export function ThemeProvider(props: { children: JSX.Element }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useMyStore must be used within a MyStoreProvider");
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }

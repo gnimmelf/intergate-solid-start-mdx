@@ -18,7 +18,7 @@ export function PageDataProvider(props: { children: JSX.Element }) {
       return m[m.length - 1]?.route;
     },
     async (route: any): Promise<PageData> => {
-      // Note! RouteData is at `route`, not just `route`
+      // Note! RouteData is at `route.key`, not just `route`
       const { id, $component } = route.key as RouteData
       const module = await getRouteComponentExport($component);
       return {
@@ -33,6 +33,9 @@ export function PageDataProvider(props: { children: JSX.Element }) {
 }
 
 export const usePageData = () => {
-  const pageData = useContext(Context)!;
-  return pageData;
+  const context = useContext(Context)!;
+  if (!context) {
+    throw new Error("usePageData must be used within a PageDataProvider");
+  }
+  return context;
 };

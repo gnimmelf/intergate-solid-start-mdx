@@ -6,7 +6,7 @@ import {
     type PageData
 } from '~/utils/getRouteComponentExport';
 
-export function getRoutesPageData<T>(path: string, filter: (...args: any[]) => boolean) {
+export function getRoutesPageData<T>(path: string) {
     const fileRoutes = createMemo(() => FileRoutes().filter(route => route.path.startsWith(path)))
 
     const [teasers] = createResource<PageData[]>(async () => {
@@ -21,9 +21,7 @@ export function getRoutesPageData<T>(path: string, filter: (...args: any[]) => b
                 }
             }))
 
-        return filter
-            ? modules.filter(filter)
-            : modules
+        return modules
     })
 
     return teasers
