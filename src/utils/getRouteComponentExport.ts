@@ -44,7 +44,7 @@ export async function getRouteComponentExport($component: RouteComponent, export
     }
 
     if (!module[exported]) {
-      console.error(`Module ${$component.src} does not export ${exported}`);
+      console.warn(`Module ${$component.src} does not export ${exported}`);
     }
 
   } else {

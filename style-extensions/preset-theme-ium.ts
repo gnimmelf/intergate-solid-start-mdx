@@ -1,7 +1,44 @@
 // panda.config.ts or similar preset file
 import { definePreset } from '@pandacss/dev'
+import { colorHarmonies } from 'rampensau'
+import { generateColorRamps } from './color-ramp'
 
-export const beachThemePreset = definePreset({
+const colors = generateColorRamps({
+  brand: {
+    total: 10,
+    hStart: 272.700,
+    hStartCenter: 0.000,
+    hEasing:
+      x => x,
+    hCycles: -0.130,
+
+    sRange: [0.172, 0.935],
+    sEasing:
+      x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+    lRange: [0.000, 0.704],
+    lEasing:
+      x => x,
+  },
+  accent: {
+    total: 4,
+    hStart: 68.200,
+    hStartCenter: 0.000,
+    hEasing:
+      x => x,
+    hCycles: -0.107,
+
+    sRange: [0.172, 0.935],
+    sEasing:
+      x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+    lRange: [0.000, 1.000],
+    lEasing:
+      x => x,
+  }
+})
+
+console.dir({ colors }, { depth: null })
+
+export const themeiumPreset = definePreset({
   name: 'beach-preset',
   // Define conditions for light and dark modes
   conditions: {
@@ -11,50 +48,55 @@ export const beachThemePreset = definePreset({
 
   // Theme configuration
   theme: {
-    // Semantic tokens for UI elements
-    semanticTokens: {
-      colors: {
-        background: {
-          value: {
-            base: '{colors.slate.200}',
-            _dark: '{colors.slate.700}',
-          },
-        },
-        foreground: {
-          value: {
-            base: '{colors.teal.950}',
-            _dark: '{colors.teal.100}',
-          },
-        },
-        accent: {
-          value: {
-            base: '{colors.lime.600}',
-            _dark: '{colors.lime.200}',
-          },
-        },
-        text: {
-          value: {
-            base: '{colors.slate.700}',
-            _dark: '{colors.slate.200}',
-          },
-        },
-        surface: {
-          foreground: {
-            value: {
-              base: '{colors.gray.900}',
-              _dark: '{colors.blue.200}',
-            },
-          },
+    extend: {
+      tokens: {
+        colors,
+      },
+      // Semantic tokens for UI elements
+      semanticTokens: {
+        colors: {
           background: {
             value: {
-              base: '{colors.zinc.300}',
-              _dark: '{colors.zinc.700}',
+              base: '{colors.brand.50}',
+              _dark: '{colors.brand.800}',
             },
           },
-          border: {
+          foreground: {
             value: {
-              base: '{colors.slate.600}',
-              _dark: '{colors.slate.600}',
+              base: '{colors.brand.900}',
+              _dark: '{colors.brand.100}',
+            },
+          },
+          accent: {
+            value: {
+              base: '{colors.accent.100}',
+              _dark: '{colors.accent.200}',
+            },
+          },
+          text: {
+            value: {
+              base: '{colors.brand.700}',
+              _dark: '{colors.brand.200}',
+            },
+          },
+          surface: {
+            foreground: {
+              value: {
+                base: '{colors.brand.900}',
+                _dark: '{colors.brand.200}',
+              },
+            },
+            background: {
+              value: {
+                base: '{colors.brand.300}',
+                _dark: '{colors.brand.700}',
+              },
+            },
+            border: {
+              value: {
+                base: '{colors.brand.600}',
+                _dark: '{colors.brand.600}',
+              },
             },
           },
         },
@@ -77,4 +119,4 @@ export const beachThemePreset = definePreset({
 })
 
 // Export for use in Panda CSS config
-export default beachThemePreset
+export default themeiumPreset

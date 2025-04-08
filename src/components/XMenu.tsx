@@ -1,11 +1,11 @@
 import { createEffect, createMemo, For, Show } from "solid-js";
 import { usePageData } from "./PageDataContext";
-import { ToggleDarkMode } from "./ToggleDarkMode";
 import { css, cx } from "styled-system/css";
 import { hstack, vstack } from "styled-system/patterns";
 import { useTheme } from "./ThemeProvider";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 import { PageData } from "~/utils/getRouteComponentExport";
+import { CgDarkMode } from "solid-icons/cg";
 
 const styles = {
   nav: cx(css({ textTransform: "capitalize" }), hstack()),
@@ -68,7 +68,9 @@ export function XMenu() {
           )}
         </For>
         <li>
-          <ToggleDarkMode />
+          <button onClick={toggleDarkMode}>
+            <CgDarkMode size={44} />
+          </button>
         </li>
       </ul>
     </nav>
