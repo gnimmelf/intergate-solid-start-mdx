@@ -1,45 +1,20 @@
 // panda.config.ts or similar preset file
 import { definePreset } from '@pandacss/dev'
-import { colorHarmonies } from 'rampensau'
-import { generateColorRamps } from './color-ramp'
+import { createScientificPalettes, createHueShiftPalette, toLch } from './palett-generators'
 
-const colors = generateColorRamps({
-  brand: {
-    total: 10,
-    hStart: 272.700,
-    hStartCenter: 0.000,
-    hEasing:
-      x => x,
-    hCycles: -0.130,
+const colors = {
+  brand: createHueShiftPalette(toLch('#f16c9b'), {
+    minLightness: 10,
+    maxLightness: 80,
+    hueStep: 5
+   }),
+   accent: createScientificPalettes(toLch('#FFD102'), 'tetradic')
+}
 
-    sRange: [0.172, 0.935],
-    sEasing:
-      x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
-    lRange: [0.000, 0.704],
-    lEasing:
-      x => x,
-  },
-  accent: {
-    total: 4,
-    hStart: 68.200,
-    hStartCenter: 0.000,
-    hEasing:
-      x => x,
-    hCycles: -0.107,
-
-    sRange: [0.172, 0.935],
-    sEasing:
-      x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
-    lRange: [0.000, 1.000],
-    lEasing:
-      x => x,
-  }
-})
-
-console.dir({ colors }, { depth: null })
+console.log()
 
 export const themeiumPreset = definePreset({
-  name: 'beach-preset',
+  name: 'themeium-preset',
   // Define conditions for light and dark modes
   conditions: {
     light: '[data-theme=light] &',
@@ -63,7 +38,7 @@ export const themeiumPreset = definePreset({
           },
           foreground: {
             value: {
-              base: '{colors.brand.900}',
+              base: '{colors.brand.800}',
               _dark: '{colors.brand.100}',
             },
           },
@@ -82,7 +57,7 @@ export const themeiumPreset = definePreset({
           surface: {
             foreground: {
               value: {
-                base: '{colors.brand.900}',
+                base: '{colors.brand.800}',
                 _dark: '{colors.brand.200}',
               },
             },

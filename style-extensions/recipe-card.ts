@@ -9,7 +9,7 @@ export const cardRecipe = defineSlotRecipe({
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: '{colors.surface.background}',
-      color: '{colors.brand.foreground}',
+      color: '{colors.surface.foreground}',
       borderRadius: 'md',
       boxShadow: '{shadows.xl}',
       overflow: 'hidden',
