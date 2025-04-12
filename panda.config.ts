@@ -2,11 +2,8 @@ import { defineConfig } from '@pandacss/dev'
 import pandaPreset from '@pandacss/preset-panda'
 import themePreset from './style-extensions/preset-theme-ium';
 
-import { cardRecipe } from './style-extensions/recipe-card';
-
+//@ts-expect-error
 const isProd = process.env.NODE_ENV?.startsWith('prod');
-
-
 
 export default defineConfig({
   // Whether to use css reset
@@ -17,18 +14,6 @@ export default defineConfig({
 
   // Where to look for your css declarations
   include: ["./src/**/*.{jsx,tsx}"],
-
-  // Files to exclude
-  exclude: [],
-
-  // Useful for theme customization
-  theme: {
-    extend: {
-      slotRecipes: {
-        card: cardRecipe
-      }
-    },
-  },
 
   presets: [pandaPreset, themePreset],
 

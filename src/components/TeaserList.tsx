@@ -8,7 +8,7 @@ import { Card } from "./Card";
 const styles = {
   section: cx(
     wrap({
-      justify: "space-between",
+      justify: "center",
       gap: "1rem"
     })
   ),

@@ -17,7 +17,6 @@ export default function App() {
             <Suspense>
               <ThemeProvider>
                 <Header />
-                ---
                 <Article>{props.children}</Article>
               </ThemeProvider>
             </Suspense>

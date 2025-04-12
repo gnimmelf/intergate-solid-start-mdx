@@ -16,6 +16,14 @@ type LCH = {
   h: number
 }
 
+export enum ScientificPaletteType {
+  Analogous = 'analogous',
+  Triadic = 'triadic',
+  Tetradic = 'tetradic',
+  Complementary = 'complementary',
+  SplitComplementary = 'splitComplementary'
+}
+
 const COLOR_MODE = 'lch'
 
 export function toLch(hexColor: string) {
@@ -86,13 +94,7 @@ export function createMonoChromatic(fromColor: LCH, adjustments: 'darker' | 'lig
   return adjusted
 }
 
-export function createScientificPalettes(baseColor: LCH, type:
-  'analogous' |
-  'triadic' |
-  'tetradic' |
-  'complementary' |
-  'splitComplementary'
-) {
+export function createScientificPalettes(baseColor: LCH, type: ScientificPaletteType) {
   const targetHueSteps = {
     analogous: [0, 30, 60],
     triadic: [0, 120, 240],

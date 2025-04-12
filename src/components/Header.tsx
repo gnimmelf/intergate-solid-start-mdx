@@ -1,35 +1,55 @@
 import { createMemo, Show } from "solid-js";
 import { css, cx } from "styled-system/css";
-import { wrap, container, box, linkOverlay } from "styled-system/patterns";
+import { center, container } from "styled-system/patterns";
 import { usePageData } from "./PageDataContext";
-import { XMenu } from "./XMenu";
+import { MenuBar } from "./MenuBar";
 import { useTheme } from "./ThemeProvider";
 
 const styles = {
-  // header:
+  menuBar: cx(
+    center(),
+    css({
+      zIndex: 10,
+      position: "fixed",
+      width: "100%",
+      "& > *": {
+        width: "100%",
+        maxWidth: "calc(var(--sizes-8xl) + 2rem)",
+      },
+    })
+  ),
+  content: cx(
+    container(),
+    css({
+      paddingTop: "50px",
+    })
+  ),
 };
 
 export function Header() {
   const theme = useTheme();
   const pageData = usePageData();
 
-  console.log(pageData());
-
   const isFrontPage = createMemo(() => pageData()?.path === "/");
 
   return (
-    <header class={styles.header}>
-      <XMenu />
-      <Show when={isFrontPage()}>
-        <div>Frontpage!</div>
-      </Show>
+    <header>
+      <div class={styles.menuBar}>
+        <MenuBar />
+      </div>
 
-      <Show when={pageData()?.meta}>
-        <div>
-          <h1>{pageData()?.meta.title}</h1>
-          <div>{pageData()?.meta.intro}</div>
-        </div>
-      </Show>
+      <div class={styles.content}>
+        <Show when={isFrontPage()}>
+          <div>Frontpage!</div>
+        </Show>
+
+        <Show when={pageData()?.meta}>
+          <div>
+            <h1>{pageData()?.meta.title}</h1>
+            <div>{pageData()?.meta.intro}</div>
+          </div>
+        </Show>
+      </div>
     </header>
   );
 }
