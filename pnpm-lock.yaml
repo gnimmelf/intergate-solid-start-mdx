@@ -35,6 +35,9 @@ importers:
       object.pick:
         specifier: ^1.3.0
         version: 1.3.0
+      solid-dismissible:
+        specifier: ^0.1.1
+        version: 0.1.1(solid-js@1.9.5)
       solid-icons:
         specifier: ^1.1.0
         version: 1.1.0(solid-js@1.9.5)
@@ -72,9 +75,6 @@ importers:
       micromark-extension-frontmatter:
         specifier: ^2.0.0
         version: 2.0.0
-      rampensau:
-        specifier: ^0.15.0
-        version: 0.15.0
       remark-behead:
         specifier: ^3.1.0
         version: 3.1.0
@@ -3141,9 +3141,6 @@ packages:
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
 
-  rampensau@0.15.0:
-    resolution: {integrity: sha512-vV8MHyjNQjKyE1+eslJWlGhyxXvyyJSHOV9Vy/TjiuetZ8Op4gS4TxclBkWide5YzsC96H7SAvun1JUNpHC0zg==}
-
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
@@ -3332,6 +3329,11 @@ packages:
 
   smob@1.5.0:
     resolution: {integrity: sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==}
+
+  solid-dismissible@0.1.1:
+    resolution: {integrity: sha512-9kcKBJIMdS+586cA1g63HYWxKh3h89leeNHbPZ1csYjuni+NvPBtNr11l0iEX2AKKEt6FHk6qNhc/gjoYAW1pA==}
+    peerDependencies:
+      solid-js: ^1.8
 
   solid-icons@1.1.0:
     resolution: {integrity: sha512-IesTfr/F1ElVwH2E1110s2RPXH4pujKfSs+koT8rwuTAdleO5s26lNSpqJV7D1+QHooJj18mcOiz2PIKs0ic+A==}
@@ -7384,8 +7386,6 @@ snapshots:
 
   radix3@1.1.2: {}
 
-  rampensau@0.15.0: {}
-
   randombytes@2.1.0:
     dependencies:
       safe-buffer: 5.2.1
@@ -7626,6 +7626,11 @@ snapshots:
       is-fullwidth-code-point: 3.0.0
 
   smob@1.5.0: {}
+
+  solid-dismissible@0.1.1(solid-js@1.9.5):
+    dependencies:
+      '@corvu/utils': 0.4.2(solid-js@1.9.5)
+      solid-js: 1.9.5
 
   solid-icons@1.1.0(solid-js@1.9.5):
     dependencies:

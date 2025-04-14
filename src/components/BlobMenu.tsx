@@ -1,16 +1,23 @@
 import { Portal } from "solid-js/web";
-import { Accessor, For } from "solid-js";
+import { Accessor, createSignal, For, Setter } from "solid-js";
+import Dismissible from "solid-dismissible";
 import { css, cx } from "styled-system/css";
-import { float } from "styled-system/patterns";
 
-const MENU_OFFSET = '50px'
+const MENU_OFFSET = "50px";
 
 const styles = {
+  backDropBlur: css({
+    position: "fixed",
+    top: "0px",
+    left: "0px",
+    width: "100vw",
+    height: "100vh",
+    backdropFilter: "auto",
+    backdropBlur: "sm",
+  }),
   blobMenu: cx(
-    float({ placement: "top-start", }),
     css({
-      position: 'fixed',
-      zIndex: 9,
+      position: "fixed",
       width: "100vw",
       height: "100vh",
       pointerEvents: "none",
@@ -23,10 +30,13 @@ const styles = {
     "--speed": "0.55",
     "--ease": "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
 
+    position: "absolute",
+    top: `-${MENU_OFFSET}`,
+    left: `-${MENU_OFFSET}`,
+
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
     borderRadius: "40%",
     textDecoration: "none",
     pointerEvents: "auto",
@@ -34,7 +44,7 @@ const styles = {
     color: "{colors.menu.foreground}",
 
     // TODO! Make invisible on closed
-    opacity: '0',
+    opacity: "0",
     transition: `all calc(var(--speed, 1) * 1s) calc(var(--delay, 0) * 1s) var(--ease)`,
     width: "150px",
     height: "100px",
@@ -43,7 +53,7 @@ const styles = {
   open: css({
     "& > *": {
       transform: "translate(var(--x), var(--y)) scale(var(--scale, 1))",
-      opacity: '1',
+      opacity: "1",
     },
   }),
 
@@ -93,16 +103,37 @@ const SvgFilters = function () {
 };
 
 export function BlobMenu(props: {
-  links: { label: string; href: string }[]
-  isOpen: Accessor<boolean>
+  zIndex: number;
+  links: { label: string; href: string }[];
+  isOpen: Accessor<boolean>;
+  setIsOpen: Setter<boolean>;
+  outsidePointerIgnore?: HTMLElement[]
 }) {
-
+  const [contentRef, setContentRef] = createSignal<HTMLElement | null>(null);
 
   return (
     <>
       <SvgFilters />
-      <Portal>
-        <div class={cx(styles.blobMenu, props.isOpen() && styles.open)}>
+
+      <div
+        style={{ "z-index": props.zIndex }}
+        class={cx(props.isOpen() && styles.backDropBlur)}
+      ></div>
+
+      <Dismissible
+        element={contentRef}
+        enabled={props.isOpen()}
+        onDismiss={(...args) => {
+          console.log('dismissed', ...args)
+          props.setIsOpen(false)
+        }}
+        outsidePointerIgnore={props.outsidePointerIgnore}
+      >
+        <div
+          ref={setContentRef}
+          class={cx(styles.blobMenu, props.isOpen() && styles.open)}
+          style={{ "z-index": props.zIndex }}
+        >
           <For each={props.links}>
             {(link, idx) => {
               const { x, y } = getBlobPosition(idx(), props.links.length);
@@ -124,7 +155,7 @@ export function BlobMenu(props: {
             }}
           </For>
         </div>
-      </Portal>
+      </Dismissible>
     </>
   );
 }
