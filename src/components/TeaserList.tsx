@@ -1,19 +1,9 @@
 import { createMemo, For } from "solid-js";
-import { wrap, container, box, linkOverlay } from "styled-system/patterns";
-import { css, cx } from "styled-system/css";
+import { linkOverlay } from "styled-system/patterns";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 import { type PageData } from "~/utils/getRouteComponentExport";
 import { Card } from "./Card";
-
-const styles = {
-  section: cx(
-    wrap({
-      justify: "center",
-      gap: "1rem"
-    })
-  ),
-  cardWrapper: cx(css({ pos: "relative" }), box({ minW: "xs", maxW: "md" })),
-};
+import { CardContainer } from "./CardContainer";
 
 export const defaultSort = (a: PageData, b: PageData) => {
   return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
@@ -21,7 +11,7 @@ export const defaultSort = (a: PageData, b: PageData) => {
 
 export function TeaserList(props: {
   path: string;
-  style?: Record<string, string>
+  style?: Record<string, string>;
   filter?: (a: PageData, idx?: number) => boolean;
   sort?: (a: PageData, b: PageData) => number;
 }) {
@@ -32,21 +22,19 @@ export function TeaserList(props: {
   );
 
   return (
-    <section class={cx(styles.section)}>
+    <CardContainer>
       <For each={sorted()} fallback={<div>No items</div>}>
         {(a, idx) => (
-          <div data-index={idx} class={styles.cardWrapper}>
-            <Card title={a.meta.title}>
-              <p>{a.meta.intro}</p>
-              <p>
-                <a class={linkOverlay()} href={a.path}>
-                  Read more
-                </a>
-              </p>
-            </Card>
-          </div>
+          <Card title={a.meta.title}>
+            <p>{a.meta.intro}</p>
+            <p>
+              <a class={linkOverlay()} href={a.path}>
+                Read more
+              </a>
+            </p>
+          </Card>
         )}
       </For>
-    </section>
+    </CardContainer>
   );
 }

@@ -6,14 +6,18 @@ export const cardRecipe = defineSlotRecipe({
   slots: ['root', 'header', 'content', 'footer'], // Define the slots
   base: {
     root: {
+      position: "relative", // Important when using `linkOverlay` in children
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: '{colors.surface.background}',
       color: '{colors.surface.foreground}',
-      borderRadius: 'md',
+      borderRadius: 'lg',
       boxShadow: '{shadows.2xl}',
       overflow: 'hidden',
-      maxWidth: 'sm',
+      border: "1px solid {colors.surface.background}",
+      _hover: {
+        borderColor: "{colors.surface.foreground}",
+      },
     },
     header: {
       padding: '4',

@@ -1,7 +1,9 @@
 import { For } from "solid-js";
 import { Token, token } from "styled-system/tokens";
-import { Dynamic } from "solid-js/web"
-import { flex } from "styled-system/patterns";
+import { Dynamic } from "solid-js/web";
+import { center, flex } from "styled-system/patterns";
+import { Card } from "./Card";
+import { CardContainer } from "./CardContainer";
 
 function ColorPalette(props: { name: string }) {
   const colors: any[] = [];
@@ -26,34 +28,43 @@ function ColorPalette(props: { name: string }) {
   });
 
   return (
-    <For each={colors} fallback={(<div>Palette {props.name} not found!</div>)}>
+    <For each={colors} fallback={<div>Palette {props.name} not found!</div>}>
       {(hue, idx) => (
-        <div style={{
-          background: hue.color,
-          color: hue.contrast == hue.color ? colors[0].color : hue.contrast
-        }} class={flex({ justify: 'space-around' })}>
-          <span>{hue.key}</span><span>{hue.color}</span>
+        <div
+          style={{
+            background: hue.color,
+            color: hue.contrast == hue.color ? colors[0].color : hue.contrast,
+          }}
+          class={flex({ justify: "space-around" })}
+        >
+          <span>{hue.key}</span>
+          <span>{hue.color}</span>
         </div>
       )}
     </For>
   );
 }
 
-function Headings(props: { depth: number}) {
+function Headings(props: { depth: number }) {
   return (
     <For each={Array.from({ length: props.depth }, (_, i) => i + 1)}>
       {(level) => {
-        return <Dynamic component={`h${level}`}>H{level}</Dynamic>
+        return <Dynamic component={`h${level}`}>H{level}</Dynamic>;
       }}
     </For>
-  )
+  );
 }
 
 export function Styleguide() {
   return (
     <>
+      <p class={center()}>--- Styleguide ---</p>
       <Headings depth={4} />
-
+      <CardContainer>
+        <Card title="Card title">
+          <p>Card content</p>
+        </Card>
+      </CardContainer>
       <ColorPalette name="brand" />
       <ColorPalette name="surface" />
       <ColorPalette name="accent" />
