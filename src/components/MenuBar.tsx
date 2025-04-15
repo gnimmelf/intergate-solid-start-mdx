@@ -1,12 +1,15 @@
 import { createEffect, createMemo, createSignal } from "solid-js";
+import { clientOnly } from "@solidjs/start";
 import { usePageData } from "./PageDataContext";
 import { css, cx } from "styled-system/css";
 import { center } from "styled-system/patterns";
 import { useTheme } from "./ThemeProvider";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 import { CgDarkMode } from "solid-icons/cg";
-import { BlobMenu } from "./BlobMenu";
 import { useBeforeLeave } from "@solidjs/router";
+
+// The BlobMenu uses screen width to disperse menu blob items
+const BlobMenu = clientOnly(() => import("./BlobMenu"))
 
 const styles = {
   menuBar: css({
@@ -54,7 +57,6 @@ export function MenuBar() {
   const [menuIsOpen, setMenuIsOpen] = createSignal(false);
 
   useBeforeLeave(() => {
-    console.log('beforeLeave')
     setMenuIsOpen(false)
   })
 
@@ -76,8 +78,6 @@ export function MenuBar() {
 
   const isFrontPage = createMemo(() => pageData()?.path === "/");
 
-  createEffect(() => console.log('!!', menuIsOpen()))
-
   function toggleDarkMode() {
     theme.toggleIsDark();
     document.documentElement.setAttribute(
@@ -93,7 +93,6 @@ export function MenuBar() {
         class={styles.menuButton}
         style={{ 'z-index': 10, 'pointer-events': 'auto' }}
         onClick={() => {
-          console.log("!", !menuIsOpen())
           setMenuIsOpen(!menuIsOpen())
         }}
         aria-label={menuIsOpen() ? "Close menu" : "Open menu"}
@@ -106,7 +105,7 @@ export function MenuBar() {
         links={menuLinks}
         isOpen={menuIsOpen}
         setIsOpen={setMenuIsOpen}
-        outsidePointerIgnore={[menuToggleRef()]}
+        menuToggleRef={menuToggleRef}
         />
 
       <button
