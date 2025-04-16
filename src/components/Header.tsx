@@ -6,7 +6,7 @@ import { MenuBar } from "./MenuBar";
 import { useTheme } from "./ThemeProvider";
 
 const styles = {
-  menuBar: cx(
+  menuBarPos: cx(
     center(),
     css({
       zIndex: 10,
@@ -34,7 +34,7 @@ export function Header() {
 
   return (
     <header>
-      <div class={styles.menuBar}>
+      <div class={styles.menuBarPos}>
         <MenuBar />
       </div>
 

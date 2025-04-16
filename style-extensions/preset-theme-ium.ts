@@ -9,9 +9,9 @@ import {
 import { cardRecipe } from './recipe-card'
 
 const palettes = {
-  brand: createHueShiftPalette(toLch('#315F4C'), {
+  brand: createHueShiftPalette(toLch('#354D43'), {
     range: 4,
-    maxLightness: 80,
+    maxLightness: 100,
     minLightness: 15,
     maxHue: 80,
     minHue: 20,

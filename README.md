@@ -2,13 +2,13 @@
 
 Utilizing solid-start and mdx.
 
-Deploy to deno
+Deploy to deno.
 
 ## Panda CSS
 
 Panda CSS relies on generating exports based on `panda.config`.
 
-This means that `dev` and `prod` need to be preapred ahead of time, so swithing between building for prod/deploy and dev needs a re-run of `panda codegen` inbetween, which rebuilds panda assets in `/styled-system/`.
+This means that `dev` and `prod` need to be preapred ahead of time, so switching between building for `prod` (for deploy) and `dev` needs a re-run of `panda codegen` inbetween, which rebuilds panda assets in `/styled-system/`.
 
 Ideally `package.json::scripts` should be set up to run concurrently, with
 
