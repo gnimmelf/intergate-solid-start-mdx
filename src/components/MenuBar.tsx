@@ -24,6 +24,9 @@ const styles = {
       border: "none",
       fontSize: "1.5rem",
       cursor: "pointer",
+      _hover: {
+        color: "{colors.accent}",
+      },
       _focusVisible: {
         outline: "none",
       },

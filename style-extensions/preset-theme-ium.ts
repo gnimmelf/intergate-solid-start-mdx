@@ -2,24 +2,27 @@
 import { definePreset } from '@pandacss/dev'
 import {
   createScientificPalettes,
-  createHueShiftPalette,
   ScientificPaletteType,
+  createHueShiftPalette,
   toLch,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
 
 const palettes = {
-  brand: createHueShiftPalette(toLch('#3A315F')),
-  menu: createHueShiftPalette(toLch('#3A315F'), {
-    range: 2,
-  }),
-  surface: createHueShiftPalette(toLch('#753F8F'), {
+  brand: createHueShiftPalette(toLch('#315F4C'), {
     range: 4,
-    minLightness: 10,
     maxLightness: 80,
-    maxHueDeviation: 20*4,
+    minLightness: 15,
+    maxHue: 80,
+    minHue: 20,
   }),
-  accent: createScientificPalettes(toLch('#ea6767'), ScientificPaletteType.Complementary),
+  surface: createHueShiftPalette(toLch('#5b969b'), {
+    range: 4,
+    maxLightness: 100,
+    minLightness: 20,
+    maxHue: 80,
+    minHue: 60,
+  }),
 }
 
 console.dir({palettes}, { depth: null })
@@ -28,7 +31,7 @@ export const themeiumPreset = definePreset({
   name: 'themeium-preset',
   // Define conditions for light and dark modes
   conditions: {
-    paradym: '[data-theme=paradym] &',
+    light: '[data-theme=light] &',
     dark: '[data-theme=dark] &',
   },
 
@@ -48,58 +51,38 @@ export const themeiumPreset = definePreset({
           background: {
             value: {
               base: '{colors.brand.100}',
-              _dark: '{colors.brand.700}',
+              _dark: '{colors.brand.500}',
             },
           },
           foreground: {
+            value: {
+              base: '{colors.brand.500}',
+              _dark: '{colors.brand.100}',
+            },
+          },
+          accent: {
             value: {
               base: '{colors.brand.800}',
               _dark: '{colors.brand.50}',
             },
           },
-          accent: {
-            value: {
-              base: '{colors.accent.50}',
-              _dark: '{colors.accent.100}',
-            },
-          },
-          menu: {
-            foreground: {
-              value: {
-                base: '{colors.surface.50}',
-                _dark: '{colors.surface.800}',
-              },
-            },
+          surface: {
             background: {
               value: {
-                base: '{colors.surface.200}',
+                base: '{colors.surface.100}',
+                _dark: '{colors.surface.500}',
+              },
+            },
+            foreground: {
+              value: {
+                base: '{colors.surface.500}',
                 _dark: '{colors.surface.100}',
               },
             },
-            hover: {
+            accent: {
               value: {
-                base: '{colors.surface.500}',
-                _dark: '{colors.surface.300}',
-              },
-            },
-          },
-          surface: {
-            foreground: {
-              value: {
-                base: '{colors.surface.800}',
+                base: '{colors.surface.600}',
                 _dark: '{colors.surface.50}',
-              },
-            },
-            background: {
-              value: {
-                base: '{colors.surface.300}',
-                _dark: '{colors.surface.700}',
-              },
-            },
-            border: {
-              value: {
-                base: '{colors.surface.100}',
-                _dark: '{colors.surface.400}',
               },
             },
           },

@@ -124,20 +124,22 @@ function mapRangeValue(
  * @param options.range The number of hues to add on each side of the base color
  * @param options.minLightness The minimum lightness for the darkest hue
  * @param options.maxLightness The maximum lightness for the lightest hue
- * @param options.maxHueDeviation The hue deviation from the base color, distributed linearly across the hues
+ * @param options.maxHue The hue deviation from the base color, distributed linearly across the hues
  * @returns
  */
 export function createHueShiftPalette(baseColor: LCH,  options?: {
   range?: number
   minLightness?: number,
   maxLightness?: number,
-  maxHueDeviation?: number,
+  minHue?: number,
+  maxHue?: number,
 }) {
-  const { minLightness, maxLightness, maxHueDeviation, range } = Object.assign({
+  const { minLightness, maxLightness, maxHue, minHue, range } = Object.assign({
     range: 4,
-    minLightness: 10,
     maxLightness: 80,
-    maxHueDeviation: 80,
+    minLightness: 10,
+    maxHue: 80,
+    minHue: 80,
   }, options ?? {});
 
   const palette = [ensureMode(baseColor)];
@@ -145,8 +147,8 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
 
   for (let i = 1; i < maxSteps; i++) {
     // Map hue for darker and lighter hues
-    const hueDark = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h - maxHueDeviation));
-    const hueLight = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h + maxHueDeviation));
+    const hueDark = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h - minHue));
+    const hueLight = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h + maxHue));
     // Map lightness for darker and lighter hues
     const lightnessDark = mapRangeValue(i, maxSteps, baseColor.l, minLightness);
     const lightnessLight = mapRangeValue(i, maxSteps, baseColor.l, maxLightness);

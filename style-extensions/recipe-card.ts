@@ -16,13 +16,13 @@ export const cardRecipe = defineSlotRecipe({
       overflow: 'hidden',
       border: "1px solid {colors.surface.background}",
       _hover: {
-        borderColor: "{colors.surface.border}",
+        borderColor: "{colors.surface.accent}",
       },
     },
     header: {
       padding: '4',
       fontWeight: 'bold',
-      borderBottom: '1px solid {colors.surface.border}',
+      borderBottom: '1px solid {colors.surface.accent}',
     },
     content: {
       padding: '4',
@@ -30,7 +30,7 @@ export const cardRecipe = defineSlotRecipe({
       flex: '1',
     },
     footer: {
-      borderTop: '1px solid {colors.surface.border}',
+      borderTop: '1px solid {colors.surface.accent}',
       padding: '4',
       fontSize: 'sm',
     },

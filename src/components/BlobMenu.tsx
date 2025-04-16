@@ -9,7 +9,6 @@ import {
 } from "solid-js";
 import Dismissible from "solid-dismissible";
 import { css, cx } from "styled-system/css";
-import { defer } from "~/utils/defer";
 import { debounce } from "~/utils/debounce";
 
 type Vector2 = [number, number];
@@ -56,8 +55,8 @@ const styles = {
     borderRadius: "40%",
     textDecoration: "none",
     pointerEvents: "auto",
-    background: "{colors.menu.background}",
-    color: "{colors.menu.foreground}",
+    background: "{colors.surface.background}",
+    color: "{colors.surface.foreground}",
 
     opacity: "0",
     transform: "scale(0.5)",
@@ -77,7 +76,7 @@ const styles = {
     fontSize: "1rem",
     transition: "none",
     _hover: {
-      color: "{colors.menu.hover}",
+      color: "{colors.surface.accent}",
     },
   }),
 };

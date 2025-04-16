@@ -35,7 +35,7 @@ function ColorPalette(props: { name: string }) {
   });
 
   return (
-    <For each={colors} fallback={<div>Palette {props.name} not found!</div>}>
+    <For each={colors} fallback={<div>Palette "{props.name}" not found!</div>}>
       {(hue, idx) => (
         <div
           style={{
@@ -73,9 +73,7 @@ export function Styleguide() {
         </Card>
       </CardContainer>
       <ColorPalette name="brand" />
-      <ColorPalette name="menu" />
-      {/* <ColorPalette name="surface" />
-      <ColorPalette name="accent" /> */}
+      <ColorPalette name="surface" />
     </>
   );
 }
