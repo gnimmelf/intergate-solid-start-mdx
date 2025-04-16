@@ -5,6 +5,13 @@ import { center, flex } from "styled-system/patterns";
 import { Card } from "./Card";
 import { CardContainer } from "./CardContainer";
 
+/**
+ * Color tokens are semantic topens retrived by dot-prop key from `token(dotPropKey)`.
+ * This means we have to know the keys forehand, which is impossible unless they
+ * follow a well-known pattern. The pattern must be `colors.{palettename}.{50|index*100}.
+ * @param props.name palette-name
+ * @returns
+ */
 function ColorPalette(props: { name: string }) {
   const colors: any[] = [];
   let idx = 0;

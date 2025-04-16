@@ -112,12 +112,18 @@ export function createScientificPalettes(baseColor: LCH, type: ScientificPalette
   return palette
 }
 
-export function createHueShiftPalette(baseColor: LCH, options: { minLightness: number, maxLightness: number, hueStep: number }) {
-  const { minLightness, maxLightness, hueStep } = options;
+export function createHueShiftPalette(baseColor: LCH, options: {
+  minLightness: number,
+  maxLightness: number,
+  hueStep: number,
+  stepCount?: number
+}) {
+  const { minLightness, maxLightness, hueStep, stepCount } = options;
 
   const palette = [ensureMode(baseColor)];
+  const maxStep = (stepCount || 4) + 1;
 
-  for (let i = 1; i < 5; i++) {
+  for (let i = 1; i < maxStep ; i++) {
     const hueDark = adjustHue(baseColor.h - hueStep * i);
     const hueLight = adjustHue(baseColor.h + hueStep * i);
     const lightnessDark = map(i, 0, 4, baseColor.l, minLightness);

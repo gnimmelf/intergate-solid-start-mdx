@@ -8,14 +8,12 @@ import { CgDarkMode } from "solid-icons/cg";
 import { useBeforeLeave } from "@solidjs/router";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
-const BlobMenu = clientOnly(() => import("./BlobMenu"))
+const BlobMenu = clientOnly(() => import("./BlobMenu"));
 
 const styles = {
   menuBar: css({
     display: "flex",
     justifyContent: "space-between",
-    backdropFilter: 'auto',
-    backdropBlur: 'sm',
     borderBottom: "1px solid {colors.background}",
   }),
   menuButton: cx(
@@ -27,8 +25,8 @@ const styles = {
       fontSize: "1.5rem",
       cursor: "pointer",
       _focusVisible: {
-        outline: 'none'
-      }
+        outline: "none",
+      },
     })
   ),
 };
@@ -36,11 +34,11 @@ const styles = {
 const menuLinks = [
   {
     label: "Home",
-    href: "/"
+    href: "/",
   },
   {
     label: "About",
-    href: "/about"
+    href: "/about",
   },
   {
     label: "Articles",
@@ -52,13 +50,14 @@ export function MenuBar() {
   const theme = useTheme();
   const pageData = usePageData();
 
-
-  const [menuToggleRef, setMenuToggleRef] = createSignal<HTMLElement | null>(null);
+  const [menuToggleRef, setMenuToggleRef] = createSignal<HTMLElement | null>(
+    null
+  );
   const [menuIsOpen, setMenuIsOpen] = createSignal(false);
 
   useBeforeLeave(() => {
-    setMenuIsOpen(false)
-  })
+    setMenuIsOpen(false);
+  });
 
   function toggleDarkMode() {
     theme.toggleIsDark();
@@ -69,13 +68,26 @@ export function MenuBar() {
   }
 
   return (
-    <div class={styles.menuBar}>
+    <div
+      class={cx(
+        styles.menuBar,
+        !menuIsOpen() &&
+          /**
+           * This filter interferes with the backdrop blur on menu open
+           * - So reverse toggle for when menu is open
+           */
+          css({
+            backdropFilter: "auto",
+            backdropBlur: "sm",
+          })
+      )}
+    >
       <button
         ref={setMenuToggleRef}
         class={styles.menuButton}
-        style={{ 'z-index': 10, 'pointer-events': 'auto' }}
+        style={{ "z-index": 10, "pointer-events": "auto" }}
         onClick={() => {
-          setMenuIsOpen(!menuIsOpen())
+          setMenuIsOpen(!menuIsOpen());
         }}
         aria-label={menuIsOpen() ? "Close menu" : "Open menu"}
       >
@@ -88,11 +100,11 @@ export function MenuBar() {
         isOpen={menuIsOpen}
         setIsOpen={setMenuIsOpen}
         menuToggleRef={menuToggleRef}
-        />
+      />
 
       <button
         class={styles.menuButton}
-        style={{ 'z-index': 8 }}
+        style={{ "z-index": 8 }}
         onClick={toggleDarkMode}
         aria-label="Toggle dark mode"
       >
