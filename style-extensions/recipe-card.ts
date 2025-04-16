@@ -16,7 +16,7 @@ export const cardRecipe = defineSlotRecipe({
       overflow: 'hidden',
       border: "1px solid {colors.surface.background}",
       _hover: {
-        borderColor: "{colors.surface.foreground}",
+        borderColor: "{colors.surface.border}",
       },
     },
     header: {

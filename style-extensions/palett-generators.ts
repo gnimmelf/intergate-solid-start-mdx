@@ -7,7 +7,7 @@ import {
   formatHex,
   parse,
   lch,
-  Color
+  formatCss,
 } from "culori"
 
 type LCH = {
@@ -43,18 +43,14 @@ function adjustHue(val: number) {
   return val % 360;
 }
 
-function map(n: number, start1: number, end1: number, start2: number, end2: number) {
-  return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
-}
-
-export function createRamp(palette: LCH[]) {
+export function createRamp(palette: LCH[], formatFn = formatHex) {
   const entries = palette.map((color: LCH, idx) => {
     const index = idx === 0 ? "50" : idx * 100;
     return [
       `${index}`,
       {
         //@ts-expect-error
-        value: formatHex(ensureMode(color)),
+        value: formatFn(ensureMode(color))
       },
     ];
   });
@@ -112,22 +108,48 @@ export function createScientificPalettes(baseColor: LCH, type: ScientificPalette
   return palette
 }
 
-export function createHueShiftPalette(baseColor: LCH, options: {
-  minLightness: number,
-  maxLightness: number,
-  hueStep: number,
-  stepCount?: number
+function mapRangeValue(
+  step: number,
+  maxSteps: number,
+  startValue: number,
+  targetValue: number
+) {
+  // Map n from [0, maxSteps-1] to [startValue, targetValue]
+  return startValue + (step / (maxSteps - 1)) * (targetValue - startValue);
+}
+
+/**
+ * Creates a palette by adding shifted colors
+ * @param baseColor
+ * @param options.range The number of hues to add on each side of the base color
+ * @param options.minLightness The minimum lightness for the darkest hue
+ * @param options.maxLightness The maximum lightness for the lightest hue
+ * @param options.maxHueDeviation The hue deviation from the base color, distributed linearly across the hues
+ * @returns
+ */
+export function createHueShiftPalette(baseColor: LCH,  options?: {
+  range?: number
+  minLightness?: number,
+  maxLightness?: number,
+  maxHueDeviation?: number,
 }) {
-  const { minLightness, maxLightness, hueStep, stepCount } = options;
+  const { minLightness, maxLightness, maxHueDeviation, range } = Object.assign({
+    range: 4,
+    minLightness: 10,
+    maxLightness: 80,
+    maxHueDeviation: 80,
+  }, options ?? {});
 
   const palette = [ensureMode(baseColor)];
-  const maxStep = (stepCount || 4) + 1;
+  const maxSteps = range + 1;
 
-  for (let i = 1; i < maxStep ; i++) {
-    const hueDark = adjustHue(baseColor.h - hueStep * i);
-    const hueLight = adjustHue(baseColor.h + hueStep * i);
-    const lightnessDark = map(i, 0, 4, baseColor.l, minLightness);
-    const lightnessLight = map(i, 0, 4, baseColor.l, maxLightness);
+  for (let i = 1; i < maxSteps; i++) {
+    // Map hue for darker and lighter hues
+    const hueDark = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h - maxHueDeviation));
+    const hueLight = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h + maxHueDeviation));
+    // Map lightness for darker and lighter hues
+    const lightnessDark = mapRangeValue(i, maxSteps, baseColor.l, minLightness);
+    const lightnessLight = mapRangeValue(i, maxSteps, baseColor.l, maxLightness);
     const chroma = baseColor.c;
 
     palette.push(ensureMode({

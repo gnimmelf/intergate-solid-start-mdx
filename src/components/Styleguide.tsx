@@ -73,8 +73,9 @@ export function Styleguide() {
         </Card>
       </CardContainer>
       <ColorPalette name="brand" />
-      <ColorPalette name="surface" />
-      <ColorPalette name="accent" />
+      <ColorPalette name="menu" />
+      {/* <ColorPalette name="surface" />
+      <ColorPalette name="accent" /> */}
     </>
   );
 }

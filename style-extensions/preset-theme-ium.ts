@@ -8,25 +8,27 @@ import {
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
 
-const colors = {
-  brand: createHueShiftPalette(toLch('#3A315F'), {
-    minLightness: 10,
-    maxLightness: 80,
-    hueStep: 20
+const palettes = {
+  brand: createHueShiftPalette(toLch('#3A315F')),
+  menu: createHueShiftPalette(toLch('#3A315F'), {
+    range: 2,
   }),
   surface: createHueShiftPalette(toLch('#753F8F'), {
+    range: 4,
     minLightness: 10,
     maxLightness: 80,
-    hueStep: 20
+    maxHueDeviation: 20*4,
   }),
-  accent: createScientificPalettes(toLch('#E0A45F'), ScientificPaletteType.Complementary)
+  accent: createScientificPalettes(toLch('#ea6767'), ScientificPaletteType.Complementary),
 }
+
+console.dir({palettes}, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
   // Define conditions for light and dark modes
   conditions: {
-    light: '[data-theme=light] &',
+    paradym: '[data-theme=paradym] &',
     dark: '[data-theme=dark] &',
   },
 
@@ -34,7 +36,7 @@ export const themeiumPreset = definePreset({
   theme: {
     extend: {
       tokens: {
-        colors,
+        colors: palettes,
         cursor: {
           click: { value: 'pointer' },
           disabled: { value: 'not-allowed' },
@@ -96,7 +98,8 @@ export const themeiumPreset = definePreset({
             },
             border: {
               value: {
-                base: '{colors.surface.600}',
+                base: '{colors.surface.100}',
+                _dark: '{colors.surface.400}',
               },
             },
           },
