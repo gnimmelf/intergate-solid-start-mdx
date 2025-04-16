@@ -25,7 +25,7 @@ const palettes = {
   }),
 }
 
-console.dir({palettes}, { depth: null })
+// console.dir({palettes}, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
@@ -85,7 +85,7 @@ export const themeiumPreset = definePreset({
                 _dark: '{colors.surface.50}',
               },
             },
-          },
+          }
         },
       },
       slotRecipes: {

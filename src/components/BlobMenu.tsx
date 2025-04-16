@@ -13,7 +13,7 @@ import { debounce } from "~/utils/debounce";
 
 type Vector2 = [number, number];
 
-const MAX_BLOB_RECT: Vector2 = [500, 600];
+const MAX_BLOB_RECT: Vector2 = [450, 400];
 
 const styles = {
   backDropBlur: css({
@@ -23,7 +23,7 @@ const styles = {
     width: "100vw",
     height: "100vh",
     backdropFilter: "auto",
-    backdropBlur: "sm",
+    backdropBlur: "lg",
   }),
   blobMenu: cx(
     css({
@@ -31,7 +31,7 @@ const styles = {
       width: "100vw",
       height: "100vh",
       pointerEvents: "none",
-      filter: "url(#goo)",
+      filter: "url(#shadowed-goo)",
 
       // Blob dispersion variables
       "--width": "150px",
@@ -82,26 +82,44 @@ const styles = {
 };
 
 const SvgFilters = function () {
+  /**
+   * See:
+   *   https://css-tricks.com/gooey-effect/
+   */
+  const deviation = 20
   return (
     <Portal isSVG={true}>
-      <svg>
-        <defs>
-          <filter id="goo">
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="10"
-              result="blur"
-            />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 20 -10"
-              result="goo"
-            />
-            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-          </filter>
-        </defs>
-      </svg>
+      <defs>
+        <filter id="shadowed-goo">
+          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={deviation} />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+            result="goo"
+          />
+          <feGaussianBlur in="goo" stdDeviation="3" result="shadow" />
+          <feColorMatrix
+            in="shadow"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 -0.07"
+            result="shadow"
+          />
+          <feOffset in="shadow" dx="1" dy="1" result="shadow" />
+          <feBlend in2="shadow" in="goo" result="goo" />
+          <feBlend in2="goo" in="SourceGraphic" result="mix" />
+        </filter>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={deviation} />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+            result="goo"
+          />
+          <feBlend in2="goo" in="SourceGraphic" result="mix" />
+        </filter>
+      </defs>
     </Portal>
   );
 };
@@ -114,7 +132,7 @@ function setBlobPositions(blobRefs: HTMLElement[], blobRect: Vector2) {
 
   const goldenAngle = 2.399963; // radians
   const baseRadius = 40;
-  const spacingPadding = 2; // extra spacing to prevent touching
+  const spacingPadding = 4; // extra spacing to prevent touching
 
   const placed: { x: number; y: number; radius: number }[] = [];
 
