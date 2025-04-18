@@ -108,19 +108,19 @@ export function createScientificPalettes(baseColor: LCH, type: ScientificPalette
   return palette
 }
 
-function mapRangeValue(
+function lerpStepValue(
   step: number,
   maxSteps: number,
   startValue: number,
   targetValue: number
 ) {
-  // Map n from [0, maxSteps-1] to [startValue, targetValue]
+  // Interpolate value for step n in [0, maxSteps-1] to [startValue, targetValue]
   return startValue + (step / (maxSteps - 1)) * (targetValue - startValue);
 }
 
 /**
  * Creates a palette by adding shifted colors
- * @param baseColor
+ * @param baseColor LHC color
  * @param options.range The number of hues to add on each side of the base color
  * @param options.minLightness The minimum lightness for the darkest hue
  * @param options.maxLightness The maximum lightness for the lightest hue
@@ -147,11 +147,11 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
 
   for (let i = 1; i < maxSteps; i++) {
     // Map hue for darker and lighter hues
-    const hueDark = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h - minHue));
-    const hueLight = adjustHue(mapRangeValue(i, maxSteps, baseColor.h, baseColor.h + maxHue));
+    const hueDark = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h - minHue));
+    const hueLight = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + maxHue));
     // Map lightness for darker and lighter hues
-    const lightnessDark = mapRangeValue(i, maxSteps, baseColor.l, minLightness);
-    const lightnessLight = mapRangeValue(i, maxSteps, baseColor.l, maxLightness);
+    const lightnessDark = lerpStepValue(i, maxSteps, baseColor.l, minLightness);
+    const lightnessLight = lerpStepValue(i, maxSteps, baseColor.l, maxLightness);
     const chroma = baseColor.c;
 
     palette.push(ensureMode({
@@ -164,6 +164,42 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
       l: lightnessLight,
       c: chroma,
       h: hueLight,
+    }));
+  }
+
+  return createRamp(palette);
+}
+
+/**
+ *
+ * @param baseColor LHC color
+ * @param options range Number of steps to create palette
+ * @param options lightnessOffset +/- value for lightness of final step
+ * @param options hueOffset +/- value for hue of final step
+ * @returns
+ */
+export function createHueRangePalette(baseColor: LCH,  options: {
+  range: number
+  lightnessOffset: number,
+  hueOffset: number,
+}) {
+  const { lightnessOffset, hueOffset, range } = Object.assign({}, options ?? {});
+
+  const palette = [ensureMode(baseColor)];
+  const maxSteps = range + 1;
+
+  for (let i = 1; i < maxSteps; i++) {
+    // Interpolate hueValue
+    const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + hueOffset));
+    // Interpolate lightnessValue
+    const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l + lightnessOffset);
+
+    const chroma = baseColor.c;
+
+    palette.push(ensureMode({
+      l: lightnessValue,
+      h: hueValue,
+      c: chroma,
     }));
   }
 

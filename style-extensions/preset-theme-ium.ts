@@ -5,6 +5,7 @@ import {
   ScientificPaletteType,
   createHueShiftPalette,
   toLch,
+  createHueRangePalette,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
 import { linkRecipe } from './recipe-link'
@@ -24,6 +25,11 @@ const palettes = {
     maxHue: 80,
     minHue: 60,
   }),
+  range: createHueRangePalette(toLch('#7c1b4b'), {
+    range: 4,
+    lightnessOffset: 40,
+    hueOffset: 40,
+  })
 }
 
 // console.dir({palettes}, { depth: null })

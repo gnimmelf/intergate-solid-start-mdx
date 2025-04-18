@@ -72,6 +72,7 @@ export function Styleguide() {
           <p>Card content</p>
         </Card>
       </CardContainer>
+      <ColorPalette name="range" />
       <ColorPalette name="brand" />
       <ColorPalette name="surface" />
     </>
