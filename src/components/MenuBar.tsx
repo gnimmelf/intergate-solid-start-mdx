@@ -1,12 +1,12 @@
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { clientOnly } from "@solidjs/start";
-import { usePageData } from "./PageDataContext";
+import { useBeforeLeave } from "@solidjs/router";
 import { css, cx } from "styled-system/css";
 import { center } from "styled-system/patterns";
+import { link } from "styled-system/recipes";
 import { useTheme } from "./ThemeProvider";
+import { usePageData } from "./PageDataContext";
 import { CgDarkMode } from "solid-icons/cg";
-import { useBeforeLeave } from "@solidjs/router";
-import { Portal } from "solid-js/web";
 import { SITE_TITLE } from "~/constants";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
@@ -19,28 +19,25 @@ const styles = {
     justifyContent: "space-between",
     borderBottom: "1px solid {colors.background}",
   }),
-  siteTitle: css({
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    '& > *': {
-      margin: "0px"
-    }
-  }),
+  siteTitle: cx(
+    link(),
+    css({
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      "& > *": {
+        margin: "0px",
+      },
+    })
+  ),
   menuButton: cx(
+    link(),
     center(),
     css({
       width: "40px",
       height: "40px",
       border: "none",
       fontSize: "1.5rem",
-      cursor: "pointer",
-      _hover: {
-        color: "{colors.accent}",
-      },
-      _focusVisible: {
-        outline: "none",
-      },
     })
   ),
 };
@@ -119,7 +116,9 @@ export function MenuBar() {
           />
         </div>
 
-        <a class={styles.siteTitle} href="/"><h2>{SITE_TITLE}</h2></a>
+        <a class={styles.siteTitle} href="/">
+          <h2>{SITE_TITLE}</h2>
+        </a>
 
         <button
           class={styles.menuButton}

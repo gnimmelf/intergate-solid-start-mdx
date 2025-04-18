@@ -7,6 +7,7 @@ import {
   toLch,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
+import { linkRecipe } from './recipe-link'
 
 const palettes = {
   brand: createHueShiftPalette(toLch('#354D43'), {
@@ -50,14 +51,14 @@ export const themeiumPreset = definePreset({
         colors: {
           background: {
             value: {
-              base: '{colors.brand.100}',
+              base: '{colors.brand.50}',
               _dark: '{colors.brand.500}',
             },
           },
           foreground: {
             value: {
               base: '{colors.brand.500}',
-              _dark: '{colors.brand.100}',
+              _dark: '{colors.brand.50}',
             },
           },
           accent: {
@@ -88,8 +89,11 @@ export const themeiumPreset = definePreset({
           }
         },
       },
+      recipes: {
+        link: linkRecipe,
+      },
       slotRecipes: {
-        card: cardRecipe
+        card: cardRecipe,
       }
     },
   },
