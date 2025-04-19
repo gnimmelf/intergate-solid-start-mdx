@@ -30,7 +30,7 @@ export function toLch(hexColor: string) {
   return lch(parse(hexColor)) as LCH
 }
 
-function ensureMode(color: LCH) {
+export function ensureLchMode(color: LCH) {
   return {
     ...color,
     mode: COLOR_MODE
@@ -50,7 +50,7 @@ export function createRamp(palette: LCH[], formatFn = formatHex) {
       `${index}`,
       {
         //@ts-expect-error
-        value: formatFn(ensureMode(color))
+        value: formatFn(ensureLchMode(color))
       },
     ];
   });
@@ -99,7 +99,7 @@ export function createScientificPalettes(baseColor: LCH, type: ScientificPalette
     splitComplementary: [0, 150, 210]
   };
 
-  const palette = createRamp(targetHueSteps[type].map((step: number) => ensureMode({
+  const palette = createRamp(targetHueSteps[type].map((step: number) => ensureLchMode({
     l: baseColor.l,
     c: baseColor.c,
     h: adjustHue(baseColor.h + step),
@@ -142,7 +142,7 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
     minHue: 80,
   }, options ?? {});
 
-  const palette = [ensureMode(baseColor)];
+  const palette = [ensureLchMode(baseColor)];
   const maxSteps = range + 1;
 
   for (let i = 1; i < maxSteps; i++) {
@@ -154,13 +154,13 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
     const lightnessLight = lerpStepValue(i, maxSteps, baseColor.l, maxLightness);
     const chroma = baseColor.c;
 
-    palette.push(ensureMode({
+    palette.push(ensureLchMode({
       l: lightnessDark,
       c: chroma,
       h: hueDark,
     }));
 
-    palette.unshift(ensureMode({
+    palette.unshift(ensureLchMode({
       l: lightnessLight,
       c: chroma,
       h: hueLight,
@@ -174,29 +174,31 @@ export function createHueShiftPalette(baseColor: LCH,  options?: {
  *
  * @param baseColor LHC color
  * @param options range Number of steps to create palette
- * @param options lightnessOffset +/- value for lightness of final step
- * @param options hueOffset +/- value for hue of final step
+ * @param options lightnessRange +/- value for lightness of final step
+ * @param options hueRange +/- value for hue of final step
  * @returns
  */
 export function createHueRangePalette(baseColor: LCH,  options: {
   range: number
-  lightnessOffset: number,
-  hueOffset: number,
+  lightnessRange: number,
+  hueRange?: number,
 }) {
-  const { lightnessOffset, hueOffset, range } = Object.assign({}, options ?? {});
+  const { lightnessRange, hueRange, range } = Object.assign({
+    hueRange: 0
+  }, options ?? {});
 
-  const palette = [ensureMode(baseColor)];
+  const palette = [ensureLchMode(baseColor)];
   const maxSteps = range + 1;
 
   for (let i = 1; i < maxSteps; i++) {
     // Interpolate hueValue
-    const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + hueOffset));
+    const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + hueRange));
     // Interpolate lightnessValue
-    const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l + lightnessOffset);
+    const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l + lightnessRange);
 
     const chroma = baseColor.c;
 
-    palette.push(ensureMode({
+    palette.push(ensureLchMode({
       l: lightnessValue,
       h: hueValue,
       c: chroma,
@@ -204,4 +206,18 @@ export function createHueRangePalette(baseColor: LCH,  options: {
   }
 
   return createRamp(palette);
+}
+
+export function getContrastingLCH({ l, h, c }: { l: number; h: number; c: number }) {
+  const contrastThreshold = 50; // Aim for at least 50 lightness units of contrast
+  let newL: number;
+
+  if (l > 50) {
+    newL = Math.max(0, l - contrastThreshold); // make it much darker
+  } else {
+    newL = Math.min(100, l + contrastThreshold); // make it much lighter
+  }
+
+  // Optional tweak: You could adjust hue slightly to make it visually distinct too
+  return { l: newL, h: (h + 180) % 360, c } as LCH; // rotate hue to opposite
 }

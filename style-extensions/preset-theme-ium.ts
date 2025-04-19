@@ -9,28 +9,48 @@ import { cardRecipe } from './recipe-card'
 import { linkRecipe } from './recipe-link'
 
 const palettes = {
-  brand: createHueShiftPalette(toLch('#354D43'), {
-    range: 4,
-    maxLightness: 100,
-    minLightness: 15,
-    maxHue: 80,
-    minHue: 20,
-  }),
-  surface: createHueShiftPalette(toLch('#5b969b'), {
-    range: 4,
-    maxLightness: 100,
-    minLightness: 20,
-    maxHue: 80,
-    minHue: 60,
-  }),
-  range: createHueRangePalette(toLch('#7c1b4b'), {
-    range: 4,
-    lightnessOffset: 40,
-    hueOffset: 0,
-  })
+  light: {
+    text: { value: '#363636' },
+    link: createHueRangePalette(toLch('#022419'), {
+      range: 1,
+      lightnessRange: 30,
+    }),
+    accent: { value: '#EC1480' },
+    ...createHueRangePalette(toLch('#AAEED2'), {
+      range: 4,
+      lightnessRange: -30,
+    }),
+    surface: {
+      text: { value: '#363636' },
+      ...createHueRangePalette(toLch('#79DB81'), {
+        range: 4,
+        lightnessRange: 30,
+      })
+    },
+
+  },
+  dark: {
+    text: { value: '#D4D4D4' },
+    link: createHueRangePalette(toLch('rgb(211 147 181)'), {
+      range: 1,
+      lightnessRange: 30,
+    }),
+    accent: { value: '#EC1480' },
+    ...createHueRangePalette(toLch('#35574A'), {
+      range: 4,
+      lightnessRange: -30,
+    }),
+    surface: {
+      text: { value: '#D4D4D4' },
+      ...createHueRangePalette(toLch('#7c1b4b'), {
+        range: 4,
+        lightnessRange: 40,
+      })
+    },
+  }
 }
 
-// console.dir({palettes}, { depth: null })
+// console.dir({ palettes }, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
@@ -55,39 +75,33 @@ export const themeiumPreset = definePreset({
         colors: {
           background: {
             value: {
-              base: '{colors.brand.50}',
-              _dark: '{colors.brand.500}',
+              base: '{colors.light.300}',
+              _dark: '{colors.dark.300}',
             },
           },
           foreground: {
             value: {
-              base: '{colors.brand.500}',
-              _dark: '{colors.brand.50}',
+              base: '{colors.light.text}',
+              _dark: '{colors.dark.text}',
             },
           },
           accent: {
             value: {
-              base: '{colors.brand.800}',
-              _dark: '{colors.brand.50}',
+              base: '{colors.light.accent}',
+              _dark: '{colors.dark.accent}',
             },
           },
           surface: {
             background: {
               value: {
-                base: '{colors.surface.100}',
-                _dark: '{colors.surface.500}',
+                base: '{colors.light.surface.300}',
+                _dark: '{colors.dark.surface.300}',
               },
             },
             foreground: {
               value: {
-                base: '{colors.surface.500}',
-                _dark: '{colors.surface.100}',
-              },
-            },
-            accent: {
-              value: {
-                base: '{colors.surface.600}',
-                _dark: '{colors.surface.50}',
+                base: '{colors.light.surface.text}',
+                _dark: '{colors.dark.surface.text}',
               },
             },
           }
@@ -131,6 +145,11 @@ export const themeiumPreset = definePreset({
       lineHeight: '1.4',
       marginBottom: '2',
     },
+    a: {
+      _hover: {
+        color: '{'
+      }
+    }
   },
 })
 
