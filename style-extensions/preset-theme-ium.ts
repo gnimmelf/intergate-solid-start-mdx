@@ -1,10 +1,8 @@
 // panda.config.ts or similar preset file
 import { definePreset } from '@pandacss/dev'
 import {
-  createScientificPalettes,
-  ScientificPaletteType,
-  createHueShiftPalette,
   toLch,
+  createHueShiftPalette,
   createHueRangePalette,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
@@ -28,7 +26,7 @@ const palettes = {
   range: createHueRangePalette(toLch('#7c1b4b'), {
     range: 4,
     lightnessOffset: 40,
-    hueOffset: 40,
+    hueOffset: 0,
   })
 }
 

@@ -10,10 +10,9 @@ import {
 import Dismissible from "solid-dismissible";
 import { css, cx } from "styled-system/css";
 import { debounce } from "~/utils/debounce";
+import { BLOB_MENU_PARAMS } from "~/constants";
 
 type Vector2 = [number, number];
-
-const MAX_BLOB_RECT: Vector2 = [450, 400];
 
 const styles = {
   backDropBlur: css({
@@ -25,7 +24,7 @@ const styles = {
     backdropFilter: "auto",
     backdropBlur: "lg",
   }),
-  blobMenu: cx(
+  blobContainer: cx(
     css({
       position: "fixed",
       width: "100vw",
@@ -35,7 +34,7 @@ const styles = {
 
       // Blob dispersion variables
       "--width": "150px",
-      "--height": "100px",
+      "--height": "90px",
       "--offset-x": "-50px",
       "--offset-y": "-40px",
       // Initial start
@@ -86,12 +85,12 @@ const SvgFilters = function () {
    * See:
    *   https://css-tricks.com/gooey-effect/
    */
-  const deviation = 20
+  const blurDeviation = 20
   return (
     <Portal isSVG={true}>
       <defs>
         <filter id="shadowed-goo">
-          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={deviation} />
+          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={blurDeviation} />
           <feColorMatrix
             in="blur"
             type="matrix"
@@ -110,7 +109,7 @@ const SvgFilters = function () {
           <feBlend in2="goo" in="SourceGraphic" result="mix" />
         </filter>
         <filter id="goo">
-          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={deviation} />
+          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={blurDeviation} />
           <feColorMatrix
             in="blur"
             type="matrix"
@@ -124,28 +123,35 @@ const SvgFilters = function () {
   );
 };
 
+/**
+ * Blob dispersion
+ * @param blobRefs
+ * @param blobRect
+ */
 function setBlobPositions(blobRefs: HTMLElement[], blobRect: Vector2) {
   const blobs = blobRefs.filter(Boolean);
 
   const centerX = blobRect[0] / 2;
   const centerY = blobRect[1] / 2;
 
-  const goldenAngle = 2.399963; // radians
-  const baseRadius = 40;
-  const spacingPadding = 4; // extra spacing to prevent touching
+  const goldenAngle = 2.399963 // In radians
 
-  const placed: { x: number; y: number; radius: number }[] = [];
+  // Tweakable params
+  const baseRadius = BLOB_MENU_PARAMS.baseRadius
+  const radiusOffset = BLOB_MENU_PARAMS.radiusOffset
+  const spacingPadding = BLOB_MENU_PARAMS.spacingPadding
+  const maxRadius = BLOB_MENU_PARAMS.maxRadius;
+
+  const blobBounds: { x: number; y: number; radius: number }[] = [];
 
   blobs.forEach((ref, idx) => {
     const blobWidth = ref.offsetWidth;
     const blobHeight = ref.offsetHeight;
 
-    const effectiveRadius =
-      Math.min(blobWidth, blobHeight) / 2 + spacingPadding;
+    const effectiveRadius = Math.min(blobWidth, blobHeight) / 2 + spacingPadding;
 
     let angle = idx * goldenAngle;
     let radius = baseRadius;
-    const maxRadius = 300;
 
     let found = false;
     let x = 0;
@@ -165,8 +171,8 @@ function setBlobPositions(blobRefs: HTMLElement[], blobRect: Vector2) {
         screenY - blobHeight / 2 > 0 &&
         screenY + blobHeight / 2 < innerHeight;
 
-      // Make sure it doesn’t overlap with any placed blob
-      const doesOverlap = placed.some((p) => {
+      // Make sure it doesn’t overlap with any blobBounds blob
+      const doesOverlap = blobBounds.some((p) => {
         const dx = p.x - x;
         const dy = p.y - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -178,11 +184,11 @@ function setBlobPositions(blobRefs: HTMLElement[], blobRect: Vector2) {
         break;
       }
 
-      radius += 6;
-      angle += goldenAngle * 0.25; // slow spiral
+      radius += radiusOffset;
+      angle += goldenAngle * BLOB_MENU_PARAMS.angleOffset
     }
 
-    placed.push({ x, y, radius: effectiveRadius });
+    blobBounds.push({ x, y, radius: effectiveRadius });
 
     const cancelInitialOffsetX = `(0px - var(--offset-x))`;
     const cancelInitialOffsetY = `(0px - var(--offset-y))`;
@@ -205,8 +211,14 @@ export function BlobMenu(props: {
   const [dismissableRef, setDismissableRef] = createSignal<HTMLElement | null>(
     null
   );
+
+  const maxBlobsRect: Vector2 = [
+    BLOB_MENU_PARAMS.boxScaleFactorX * props.links.length,
+    BLOB_MENU_PARAMS.boxScaleFactorY * props.links.length
+  ];
+
   const [blobRefs, _setBlobRefs] = createSignal<HTMLElement[]>([]);
-  const [blobRect, _setBlobRect] = createSignal(MAX_BLOB_RECT);
+  const [blobRect, _setBlobRect] = createSignal(maxBlobsRect);
 
   function addBlobRef(ref: HTMLElement, idx: number) {
     // Update the refs array at the current index
@@ -220,8 +232,8 @@ export function BlobMenu(props: {
   function setBlobRect() {
     const { innerWidth } = window;
     const newRect: Vector2 = [
-      innerWidth > MAX_BLOB_RECT[0] ? MAX_BLOB_RECT[0] : innerWidth,
-      MAX_BLOB_RECT[1],
+      innerWidth > maxBlobsRect[0] ? maxBlobsRect[0] : innerWidth,
+      maxBlobsRect[1],
     ];
     if (blobRect()[0] !== newRect[0] || blobRect()[1] !== newRect[1]) {
       _setBlobRect(newRect);
@@ -259,7 +271,9 @@ export function BlobMenu(props: {
       >
         <div
           ref={setDismissableRef}
-          class={cx(styles.blobMenu, props.isOpen() && styles.open)}
+          class={cx(
+            styles.blobContainer,
+            props.isOpen() && styles.open)}
           style={{ "z-index": props.zIndex }}
         >
           <For each={props.links}>

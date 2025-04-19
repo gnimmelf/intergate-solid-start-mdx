@@ -7,7 +7,7 @@ import { link } from "styled-system/recipes";
 import { useTheme } from "./ThemeProvider";
 import { usePageData } from "./PageDataContext";
 import { CgDarkMode } from "solid-icons/cg";
-import { SITE_TITLE } from "~/constants";
+import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));
@@ -41,21 +41,6 @@ const styles = {
     })
   ),
 };
-
-const menuLinks = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "Articles",
-    href: "/articles",
-  },
-];
 
 export function MenuBar() {
   const theme = useTheme();
@@ -109,7 +94,7 @@ export function MenuBar() {
         <div style={{ position: "absolute" }}>
           <BlobMenu
             zIndex={9}
-            links={menuLinks}
+            links={PRIMARY_MENU_LINKS}
             isOpen={menuIsOpen}
             setIsOpen={setMenuIsOpen}
             menuToggleRef={menuToggleRef}
