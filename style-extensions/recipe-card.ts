@@ -10,19 +10,19 @@ export const cardRecipe = defineSlotRecipe({
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: '{colors.surface.background}',
-      color: '{colors.surface.foreground}',
+      color: '{colors.surface.text}',
       borderRadius: 'lg',
       boxShadow: '{shadows.2xl}',
       overflow: 'hidden',
-      border: "1px solid {colors.surface.background}",
+      border: "1px solid {colors.surface.text}",
       _hover: {
-        borderColor: "{colors.surface.accent}",
+        // TODO! S.th cool!
       },
     },
     header: {
       padding: '4',
       fontWeight: 'bold',
-      borderBottom: '1px solid {colors.surface.accent}',
+      borderBottom: '1px solid {colors.surface.text}',
     },
     content: {
       padding: '4',
@@ -30,7 +30,7 @@ export const cardRecipe = defineSlotRecipe({
       flex: '1',
     },
     footer: {
-      borderTop: '1px solid {colors.surface.accent}',
+      borderTop: '1px solid {colors.surface.text}',
       padding: '4',
       fontSize: 'sm',
     },

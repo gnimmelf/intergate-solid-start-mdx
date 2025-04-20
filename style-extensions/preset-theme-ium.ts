@@ -6,7 +6,7 @@ import {
   createHueShiftPalette,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
-import { linkRecipe } from './recipe-link'
+import { linkBase, linkRecipe } from './recipe-link'
 
 /**
  * Goal:
@@ -84,7 +84,7 @@ function createDarkPalette() {
   colors.link = createHueShiftPalette(toLch(colors.text.value), {
     range: 1,
     baseColorPos: 'center',
-    lightnessRange: 10,
+    lightnessRange: 30,
   })
   colors.surface.text = {
     value: getContrastingHex(colors.surface['200'].value)
@@ -92,7 +92,7 @@ function createDarkPalette() {
   colors.surface.link = createHueShiftPalette(toLch(colors.surface.text.value), {
     range: 1,
     baseColorPos: 'center',
-    lightnessRange: 10,
+    lightnessRange: 30,
   })
   return colors
 }
@@ -101,8 +101,6 @@ const palettes = {
   light: createLightPalette(),
   dark: createDarkPalette()
 }
-
-// console.dir({ palettes }, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
@@ -131,16 +129,16 @@ export const themeiumPreset = definePreset({
               _dark: '{colors.dark.200}',
             },
           },
-          foreground: {
-            value: {
-              base: '{colors.light.text}',
-              _dark: '{colors.dark.text}',
-            },
-          },
           accent: {
             value: {
               base: '{colors.light.accent}',
               _dark: '{colors.dark.accent}',
+            },
+          },
+          text: {
+            value: {
+              base: '{colors.light.text}',
+              _dark: '{colors.dark.text}',
             },
           },
           surface: {
@@ -150,7 +148,7 @@ export const themeiumPreset = definePreset({
                 _dark: '{colors.dark.surface.200}',
               },
             },
-            foreground: {
+            text: {
               value: {
                 base: '{colors.light.surface.text}',
                 _dark: '{colors.dark.surface.text}',
@@ -172,7 +170,7 @@ export const themeiumPreset = definePreset({
   globalCss: {
     html: {
       fontFamily: 'sans-serif',
-      color: 'foreground',
+      color: 'text',
       backgroundColor: 'background',
     },
     body: {
@@ -197,11 +195,7 @@ export const themeiumPreset = definePreset({
       lineHeight: '1.4',
       marginBottom: '2',
     },
-    a: {
-      _hover: {
-        color: '{'
-      }
-    }
+    a: linkBase
   },
 })
 

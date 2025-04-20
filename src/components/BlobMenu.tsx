@@ -55,7 +55,7 @@ const styles = {
     textDecoration: "none",
     pointerEvents: "auto",
     background: "{colors.surface.background}",
-    color: "{colors.surface.foreground}",
+    color: "{colors.surface.text}",
 
     opacity: "0",
     transform: "scale(0.5)",

@@ -1,22 +1,25 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const linkRecipe = defineRecipe({
-  className: 'link',
-  base: {
-    color: '{colors.light.100}',
+
+export const linkBase = {
+  color: '{colors.light.link.50}',
+  _dark: {
+    color: '{colors.dark.link.50}',
+  },
+  _hover: {
+    color: '{colors.light.link.200}',
     _dark: {
-      color: '{colors.dark.100}',
-    },
-    _hover: {
-      color: '{colors.light.50}',
-      _dark: {
-        color: '{colors.dark.50}',
-      },
-    },
-    _focusVisible: {
-      outline: "none",
+      color: '{colors.dark.link.200}',
     },
   },
+  _focusVisible: {
+    outline: "none",
+  },
+}
+
+export const linkRecipe = defineRecipe({
+  className: 'link',
+  base: linkBase,
   variants: {
     cursor: {
       click: { cursor: 'pointer' },

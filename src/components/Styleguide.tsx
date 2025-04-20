@@ -1,7 +1,7 @@
 import { For } from "solid-js";
 import { Token, token } from "styled-system/tokens";
 import { Dynamic } from "solid-js/web";
-import { center } from "styled-system/patterns";
+import { center, linkOverlay } from "styled-system/patterns";
 import { Card } from "./Card";
 import { CardContainer } from "./CardContainer";
 import { css, cx } from "styled-system/css";
@@ -116,8 +116,9 @@ export function Styleguide() {
       <Headings depth={4} />
       <a href="#">Link</a>
       <CardContainer>
-        <Card title="Card title">
+        <Card title="Card title" footer={<p>Footer</p>}>
           <p>Card content</p>
+          <p><a class={linkOverlay()}href="#">Card Link</a></p>
         </Card>
       </CardContainer>
       <For each={["light", "dark"]}>
