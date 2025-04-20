@@ -7,7 +7,9 @@ import {
   formatHex,
   parse,
   lch,
-  formatCss,
+  Color,
+  clampChroma,
+
 } from "culori"
 
 type LCH = {
@@ -27,7 +29,7 @@ export enum ScientificPaletteType {
 const COLOR_MODE = 'lch'
 
 export function toLch(hexColor: string) {
-  return lch(parse(hexColor)) as LCH
+  return lch(parse(hexColor), COLOR_MODE) as LCH
 }
 
 export function ensureLchMode(color: LCH) {
@@ -119,105 +121,82 @@ function lerpStepValue(
 }
 
 /**
- * Creates a palette by adding shifted colors
- * @param baseColor LHC color
- * @param options.range The number of hues to add on each side of the base color
- * @param options.minLightness The minimum lightness for the darkest hue
- * @param options.maxLightness The maximum lightness for the lightest hue
- * @param options.maxHue The hue deviation from the base color, distributed linearly across the hues
- * @returns
- */
-export function createHueShiftPalette(baseColor: LCH,  options?: {
-  range?: number
-  minLightness?: number,
-  maxLightness?: number,
-  minHue?: number,
-  maxHue?: number,
-}) {
-  const { minLightness, maxLightness, maxHue, minHue, range } = Object.assign({
-    range: 4,
-    maxLightness: 80,
-    minLightness: 10,
-    maxHue: 80,
-    minHue: 80,
-  }, options ?? {});
-
-  const palette = [ensureLchMode(baseColor)];
-  const maxSteps = range + 1;
-
-  for (let i = 1; i < maxSteps; i++) {
-    // Map hue for darker and lighter hues
-    const hueDark = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h - minHue));
-    const hueLight = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + maxHue));
-    // Map lightness for darker and lighter hues
-    const lightnessDark = lerpStepValue(i, maxSteps, baseColor.l, minLightness);
-    const lightnessLight = lerpStepValue(i, maxSteps, baseColor.l, maxLightness);
-    const chroma = baseColor.c;
-
-    palette.push(ensureLchMode({
-      l: lightnessDark,
-      c: chroma,
-      h: hueDark,
-    }));
-
-    palette.unshift(ensureLchMode({
-      l: lightnessLight,
-      c: chroma,
-      h: hueLight,
-    }));
-  }
-
-  return createRamp(palette);
-}
-
-/**
- *
+ * Create a range of hues, starting with basColor and adding the range
  * @param baseColor LHC color
  * @param options range Number of steps to create palette
  * @param options lightnessRange +/- value for lightness of final step
  * @param options hueRange +/- value for hue of final step
  * @returns
  */
-export function createHueRangePalette(baseColor: LCH,  options: {
+export function createHueShiftPalette(baseColor: LCH,  options?: {
   range: number
   lightnessRange: number,
   hueRange?: number,
+  baseColorPos?: 'start' | 'center'
 }) {
-  const { lightnessRange, hueRange, range } = Object.assign({
-    hueRange: 0
-  }, options ?? {});
+  const { lightnessRange, hueRange, range, baseColorPos } = Object.assign({
+    hueRange: 0,
+    baseColorPos: 'start'
+  }, options);
 
+  // Add base color
   const palette = [ensureLchMode(baseColor)];
-  const maxSteps = range + 1;
 
+  const chroma = baseColor.c;
+  const maxSteps = range + 1;
   for (let i = 1; i < maxSteps; i++) {
     // Interpolate hueValue
     const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + hueRange));
     // Interpolate lightnessValue
     const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l + lightnessRange);
-
-    const chroma = baseColor.c;
-
     palette.push(ensureLchMode({
       l: lightnessValue,
       h: hueValue,
       c: chroma,
     }));
+
+    if (baseColorPos === 'center') {
+      // Interpolate hueValue
+      const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h - hueRange));
+      // Interpolate lightnessValue
+      const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l - lightnessRange);
+      palette.unshift(ensureLchMode({
+        l: lightnessValue,
+        h: hueValue,
+        c: chroma,
+      }));
+    }
   }
 
   return createRamp(palette);
 }
 
-export function getContrastingLCH({ l, h, c }: { l: number; h: number; c: number }) {
-  const contrastThreshold = 50; // Aim for at least 50 lightness units of contrast
-  let newL: number;
+export function getContrastingLch(input: LCH) {
+  const contrast = 50;
+  const newL = input.l > 50
+    ? input.l - contrast
+    : Math.min(100, input.l + contrast);
+  const newH = (input.h + 180) % 360;
 
-  if (l > 50) {
-    newL = Math.max(0, l - contrastThreshold); // make it much darker
-  } else {
-    newL = Math.min(100, l + contrastThreshold); // make it much lighter
-  }
+  // build an LCh object
+  const target: LCH & { mode: 'lch' } = {
+    mode: 'lch',
+    l: newL,
+    c: input.c,
+    h: newH
+  };
 
-  // Optional tweak: You could adjust hue slightly to make it visually distinct too
-  return { l: newL, h: (h + 180) % 360, c } as LCH; // rotate hue to opposite
+  // clampChroma will find the highest c ≤ input.c
+  // that stays in sRGB gamut :contentReference[oaicite:0]{index=0}
+  const safeLch = clampChroma(target);
+
+  // formatHex converts to sRGB under the hood and returns #RRGGBB
+  return safeLch;
+}
+
+export function getContrastingHex(hexColor: string) {
+  const lch = toLch(hexColor)
+  const lchContrast = getContrastingLch(lch)
+  const hexContrast = formatHex(lchContrast)
+  return hexContrast
 }

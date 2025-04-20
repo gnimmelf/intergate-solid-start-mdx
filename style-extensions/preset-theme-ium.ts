@@ -2,52 +2,104 @@
 import { definePreset } from '@pandacss/dev'
 import {
   toLch,
+  getContrastingHex,
   createHueShiftPalette,
-  createHueRangePalette,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
 import { linkRecipe } from './recipe-link'
 
-const palettes = {
-  light: {
-    text: { value: '#363636' },
-    link: createHueRangePalette(toLch('#022419'), {
-      range: 1,
-      lightnessRange: 30,
-    }),
-    accent: { value: '#EC1480' },
-    ...createHueRangePalette(toLch('#AAEED2'), {
+/**
+ * Goal:
+ *   - Start with one base color per surface.
+ *
+ * - text: contrast to surface bg
+ * - link
+ * - accent
+ *
+ */
+
+function createLightPalette() {
+  const options = {
+    base: '#2F7291',
+    surfaceBase: '#78B0CA',
+    accent: '#D68DCA',
+  }
+  const colors = {
+    ...createHueShiftPalette(toLch(options.base), {
       range: 4,
       lightnessRange: -30,
     }),
     surface: {
-      text: { value: '#363636' },
-      ...createHueRangePalette(toLch('#79DB81'), {
+      ...createHueShiftPalette(toLch(options.surfaceBase), {
+        range: 4,
+        lightnessRange: -30,
+      })
+    },
+    accent: { value: options.accent },
+  }
+
+  // Computed
+  colors.text = {
+    value: getContrastingHex(colors['200'].value)
+  }
+  colors.link = createHueShiftPalette(toLch(colors.text.value), {
+    range: 1,
+    baseColorPos: 'center',
+    lightnessRange: 10,
+  })
+  colors.surface.text = {
+    value: getContrastingHex(colors.surface['200'].value)
+  }
+  colors.surface.link = createHueShiftPalette(toLch(colors.surface.text.value), {
+    range: 1,
+    baseColorPos: 'center',
+    lightnessRange: 10,
+  })
+  return colors
+}
+
+function createDarkPalette() {
+  const options = {
+    base: '#1F4C61',
+    surfaceBase: '#456F83',
+    accent: '#D68DCA',
+  }
+  const colors = {
+    ...createHueShiftPalette(toLch(options.base), {
+      range: 4,
+      lightnessRange: 30,
+    }),
+    surface: {
+      ...createHueShiftPalette(toLch(options.surfaceBase), {
         range: 4,
         lightnessRange: 30,
       })
     },
-
-  },
-  dark: {
-    text: { value: '#D4D4D4' },
-    link: createHueRangePalette(toLch('rgb(211 147 181)'), {
-      range: 1,
-      lightnessRange: 30,
-    }),
-    accent: { value: '#EC1480' },
-    ...createHueRangePalette(toLch('#35574A'), {
-      range: 4,
-      lightnessRange: -30,
-    }),
-    surface: {
-      text: { value: '#D4D4D4' },
-      ...createHueRangePalette(toLch('#7c1b4b'), {
-        range: 4,
-        lightnessRange: 40,
-      })
-    },
+    accent: { value: options.accent },
   }
+  // Computed
+  colors.text = {
+    value: getContrastingHex(colors['200'].value)
+  }
+  colors.link = createHueShiftPalette(toLch(colors.text.value), {
+    range: 1,
+    baseColorPos: 'center',
+    lightnessRange: 10,
+  })
+  colors.surface.text = {
+    value: getContrastingHex(colors.surface['200'].value)
+  }
+  colors.surface.link = createHueShiftPalette(toLch(colors.surface.text.value), {
+    range: 1,
+    baseColorPos: 'center',
+    lightnessRange: 10,
+  })
+  return colors
+}
+
+const palettes = {
+  light: createLightPalette(),
+  dark: createDarkPalette()
 }
 
 // console.dir({ palettes }, { depth: null })
@@ -75,8 +127,8 @@ export const themeiumPreset = definePreset({
         colors: {
           background: {
             value: {
-              base: '{colors.light.300}',
-              _dark: '{colors.dark.300}',
+              base: '{colors.light.200}',
+              _dark: '{colors.dark.200}',
             },
           },
           foreground: {
@@ -94,8 +146,8 @@ export const themeiumPreset = definePreset({
           surface: {
             background: {
               value: {
-                base: '{colors.light.surface.300}',
-                _dark: '{colors.dark.surface.300}',
+                base: '{colors.light.surface.200}',
+                _dark: '{colors.dark.surface.200}',
               },
             },
             foreground: {

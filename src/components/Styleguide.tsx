@@ -7,14 +7,14 @@ import { CardContainer } from "./CardContainer";
 import { css, cx } from "styled-system/css";
 import {
   toLch,
-  getContrastingLCH,
+  getContrastingLch,
   ensureLchMode,
 } from "~/../style-extensions/palett-generators";
 import { formatHex } from "culori";
 
 function getContrastColor(hex: string) {
   const parsedLch = toLch(hex);
-  return getContrastingLCH(parsedLch);
+  return getContrastingLch(parsedLch);
 }
 
 /**
@@ -54,8 +54,6 @@ function ColorPalette(props: { name: string }) {
     }
   });
 
-  console.log({ colors })
-
   return (
     <>
       <div
@@ -74,7 +72,7 @@ function ColorPalette(props: { name: string }) {
         fallback={<div>Palette "{props.name}" not found!</div>}
       >
         {(color) => {
-          const textColorValue = formatHex(ensureLchMode(getContrastColor(color.value)))
+          const textColorValue = token(`colors.${props.name}.text` as Token)
 
           return (
             <div
@@ -128,6 +126,7 @@ export function Styleguide() {
             <ColorPalette name={paletteName} />
             <ColorPalette name={`${paletteName}.link`} />
             <ColorPalette name={`${paletteName}.surface`} />
+            <ColorPalette name={`${paletteName}.surface.link`} />
           </>
         )}
       </For>
