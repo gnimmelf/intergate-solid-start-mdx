@@ -18,14 +18,13 @@ function getContrastColor(hex: string) {
 }
 
 /**
- * Color tokens are semantic topens retrived by dot-prop key from `token(dotPropKey)`.
+ * Color tokens are semantic tokens retrived by dot-prop key from `token(dotPropKey)`.
  * This means we have to know the keys forehand, which is impossible unless they
  * follow a well-known pattern. The pattern must be `colors.{palettename}.{50|index*100}.
  * @param props.name palette-name
- * @returns
+ * @returns JSX.Element
  */
 function ColorPalette(props: { name: string }) {
-  const textColorKey = `colors.${props.name}.text`;
   const colors: any[] = [];
 
   // Loop until the calculated index exceeds maxValue
@@ -72,7 +71,7 @@ function ColorPalette(props: { name: string }) {
         fallback={<div>Palette "{props.name}" not found!</div>}
       >
         {(color) => {
-          const textColorValue = token(`colors.${props.name}.text` as Token)
+          const textColorValue = token(`colors.${props.name}.text` as Token) || formatHex(getContrastColor(color.value));
 
           return (
             <div
@@ -113,15 +112,29 @@ export function Styleguide() {
   return (
     <>
       <p class={center()}>--- Styleguide ---</p>
+
       <Headings depth={4} />
+
       <a href="#">Link</a>
+
       <CardContainer>
-        <Card title="Card title" footer={<p>Footer</p>}>
+        <Card title="Card title" footer={() => <p>Card Footer</p>}>
           <p>Card content</p>
-          <p><a class={linkOverlay()}href="#">Card Link</a></p>
+          <p>
+            <a class={linkOverlay()} href="#">
+              Card Link
+            </a>
+          </p>
         </Card>
       </CardContainer>
-      <For each={["light", "dark"]}>
+
+      <For
+        each={[
+          //
+          "light",
+          //"dark"
+        ]}
+      >
         {(paletteName) => (
           <>
             <ColorPalette name={paletteName} />

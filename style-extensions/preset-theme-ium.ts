@@ -6,7 +6,7 @@ import {
   createHueShiftPalette,
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
-import { linkBase, linkRecipe } from './recipe-link'
+import { linkRecipe, linkScopeRecipe, pageLink } from './recipe-link-scope'
 
 /**
  * Goal:
@@ -20,8 +20,10 @@ import { linkBase, linkRecipe } from './recipe-link'
 
 function createLightPalette() {
   const options = {
-    base: '#2F7291',
+    base: '#9CCCE2',
+    linkBase: '#f3f091',
     surfaceBase: '#78B0CA',
+    surfaceLinkBase: '#80E230',
     accent: '#D68DCA',
   }
   const colors = {
@@ -42,26 +44,28 @@ function createLightPalette() {
   colors.text = {
     value: getContrastingHex(colors['200'].value)
   }
-  colors.link = createHueShiftPalette(toLch(colors.text.value), {
+  colors.link = createHueShiftPalette(toLch(options.linkBase), {
     range: 1,
-    baseColorPos: 'center',
-    lightnessRange: 10,
+    hueRange: 20,
+    lightnessRange: 30
   })
   colors.surface.text = {
     value: getContrastingHex(colors.surface['200'].value)
   }
-  colors.surface.link = createHueShiftPalette(toLch(colors.surface.text.value), {
+  colors.surface.link = createHueShiftPalette(toLch(options.surfaceLinkBase), {
     range: 1,
-    baseColorPos: 'center',
-    lightnessRange: 10,
+    hueRange: 20,
+    lightnessRange: 30
   })
   return colors
 }
 
 function createDarkPalette() {
   const options = {
-    base: '#1F4C61',
+    base: '#0F3749',
+    linkBase: '#976A58',
     surfaceBase: '#456F83',
+    surfaceLinkBase: '#835E45',
     accent: '#D68DCA',
   }
   const colors = {
@@ -77,22 +81,23 @@ function createDarkPalette() {
     },
     accent: { value: options.accent },
   }
+
   // Computed
   colors.text = {
     value: getContrastingHex(colors['200'].value)
   }
-  colors.link = createHueShiftPalette(toLch(colors.text.value), {
+  colors.link = createHueShiftPalette(toLch(options.linkBase), {
     range: 1,
-    baseColorPos: 'center',
-    lightnessRange: 30,
+    hueRange: 30,
+    lightnessRange: 20,
   })
   colors.surface.text = {
     value: getContrastingHex(colors.surface['200'].value)
   }
-  colors.surface.link = createHueShiftPalette(toLch(colors.surface.text.value), {
+  colors.surface.link = createHueShiftPalette(toLch(options.surfaceLinkBase), {
     range: 1,
-    baseColorPos: 'center',
-    lightnessRange: 30,
+    hueRange: 20,
+    lightnessRange: 30
   })
   return colors
 }
@@ -159,6 +164,7 @@ export const themeiumPreset = definePreset({
       },
       recipes: {
         link: linkRecipe,
+        linkScope: linkScopeRecipe,
       },
       slotRecipes: {
         card: cardRecipe,
@@ -195,7 +201,7 @@ export const themeiumPreset = definePreset({
       lineHeight: '1.4',
       marginBottom: '2',
     },
-    a: linkBase
+    // a: pageLink
   },
 })
 

@@ -3,24 +3,27 @@ import { clientOnly } from "@solidjs/start";
 import { useBeforeLeave } from "@solidjs/router";
 import { css, cx } from "styled-system/css";
 import { center } from "styled-system/patterns";
-import { link } from "styled-system/recipes";
 import { useTheme } from "./ThemeProvider";
 import { usePageData } from "./PageDataContext";
 import { CgDarkMode } from "solid-icons/cg";
 import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
+import { linkScope } from "styled-system/recipes";
+import { link } from "styled-system/recipes/link";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));
 
 const styles = {
-  menuBar: css({
-    padding: "2px",
-    display: "flex",
-    justifyContent: "space-between",
-    borderBottom: "1px solid {colors.background}",
-  }),
+  menuBar: cx(
+    css({
+      padding: "2px",
+      display: "flex",
+      justifyContent: "space-between",
+      borderBottom: "1px solid {colors.background}",
+    })
+    // linkScope({ area: "page", cursor: "disabled" }),
+  ),
   siteTitle: cx(
-    link(),
     css({
       display: "flex",
       flexDirection: "column",
@@ -28,17 +31,18 @@ const styles = {
       "& > *": {
         margin: "0px",
       },
-    })
+    }),
+    link()
   ),
   menuButton: cx(
-    link(),
     center(),
     css({
       width: "40px",
       height: "40px",
       border: "none",
       fontSize: "1.5rem",
-    })
+    }),
+    link()
   ),
 };
 
