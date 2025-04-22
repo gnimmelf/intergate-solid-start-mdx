@@ -3,19 +3,14 @@
  *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
  */
 
-import {
-  formatHex,
-  parse,
-  lch,
-  Color,
-  clampChroma,
-
-} from "culori"
+import { clampChroma, formatHex, parse } from 'culori'
+import { adjustHue, clamp, createRamp, ensureLchMode, lerpStepValue } from './color-utils'
 
 type LCh = {
   l: number // 0-100 - Percieved brightness
   c: number // 0-150 - Chroma (roughly representing the "amount of color")
   h: number // 0-360 - Hue angle, see https://luncheon.github.io/lch-color-wheel/
+  mode?: string
   /**
    * LCh 40 deg samples
    * lch(80% 150 30deg)
@@ -27,57 +22,6 @@ type LCh = {
    */
 }
 
-const COLOR_MODE = 'lch'
-
-export function toLch(colorString: string) {
-  return lch(parse(colorString), COLOR_MODE) as LCh
-}
-
-export function ensureLchMode(color: LCh) {
-  return {
-    ...color,
-    mode: COLOR_MODE
-  } as LCh & { mode: string }
-}
-
-function adjustHue(val: number) {
-  if (val < 0) val += Math.ceil(-val / 360) * 360;
-  return val % 360;
-}
-
-function lerpStepValue(
-  step: number,
-  maxSteps: number,
-  startValue: number,
-  targetValue: number
-) {
-  // Interpolate value for step n in [0, maxSteps-1] to [startValue, targetValue]
-  return startValue + (step / (maxSteps - 1)) * (targetValue - startValue);
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
-}
-
-function mod(n: number, m: number): number {
-  return ((n % m) + m) % m;
-}
-
-export function createRamp(palette: LCh[], formatFn = formatHex) {
-  const entries = palette.map((color: LCh, idx) => {
-    const index = idx === 0 ? "50" : idx * 100;
-    return [
-      `${index}`,
-      {
-        //@ts-expect-error
-        value: formatFn(ensureLchMode(color))
-      },
-    ];
-  });
-  const ramp = Object.fromEntries(entries);
-  return ramp
-}
-
 /**
  * Create a range of hues, starting with basColor and adding the range
  * @param baseColor LHC color
@@ -86,7 +30,7 @@ export function createRamp(palette: LCh[], formatFn = formatHex) {
  * @param options hueRange +/- value for hue of final step
  * @returns
  */
-export function createHueShiftPalette(baseColor: LCh, options: {
+export function createRangePalette(baseColor: LCh, options: {
   range?: number
   lightnessRange?: number,
   hueRange?: number,
@@ -136,32 +80,53 @@ export function createHueShiftPalette(baseColor: LCh, options: {
   return createRamp(palette);
 }
 
-export function getContrastingLch(input: LCh) {
-  const contrast = 50;
-  const newL = input.l > 50
-    ? input.l - contrast
-    : Math.min(100, input.l + contrast);
-  const newH = (input.h + 180) % 360;
 
-  // build an LCh object
-  const target: LCh & { mode: 'lch' } = {
+export function createTextColors(baseColor: LCh, options: {
+  lightnessThreshold?: number
+  textOffsets?: Partial<LCh>
+  linkOffsets?: Partial<LCh>
+  hoverOffsets?: Partial<LCh>
+} = {}) {
+
+  const { lightnessThreshold } = Object.assign({
+    lightnessThreshold: 50,
+  }, options);
+
+  const textOffsets = Object.assign({ l: 5, c: -20, h: 0 }, options.textOffsets || {})
+  const linkOffsets = Object.assign({ l: 20, c: 0, h: 0 }, options.linkOffsets || {})
+  const hoverOffsets = Object.assign({ l: -90, c: 0, h: 0 }, options.hoverOffsets || {})
+
+  const useLightText = baseColor.l < lightnessThreshold
+
+  console.log({ useLightText, lightnessThreshold, baseColorL: baseColor.l })
+
+  const text = clampChroma({
     mode: 'lch',
-    l: newL,
-    c: input.c,
-    h: newH
-  };
+    l: clamp((useLightText ? 100 - textOffsets.l : 0 + textOffsets.l), 0, 100),
+    c: clamp(baseColor.c + textOffsets.c, 0, 150),
+    h: adjustHue(baseColor.h + textOffsets.h)
+  })
 
-  // clampChroma will find the highest c ≤ input.c
-  // that stays in sRGB gamut :contentReference[oaicite:0]{index=0}
-  const safeLch = clampChroma(target);
+  const link = clampChroma({
+    mode: 'lch',
+    l: clamp(text.l + (useLightText ? -1 : 1) * linkOffsets.l, 0, 100),
+    c: clamp(baseColor.c + linkOffsets.c, 0, 150),
+    h: adjustHue(baseColor.h + linkOffsets.h)
+  })
 
-  // formatHex converts to sRGB under the hood and returns #RRGGBB
-  return safeLch;
-}
+  const hover = clampChroma({
+    mode: 'lch',
+    l: clamp(text.l + (useLightText ? 1 : -1) * hoverOffsets.l, 0, 100),
+    c: clamp(link.c + hoverOffsets.c, 0, 150),
+    h: adjustHue(link.h + hoverOffsets.h)
+  })
 
-export function getContrastingHex(hexColor: string) {
-  const lch = toLch(hexColor)
-  const lchContrast = getContrastingLch(lch)
-  const hexContrast = formatHex(lchContrast)
-  return hexContrast
+
+
+
+  return {
+    text: formatHex(text),
+    link: formatHex(link),
+    hover: formatHex(hover),
+  }
 }

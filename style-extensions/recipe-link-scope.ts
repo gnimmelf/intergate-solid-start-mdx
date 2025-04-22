@@ -7,27 +7,27 @@ const linkBase = {
 }
 
 export const pageLink = {
-  color: '{colors.light.link.50}',
+  color: '{colors.light.link}',
   _dark: {
-    color: '{colors.dark.link.50}',
+    color: '{colors.dark.link}',
   },
   _hover: {
-    color: '{colors.light.link.100}',
+    color: '{colors.light.link.hover}',
     _dark: {
-      color: '{colors.dark.link.100}',
+      color: '{colors.dark.link.hover}',
     },
   },
 }
 
 const surfaceLink = {
-  color: '{colors.light.surface.link.50}',
+  color: '{colors.light.surface.link}',
   _dark: {
-    color: '{colors.dark.surface.link.50}',
+    color: '{colors.dark.surface.link}',
   },
   _hover: {
-    color: '{colors.light.surface.link.100}',
+    color: '{colors.light.surface.link.hover}',
     _dark: {
-      color: '{colors.dark.surface.link.100}',
+      color: '{colors.dark.surface.link.hover}',
     },
   },
 }

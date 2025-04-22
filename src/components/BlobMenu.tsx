@@ -56,7 +56,7 @@ const styles = {
     pointerEvents: "auto",
     background: "{colors.surface.background}",
     color: "{colors.surface.text}",
-
+    fontWeight: "bolder",
     opacity: "0",
     transform: "scale(0.5)",
     transition: `all calc(var(--speed, 1) * 1s) var(--ease)`,

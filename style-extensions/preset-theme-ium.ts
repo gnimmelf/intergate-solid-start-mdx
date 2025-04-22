@@ -2,37 +2,51 @@
 import { definePreset } from '@pandacss/dev'
 import {
   toLch,
-  getContrastingHex,
-  createHueShiftPalette,
+  getContrastingColor
+} from './color-utils'
+import {
+  createRangePalette,
+  createTextColors
 } from './palett-generators'
 import { cardRecipe } from './recipe-card'
 import { linkRecipe, linkScopeRecipe, pageLink } from './recipe-link-scope'
 
 /**
  * Goal:
- *   - Start with one base color per surface.
+ *  - Start with one base color per surface.
  *
- * - text: contrast to surface bg
- * - link
- * - accent
+ *  - accent: Selected color
  *
+ *  - background: Middle value from a hueshiftpalette of 5 colors
+ *
+ *  TODO!
+ *  - text: contrast to background bg by almost maxing out lightness contrast
+ *    - Max lightness for dark background
+ *    - Min lighness for light background
+ *    - Keep hue & chroma
+ *
+ *  - link: contrast to text color
+ *    - Darken a bit for base color
+ *    - 1/2 of darken for hover-color
  */
 
+/**
+ * LIGHT THEME
+ * @returns theme colors
+ */
 function createLightPalette() {
   const options = {
-    base: '#9CCCE2',
-    linkBase: '#f3f091',
-    surfaceBase: '#78B0CA',
-    surfaceLinkBase: '#80E230',
-    accent: '#D68DCA',
+    base: '#C3F1AC',
+    surfaceBase: '#78CA86',
+    accent: '#EE8CDE',
   }
   const colors = {
-    ...createHueShiftPalette(toLch(options.base), {
+    ...createRangePalette(toLch(options.base), {
       range: 4,
       lightnessRange: -30,
     }),
     surface: {
-      ...createHueShiftPalette(toLch(options.surfaceBase), {
+      ...createRangePalette(toLch(options.surfaceBase), {
         range: 4,
         lightnessRange: -30,
       })
@@ -40,72 +54,45 @@ function createLightPalette() {
     accent: { value: options.accent },
   }
 
-  // Computed
+  // Page text
+  const pageTextColors = createTextColors(toLch(colors['200'].value), {
+    textOffsets: { c: -40 },
+    hoverOffsets: { l: -93 }
+  })
   colors.text = {
-    value: getContrastingHex(colors['200'].value)
+    value: pageTextColors.text
   }
-  colors.link = createHueShiftPalette(toLch(options.linkBase), {
-    range: 1,
-    hueRange: 20,
-    lightnessRange: 30
-  })
-  colors.surface.text = {
-    value: getContrastingHex(colors.surface['200'].value)
-  }
-  colors.surface.link = createHueShiftPalette(toLch(options.surfaceLinkBase), {
-    range: 1,
-    hueRange: 20,
-    lightnessRange: 30
-  })
-  return colors
-}
-
-function createDarkPalette() {
-  const options = {
-    base: '#0F3749',
-    linkBase: '#976A58',
-    surfaceBase: '#456F83',
-    surfaceLinkBase: '#835E45',
-    accent: '#D68DCA',
-  }
-  const colors = {
-    ...createHueShiftPalette(toLch(options.base), {
-      range: 4,
-      lightnessRange: 30,
-    }),
-    surface: {
-      ...createHueShiftPalette(toLch(options.surfaceBase), {
-        range: 4,
-        lightnessRange: 30,
-      })
-    },
-    accent: { value: options.accent },
+  colors.link = {
+    value: pageTextColors.link,
+    hover: {
+      value: pageTextColors.hover
+    }
   }
 
-  // Computed
-  colors.text = {
-    value: getContrastingHex(colors['200'].value)
-  }
-  colors.link = createHueShiftPalette(toLch(options.linkBase), {
-    range: 1,
-    hueRange: 30,
-    lightnessRange: 20,
+  // Surface text
+  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value),{
+    linkOffsets: { l: -70 },
+    hoverOffsets: { l: -100 }
   })
   colors.surface.text = {
-    value: getContrastingHex(colors.surface['200'].value)
+    value: surfaceTextColors.text
   }
-  colors.surface.link = createHueShiftPalette(toLch(options.surfaceLinkBase), {
-    range: 1,
-    hueRange: 20,
-    lightnessRange: 30
-  })
+  colors.surface.link = {
+    value: surfaceTextColors.link,
+    hover: {
+      value: surfaceTextColors.hover
+    }
+  }
+
   return colors
 }
 
 const palettes = {
   light: createLightPalette(),
-  dark: createDarkPalette()
+  dark: createLightPalette()
 }
+
+console.dir({ lightTheme: palettes.light }, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
@@ -201,7 +188,7 @@ export const themeiumPreset = definePreset({
       lineHeight: '1.4',
       marginBottom: '2',
     },
-    // a: pageLink
+    a: pageLink
   },
 })
 

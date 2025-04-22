@@ -8,8 +8,7 @@ import { css, cx } from "styled-system/css";
 import {
   toLch,
   getContrastingLch,
-  ensureLchMode,
-} from "~/../style-extensions/palett-generators";
+} from "~/../style-extensions/color-utils";
 import { formatHex } from "culori";
 
 function getContrastColor(hex: string) {
@@ -42,13 +41,14 @@ function ColorPalette(props: { name: string }) {
   }
 
   // Check for other colors
-  ["text", "accent"].forEach((colorName) => {
+  ["accent", "text", "link", "link.hover"].forEach((colorName) => {
     const key = `colors.${props.name}.${colorName}`;
     const value = token(key as Token);
     if (value) {
       colors.push({
         key,
         value,
+        contrast: formatHex(getContrastColor(value))
       });
     }
   });
@@ -71,7 +71,7 @@ function ColorPalette(props: { name: string }) {
         fallback={<div>Palette "{props.name}" not found!</div>}
       >
         {(color) => {
-          const textColorValue = token(`colors.${props.name}.text` as Token) || formatHex(getContrastColor(color.value));
+          const textColorValue = color.contrast || token(`colors.${props.name}.text` as Token);
 
           return (
             <div
@@ -115,7 +115,7 @@ export function Styleguide() {
 
       <Headings depth={4} />
 
-      <a href="#">Link</a>
+      How easy can you find the <a href="#">link</a> in this line?
 
       <CardContainer>
         <Card title="Card title" footer={() => <p>Card Footer</p>}>
@@ -138,9 +138,7 @@ export function Styleguide() {
         {(paletteName) => (
           <>
             <ColorPalette name={paletteName} />
-            <ColorPalette name={`${paletteName}.link`} />
             <ColorPalette name={`${paletteName}.surface`} />
-            <ColorPalette name={`${paletteName}.surface.link`} />
           </>
         )}
       </For>

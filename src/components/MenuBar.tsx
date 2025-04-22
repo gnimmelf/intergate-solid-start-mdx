@@ -32,7 +32,7 @@ const styles = {
         margin: "0px",
       },
     }),
-    link()
+    link({area: "page"})
   ),
   menuButton: cx(
     center(),
@@ -42,7 +42,7 @@ const styles = {
       border: "none",
       fontSize: "1.5rem",
     }),
-    link()
+    link({area: "page"})
   ),
 };
 
