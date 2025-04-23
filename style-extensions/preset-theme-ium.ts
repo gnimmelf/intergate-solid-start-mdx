@@ -34,7 +34,7 @@ export const themeiumPreset = definePreset({
           background: {
             value: {
               base: '{colors.light.50}',
-              _dark: '{colors.dark.200}',
+              _dark: '{colors.dark.300}',
             },
           },
           accent: {

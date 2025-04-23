@@ -5,6 +5,7 @@
 
 import {
   formatHex,
+  formatCss,
   parse,
   lch,
   clampChroma,
@@ -27,6 +28,7 @@ type LCh = {
 }
 
 export const COLOR_MODE = 'lch'
+export const defaultFormatFn = formatHex
 
 /**
  * Create a ramp of colors by accending integer keys starting at 50 then index * 100
@@ -34,7 +36,7 @@ export const COLOR_MODE = 'lch'
  * @param formatFn css format function
  * @returns ramp of colors with ascenign numeric keys
  */
-export function createRamp(palette: LCh[], formatFn = formatHex) {
+export function createRamp(palette: LCh[], formatFn = defaultFormatFn) {
   const entries = palette.map((color: LCh, idx) => {
     const index = idx === 0 ? "50" : idx * 100;
     return [
@@ -128,21 +130,5 @@ export function getContrastingLch(input: LCh) {
   // that stays in sRGB gamut :contentReference[oaicite:0]{index=0}
   const safeLch = clampChroma(target);
 
-  // formatHex converts to sRGB under the hood and returns #RRGGBB
   return safeLch;
 }
-
-/**
- *
- * @param colorString
- * @param formatFn css color format function
- * @returns
- */
-export function getContrastingColor(colorString: string, formatFn = formatHex) {
-  const lch = toLch(colorString)
-  const lchContrast = getContrastingLch(lch)
-  const hexContrast = formatFn(lchContrast)
-  return hexContrast
-}
-
-

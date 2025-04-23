@@ -21,7 +21,7 @@ const styles = {
   content: cx(
     container(),
     css({
-      paddingTop: "50px",
+      paddingTop: "80px",
     })
   ),
 };

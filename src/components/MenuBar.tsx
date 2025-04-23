@@ -7,8 +7,8 @@ import { useTheme } from "./ThemeProvider";
 import { usePageData } from "./PageDataContext";
 import { CgDarkMode } from "solid-icons/cg";
 import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
-import { linkScope } from "styled-system/recipes";
 import { link } from "styled-system/recipes/link";
+import { linkScope } from "styled-system/recipes";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));
@@ -23,15 +23,16 @@ const styles = {
     })
   ),
   siteTitle: cx(
+    center(),
     css({
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      "& > *": {
+      "& *": {
         margin: "0px",
       },
     }),
-    link({area: "page"})
+    linkScope({ area: "page" })
   ),
   menuButton: cx(
     center(),
@@ -41,7 +42,7 @@ const styles = {
       border: "none",
       fontSize: "1.5rem",
     }),
-    link({area: "page"})
+    link({ area: "page" })
   ),
 };
 
@@ -59,11 +60,7 @@ export function MenuBar() {
   });
 
   function toggleDarkMode() {
-    theme.toggleIsDark();
-    document.documentElement.setAttribute(
-      "data-theme",
-      theme.isDark() ? "dark" : ""
-    );
+    theme.toggleTheme();
   }
 
   return (
@@ -104,9 +101,12 @@ export function MenuBar() {
           />
         </div>
 
-        <a class={styles.siteTitle} href="/">
-          <h2>{SITE_TITLE}</h2>
-        </a>
+        <div class={styles.siteTitle} >
+          <a href="/">
+            <h2>{SITE_TITLE}</h2>
+          </a>
+          <div>{theme.currentTheme()}</div>
+        </div>
 
         <button
           class={styles.menuButton}

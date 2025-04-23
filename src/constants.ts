@@ -1,3 +1,9 @@
+export enum THEMES {
+  DARK = 'dark',
+  LIGHT = 'light'
+}
+export const DEFAULT_THEME = THEMES.LIGHT
+
 export const SITE_TITLE = "Intergate.io"
 export const PRIMARY_MENU_LINKS = [
   {

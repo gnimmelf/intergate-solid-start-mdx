@@ -2,26 +2,30 @@ import { usePageData } from "./PageDataContext";
 import { createContext, useContext, JSXElement } from "solid-js";
 import { createStore, Store } from "solid-js/store";
 import { isServer } from "solid-js/web";
-
-const isDark = !isServer
-  ? document.documentElement.getAttribute("data-theme") == "dark"
-  : false
-
+import { DEFAULT_THEME, THEMES } from "~/constants";
 
 const [store, setStore] = createStore({
-  isDark,
+  currentTheme: DEFAULT_THEME,
 });
 
 const themeData = {
-  isDark: () => store.isDark,
-  toggleIsDark: () => setStore("isDark", !store.isDark),
+  currentTheme: () => store.currentTheme,
+  toggleTheme: () => {
+    if (!isServer) {
+      const prev = store.currentTheme;
+      const next = prev == THEMES.DARK ? THEMES.LIGHT : THEMES.DARK;
+
+      document.documentElement.setAttribute("data-theme", next);
+      setStore("currentTheme", next);
+    }
+  },
 };
 
 const ThemeContext = createContext(themeData);
 
 // Create the provider component
 export function ThemeProvider(props: { children: JSXElement }) {
-  const pageData = usePageData()
+  const pageData = usePageData();
   return (
     <ThemeContext.Provider value={themeData}>
       {props.children}

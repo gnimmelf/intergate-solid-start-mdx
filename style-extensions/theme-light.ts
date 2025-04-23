@@ -13,8 +13,8 @@ import {
  */
 export function createLightPalette() {
   const options = {
-    base: '#B5FFC0',
-    surfaceBase: '#8cd497',
+    base: '#FFFEB5',
+    surfaceBase: '#D3D48C',
     accent: '#EE8CDE',
   }
   const colors = {
@@ -32,11 +32,7 @@ export function createLightPalette() {
   }
 
   // Page text
-  const pageTextColors = createTextColors(toLch(colors['200'].value), {
-    textOffsets: { c: -60 },
-    linkOffsets: { h: 50 },
-    hoverOffsets: { l: 10 }
-  })
+  const pageTextColors = createTextColors(toLch(colors['200'].value))
   colors.text = {
     value: pageTextColors.text
   }
@@ -48,10 +44,7 @@ export function createLightPalette() {
   }
 
   // Surface text
-  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value),{
-    linkOffsets: { l: -70 },
-    hoverOffsets: { l: -100 }
-  })
+  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value))
   colors.surface.text = {
     value: surfaceTextColors.text
   }

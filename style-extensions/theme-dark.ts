@@ -12,8 +12,8 @@ import {
  */
 export function createDarkPalette() {
   const options = {
-    base: '#B5FFC0',
-    surfaceBase: '#8cd497',
+    base: '#24582C',
+    surfaceBase: '#3E6443',
     accent: '#EE8CDE',
   }
   const colors = {
@@ -32,9 +32,7 @@ export function createDarkPalette() {
 
   // Page text
   const pageTextColors = createTextColors(toLch(colors['200'].value), {
-    textOffsets: { c: -40 },
-    linkOffsets: { h: 50 },
-    hoverOffsets: { l: -60 }
+    lightnessThreshold: 80,
   })
   colors.text = {
     value: pageTextColors.text
@@ -47,10 +45,7 @@ export function createDarkPalette() {
   }
 
   // Surface text
-  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value),{
-    linkOffsets: { l: -70 },
-    hoverOffsets: { l: -100 }
-  })
+  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value))
   colors.surface.text = {
     value: surfaceTextColors.text
   }

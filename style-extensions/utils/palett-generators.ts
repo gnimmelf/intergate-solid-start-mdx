@@ -3,8 +3,8 @@
  *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
  */
 
-import { clampChroma, formatHex, parse } from 'culori'
-import { adjustHue, clamp, createRamp, ensureLchMode, lerpStepValue } from './color-utils'
+import { clampChroma } from 'culori'
+import { adjustHue, clamp, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue } from './color-utils'
 
 type LCh = {
   l: number // 0-100 - Percieved brightness
@@ -83,12 +83,15 @@ export function createRangePalette(baseColor: LCh, options: {
 }
 
 /**
- *
- * @param baseColor
- * @param options
+ * Calculate text, link and hover colors based on the given backgroundColor.
+ * @param bgColor { l,h,c }
+ * @param options.lightnessThreshold The bg lightness threshold to determine if bg is light or dark
+ * @param options.textOffsets { l,h,c } offsets relative to backgroundColor
+ * @param options.linkOffsets { l,h,c } offsets relative to calcucalted textColor
+ * @param options.hoverOffsets { l,h,c } offsets relative to calcucalted linkColor
  * @returns
- */
-export function createTextColors(baseColor: LCh, options: {
+*/
+export function createTextColors(bgColor: LCh, options: {
   lightnessThreshold?: number
   textOffsets?: Partial<LCh>
   linkOffsets?: Partial<LCh>
@@ -96,41 +99,54 @@ export function createTextColors(baseColor: LCh, options: {
 } = {}) {
 
   const { lightnessThreshold } = Object.assign({
-    lightnessThreshold: 50,
+    lightnessThreshold: 60,
   }, options);
 
-  const textOffsets = Object.assign({ l: 5, c: -20, h: 0 }, options.textOffsets || {})
-  const linkOffsets = Object.assign({ l: 20, c: 0, h: 0 }, options.linkOffsets || {})
-  const hoverOffsets = Object.assign({ l: -90, c: 0, h: 0 }, options.hoverOffsets || {})
+  const bgIsDark = bgColor.l < lightnessThreshold;
 
-  const useLightText = baseColor.l < lightnessThreshold
+  // Defaults
+  const textOffsets = Object.assign({
+    l: bgIsDark ? 60 : -60,  // Much lighter text on dark, darker on light
+    c: -bgColor.c,           // Pull toward neutral gray
+    h: 0
+  }, options.textOffsets || {});
 
-  console.log({ useLightText, lightnessThreshold, baseColorL: baseColor.l })
+  const linkOffsets = Object.assign({
+    l: bgIsDark ? -10 : 12,  // Slight difference from text
+    c: 50,                   // More chroma than text for standout
+    h: 220                   // Blue-ish hue (typical link)
+  }, options.linkOffsets || {});
 
-  const text = clampChroma({
+  const hoverOffsets = Object.assign({
+    l: bgIsDark ? -5 : 20,    // Subtle hover lightness change
+    c: 10,                   // More saturation on hover
+    h: 20                    // Small hue shift for variation
+  }, options.hoverOffsets || {});
+
+  const textColor = clampChroma({
     mode: 'lch',
-    l: clamp((useLightText ? 100 - textOffsets.l : 0 + textOffsets.l), 0, 100),
-    c: clamp(baseColor.c + textOffsets.c, 0, 150),
-    h: adjustHue(baseColor.h + textOffsets.h)
-  })
+    l: clamp(bgColor.l + textOffsets.l, 0, 100),
+    c: clamp(bgColor.c + textOffsets.c, 0, 150),
+    h: adjustHue(bgColor.h + textOffsets.h)
+  });
 
-  const link = clampChroma({
+  const linkColor = clampChroma({
     mode: 'lch',
-    l: clamp(text.l + (useLightText ? -1 : 1) * linkOffsets.l, 0, 100),
-    c: clamp(baseColor.c + linkOffsets.c, 0, 150),
-    h: adjustHue(baseColor.h + linkOffsets.h)
-  })
+    l: clamp(textColor.l + linkOffsets.l, 0, 100),
+    c: clamp(textColor.c + linkOffsets.c, 0, 150),
+    h: adjustHue(textColor.h + linkOffsets.h)
+  });
 
-  const hover = clampChroma({
+  const hoverColor = clampChroma({
     mode: 'lch',
-    l: clamp(text.l + (useLightText ? 1 : -1) * hoverOffsets.l, 0, 100),
-    c: clamp(link.c + hoverOffsets.c, 0, 150),
-    h: adjustHue(link.h + hoverOffsets.h)
-  })
+    l: clamp(linkColor.l + hoverOffsets.l, 0, 100),
+    c: clamp(linkColor.c + hoverOffsets.c, 0, 150),
+    h: adjustHue(linkColor.h + hoverOffsets.h)
+  });
 
   return {
-    text: formatHex(text),
-    link: formatHex(link),
-    hover: formatHex(hover),
+    text: defaultFormatFn(textColor),
+    link: defaultFormatFn(linkColor),
+    hover: defaultFormatFn(hoverColor),
   }
 }
