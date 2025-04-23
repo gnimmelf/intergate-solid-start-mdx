@@ -25,9 +25,11 @@ type LCh = {
 /**
  * Create a range of hues, starting with basColor and adding the range
  * @param baseColor LHC color
- * @param options range Number of steps to create palette
- * @param options lightnessRange +/- value for lightness of final step
- * @param options hueRange +/- value for hue of final step
+ * @param options.range range Number of steps to create palette
+ * @param options.lightnessRange lightnessRange +/- value for lightness of final step
+ * @param options.hueRange hueRange +/- value for hue of final step
+ * @param options.chromaRange chromaRange +/- value for chroma of final step
+ * @param options.baseColorPos 'end' reverses the order of palette hues, 'center' add range hues up and down
  * @returns
  */
 export function createRangePalette(baseColor: LCh, options: {
@@ -80,7 +82,12 @@ export function createRangePalette(baseColor: LCh, options: {
   return createRamp(palette);
 }
 
-
+/**
+ *
+ * @param baseColor
+ * @param options
+ * @returns
+ */
 export function createTextColors(baseColor: LCh, options: {
   lightnessThreshold?: number
   textOffsets?: Partial<LCh>
@@ -120,9 +127,6 @@ export function createTextColors(baseColor: LCh, options: {
     c: clamp(link.c + hoverOffsets.c, 0, 150),
     h: adjustHue(link.h + hoverOffsets.h)
   })
-
-
-
 
   return {
     text: formatHex(text),

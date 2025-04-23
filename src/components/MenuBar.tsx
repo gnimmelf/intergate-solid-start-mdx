@@ -21,7 +21,6 @@ const styles = {
       justifyContent: "space-between",
       borderBottom: "1px solid {colors.background}",
     })
-    // linkScope({ area: "page", cursor: "disabled" }),
   ),
   siteTitle: cx(
     css({

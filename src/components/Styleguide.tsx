@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { createMemo, For } from "solid-js";
 import { Token, token } from "styled-system/tokens";
 import { Dynamic } from "solid-js/web";
 import { center, linkOverlay } from "styled-system/patterns";
@@ -8,8 +8,9 @@ import { css, cx } from "styled-system/css";
 import {
   toLch,
   getContrastingLch,
-} from "~/../style-extensions/color-utils";
+} from "../../style-extensions/utils/color-utils";
 import { formatHex } from "culori";
+import { useTheme } from "./ThemeProvider";
 
 function getContrastColor(hex: string) {
   const parsedLch = toLch(hex);
@@ -23,9 +24,9 @@ function getContrastColor(hex: string) {
  * @param props.name palette-name
  * @returns JSX.Element
  */
-function ColorPalette(props: { name: string }) {
-  const colors: any[] = [];
+function ThemePalette(props: { name: string }) {
 
+  const colors: any[] = [];
   // Loop until the calculated index exceeds maxValue
   let idx = 0;
   while (true) {
@@ -109,6 +110,9 @@ function Headings(props: { depth: number }) {
 }
 
 export function Styleguide() {
+  const theme = useTheme()
+  const themeName = createMemo(() => theme.isDark() ? 'dark' : 'light')
+
   return (
     <>
       <p class={center()}>--- Styleguide ---</p>
@@ -128,20 +132,14 @@ export function Styleguide() {
         </Card>
       </CardContainer>
 
-      <For
-        each={[
-          //
-          "light",
-          //"dark"
-        ]}
-      >
-        {(paletteName) => (
-          <>
-            <ColorPalette name={paletteName} />
-            <ColorPalette name={`${paletteName}.surface`} />
-          </>
-        )}
-      </For>
+
+
+      <section>
+        <ThemePalette name={themeName()} />
+        <ThemePalette name={`${themeName()}.surface`} />
+      </section>
+
+
     </>
   );
 }
