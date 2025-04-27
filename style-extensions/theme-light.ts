@@ -13,9 +13,10 @@ import {
  */
 export function createLightPalette() {
   const options = {
-    base: '#FFFEB5',
-    surfaceBase: '#D3D48C',
+    base: '#8FCEF1',
+    surfaceBase: '#A0C8EE',
     accent: '#EE8CDE',
+    isDarkTheme: false
   }
   const colors = {
     ...createRangePalette(toLch(options.base), {
@@ -31,8 +32,11 @@ export function createLightPalette() {
     accent: { value: options.accent },
   }
 
+  const { isDarkTheme } = options
   // Page text
-  const pageTextColors = createTextColors(toLch(colors['200'].value))
+  const pageTextColors = createTextColors({
+    isDarkTheme
+  })
   colors.text = {
     value: pageTextColors.text
   }
@@ -44,7 +48,9 @@ export function createLightPalette() {
   }
 
   // Surface text
-  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value))
+  const surfaceTextColors = createTextColors({
+    isDarkTheme
+  })
   colors.surface.text = {
     value: surfaceTextColors.text
   }

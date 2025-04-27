@@ -12,9 +12,10 @@ import {
  */
 export function createDarkPalette() {
   const options = {
-    base: '#24582C',
-    surfaceBase: '#3E6443',
-    accent: '#EE8CDE',
+    base: '#2D3B7E',
+    surfaceBase: '#43618A',
+    accent: 'lch(71.04 53.06 345)',
+    isDarkTheme: true
   }
   const colors = {
     ...createRangePalette(toLch(options.base), {
@@ -30,9 +31,11 @@ export function createDarkPalette() {
     accent: { value: options.accent },
   }
 
+  const { isDarkTheme } = options
+
   // Page text
-  const pageTextColors = createTextColors(toLch(colors['200'].value), {
-    lightnessThreshold: 80,
+  const pageTextColors = createTextColors({
+    isDarkTheme,
   })
   colors.text = {
     value: pageTextColors.text
@@ -45,7 +48,9 @@ export function createDarkPalette() {
   }
 
   // Surface text
-  const surfaceTextColors = createTextColors(toLch(colors.surface['200'].value))
+  const surfaceTextColors = createTextColors({
+    isDarkTheme,
+  })
   colors.surface.text = {
     value: surfaceTextColors.text
   }

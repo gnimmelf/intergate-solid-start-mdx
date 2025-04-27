@@ -12,6 +12,9 @@ export default defineConfig({
   // Shorten generated class-names
   hash: isProd,
 
+  // Include JSX version of recipes, patterns etc
+  jsxFramework: 'solid',
+
   // Where to look for your css declarations
   include: ["./src/**/*.{jsx,tsx}"],
 

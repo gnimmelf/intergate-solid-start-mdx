@@ -7,7 +7,6 @@ export function Card(props: {
   title: string;
   children: JSXElement;
   footer?: () => JSXElement;
-  class?: string;
 }) {
   const cardStyles = card();
   return (

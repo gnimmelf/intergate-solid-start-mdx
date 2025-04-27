@@ -91,43 +91,60 @@ export function createRangePalette(baseColor: LCh, options: {
  * @param options.hoverOffsets { l,h,c } offsets relative to calcucalted linkColor
  * @returns
 */
-export function createTextColors(bgColor: LCh, options: {
-  lightnessThreshold?: number
-  textOffsets?: Partial<LCh>
+export function createTextColors(options: {
+  isDarkTheme: boolean
+  textValues?: Partial<LCh>
   linkOffsets?: Partial<LCh>
   hoverOffsets?: Partial<LCh>
-} = {}) {
+}) {
 
-  const { lightnessThreshold } = Object.assign({
-    lightnessThreshold: 60,
-  }, options);
+  // Use two flags to help devs not edit in the wrong place
+  const { isDarkTheme } = options
+  const isLightTheme = !isDarkTheme
 
-  const bgIsDark = bgColor.l < lightnessThreshold;
+  // Color justifiers
+  const textValues = { l: 0, c: 0, h: 280 }
+  const linkOffsets = { l: 0, c: 0, h: 0 }
+  const hoverOffsets = { l: 0, c: 0, h: 0 }
 
-  // Defaults
-  const textOffsets = Object.assign({
-    l: bgIsDark ? 60 : -60,  // Much lighter text on dark, darker on light
-    c: -bgColor.c,           // Pull toward neutral gray
-    h: 0
-  }, options.textOffsets || {});
+  if (isDarkTheme) {
+    // Dark type theme
+    Object.assign(textValues, {
+      l: 90,
+      c: 10,
+    }, options.textValues || {});
+    Object.assign(linkOffsets, {
+      l: -35,
+      c: 50,
+    }, options.linkOffsets || {});
+    Object.assign(hoverOffsets, {
+      l: 25,
+      c: 10,
+    }, options.hoverOffsets || {});
+  }
 
-  const linkOffsets = Object.assign({
-    l: bgIsDark ? -10 : 12,  // Slight difference from text
-    c: 50,                   // More chroma than text for standout
-    h: 220                   // Blue-ish hue (typical link)
-  }, options.linkOffsets || {});
+  if (isLightTheme) {
+    // Light type theme
+    Object.assign(textValues, {
+      l: 10,
+      c: 10,
+    }, options.textValues || {});
+    Object.assign(linkOffsets, {
+      l: 20,
+      c: 50,
+    }, options.linkOffsets || {});
+    Object.assign(hoverOffsets, {
+      l: 20,
+      c: 40,
+    }, options.hoverOffsets || {});
+  }
 
-  const hoverOffsets = Object.assign({
-    l: bgIsDark ? -5 : 20,    // Subtle hover lightness change
-    c: 10,                   // More saturation on hover
-    h: 20                    // Small hue shift for variation
-  }, options.hoverOffsets || {});
-
+  // Create colors
   const textColor = clampChroma({
     mode: 'lch',
-    l: clamp(bgColor.l + textOffsets.l, 0, 100),
-    c: clamp(bgColor.c + textOffsets.c, 0, 150),
-    h: adjustHue(bgColor.h + textOffsets.h)
+    l: clamp(textValues.l, 0, 100),
+    c: clamp(textValues.c, 0, 150),
+    h: adjustHue(textValues.h)
   });
 
   const linkColor = clampChroma({
