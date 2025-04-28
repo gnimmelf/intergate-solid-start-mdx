@@ -3,7 +3,7 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { MetaProvider } from "@solidjs/meta";
 import { PageDataProvider } from "./components/PageDataContext";
-import { Header } from "./components/Header";
+import { PageHeader } from "./components/PageHeader";
 import { Article } from "./components/Article";
 import { ThemeProvider} from "./components/ThemeProvider";
 import "./app.css";
@@ -16,7 +16,7 @@ export default function App() {
           <MetaProvider>
             <Suspense>
               <ThemeProvider>
-                <Header />
+                <PageHeader />
                 <Article>{props.children}</Article>
               </ThemeProvider>
             </Suspense>

@@ -9,7 +9,7 @@ import { CgDarkMode } from "solid-icons/cg";
 import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
 import { link } from "styled-system/recipes/link";
 import { linkScope } from "styled-system/recipes";
-import { Heading } from "./Heading";
+import { SquaresBg } from "./SquaresBg";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));

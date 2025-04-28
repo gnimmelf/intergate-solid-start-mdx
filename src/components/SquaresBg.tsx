@@ -12,10 +12,11 @@ const styles = {
   }),
 };
 
-export function Heading(props: {
+export function SquaresBg(props: {
   children: JSXElement
   bgColors?: string[];
   asBlock?: boolean
+  squareSize?: number
 }) {
   const theme = useTheme();
 
@@ -32,7 +33,7 @@ export function Heading(props: {
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
 
-    const squareSize = 10;
+    const squareSize = props.squareSize || 10;
     const cols = Math.floor(container.clientWidth / squareSize);
     const rows = Math.floor(container.clientHeight / squareSize);
     const colors = bgColors()!;

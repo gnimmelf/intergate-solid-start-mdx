@@ -26,7 +26,7 @@ const styles = {
   ),
 };
 
-export function Header() {
+export function PageHeader() {
   const theme = useTheme();
   const pageData = usePageData();
 

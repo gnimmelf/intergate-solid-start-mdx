@@ -11,7 +11,7 @@ import {
 } from "../../style-extensions/utils/color-utils";
 import { formatCss, formatHex } from "culori";
 import { useTheme } from "./ThemeProvider";
-import { Heading } from "./Heading";
+import { SquaresBg } from "./SquaresBg";
 import { extractPandaPalette } from "~/utils/extractPandaPalette";
 
 function getContrastColor(hex: string) {
@@ -107,7 +107,7 @@ function ThemePalette(props: { name: string }) {
   );
 }
 
-function Headings(props: {
+function SquaresBgs(props: {
   themeName: string
   depth: number
 }) {
@@ -115,7 +115,7 @@ function Headings(props: {
   return (
     <For each={Array.from({ length: props.depth }, (_, i) => i + 1)}>
       {(level) => {
-        return <Heading bgColors={bgColors()}><Dynamic component={`h${level}`}>Heading {level}</Dynamic></Heading>;
+        return <SquaresBg bgColors={bgColors()}><Dynamic component={`h${level}`}>Heading + SquaresBg {level}</Dynamic></SquaresBg>;
       }}
     </For>
   );
@@ -128,7 +128,7 @@ export function Styleguide() {
   return (
     <>
       <p class={center()}>--- Styleguide ---</p>
-      <Headings themeName={themeName()} depth={4} />
+      <SquaresBgs themeName={themeName()} depth={4} />
       How easy can you find the <a href="#">link</a> in this line?
       <CardContainer>
         <Card title="Card title" footer={() => <p>Card Footer</p>}>
