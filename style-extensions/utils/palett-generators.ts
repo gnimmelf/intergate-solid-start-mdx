@@ -103,7 +103,7 @@ export function createTextColors(options: {
   const isLightTheme = !isDarkTheme
 
   // Color justifiers
-  const textValues = { l: 0, c: 0, h: 280 }
+  const textValues = { l: 0, c: 0, h: 280 } // Default hue is deep blueish
   const linkOffsets = { l: 0, c: 0, h: 0 }
   const hoverOffsets = { l: 0, c: 0, h: 0 }
 

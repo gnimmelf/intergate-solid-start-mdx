@@ -9,8 +9,10 @@ import {
   toLch,
   getContrastingLch,
 } from "../../style-extensions/utils/color-utils";
-import { Color, formatCss, formatHex, lch, Lch, parse } from "culori";
+import { formatCss, formatHex } from "culori";
 import { useTheme } from "./ThemeProvider";
+import { Heading } from "./Heading";
+import { extractPandaPalette } from "~/utils/extractPandaPalette";
 
 function getContrastColor(hex: string) {
   const parsedLch = toLch(hex);
@@ -38,23 +40,10 @@ function formatLCh(hex: string): string {
 function ThemePalette(props: { name: string }) {
 
   const palette = createMemo(() => {
-    const colors: Record<string, string>[] = [];
-    // Loop until the calculated index exceeds maxValue
-    let idx = 0;
-    while (true) {
-      const cIdx = idx === 0 ? 50 : idx * 100;
-      const key = `colors.${props.name}.${cIdx}`;
-      const value = token(key as Token);
-      if (!value) break;
-      colors.push({
-        key,
-        value,
-      });
-      idx++;
-    }
+    const colors = extractPandaPalette(`colors.${props.name}`)
 
     // Check for other colors
-    ["accent", "text", "link", "link.hover"].forEach((colorName) => {
+    ;["accent", "text", "link", "link.hover"].forEach((colorName) => {
       const key = `colors.${props.name}.${colorName}`;
       const value = token(key as Token);
       if (value) {
@@ -118,11 +107,15 @@ function ThemePalette(props: { name: string }) {
   );
 }
 
-function Headings(props: { depth: number }) {
+function Headings(props: {
+  themeName: string
+  depth: number
+}) {
+  const bgColors = createMemo(() => extractPandaPalette(`colors.${props.themeName}`).map(({value}) => value))
   return (
     <For each={Array.from({ length: props.depth }, (_, i) => i + 1)}>
       {(level) => {
-        return <Dynamic component={`h${level}`}>H{level}</Dynamic>;
+        return <Heading bgColors={bgColors()}><Dynamic component={`h${level}`}>Heading {level}</Dynamic></Heading>;
       }}
     </For>
   );
@@ -135,7 +128,7 @@ export function Styleguide() {
   return (
     <>
       <p class={center()}>--- Styleguide ---</p>
-      <Headings depth={4} />
+      <Headings themeName={themeName()} depth={4} />
       How easy can you find the <a href="#">link</a> in this line?
       <CardContainer>
         <Card title="Card title" footer={() => <p>Card Footer</p>}>

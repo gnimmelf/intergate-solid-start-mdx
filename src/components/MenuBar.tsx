@@ -9,6 +9,7 @@ import { CgDarkMode } from "solid-icons/cg";
 import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
 import { link } from "styled-system/recipes/link";
 import { linkScope } from "styled-system/recipes";
+import { Heading } from "./Heading";
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));
@@ -101,7 +102,7 @@ export function MenuBar() {
           />
         </div>
 
-        <div class={styles.siteTitle} >
+        <div class={styles.siteTitle}>
           <a href="/">
             <h2>{SITE_TITLE}</h2>
           </a>
