@@ -32,10 +32,14 @@ export function createLightPalette() {
     accent: { value: options.accent },
   }
 
-  const { isDarkTheme } = options
   // Page text
+  const colorSettings = {
+    textValues: toLch('lch(18 4 260)'),
+    linkOffsets: { c: 100 },
+    hoverOffsets: { l: 10, c: 100 }
+  }
   const pageTextColors = createTextColors({
-    isDarkTheme
+    ...colorSettings
   })
   colors.text = {
     value: pageTextColors.text
@@ -49,7 +53,7 @@ export function createLightPalette() {
 
   // Surface text
   const surfaceTextColors = createTextColors({
-    isDarkTheme
+    ...colorSettings,
   })
   colors.surface.text = {
     value: surfaceTextColors.text
@@ -60,6 +64,5 @@ export function createLightPalette() {
       value: surfaceTextColors.hover
     }
   }
-
   return colors
 }

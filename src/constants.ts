@@ -2,9 +2,9 @@ export enum THEMES {
   DARK = 'dark',
   LIGHT = 'light'
 }
-export const DEFAULT_THEME = THEMES.DARK
+export const DEFAULT_THEME = THEMES.LIGHT
 
-export const SITE_TITLE = "Flemming"
+export const SITE_TITLE = "Flemming H"
 export const PRIMARY_MENU_LINKS = [
   {
     label: "Home",
@@ -18,19 +18,15 @@ export const PRIMARY_MENU_LINKS = [
     label: "Articles",
     href: "/articles",
   },
-  {
-    label: "About",
-    href: "/about",
-  },
 ];
 export const BLOB_MENU_PARAMS ={
   baseRadius: 25,
-  maxRadius: 200,
-  radiusOffset: 30,
+  maxRadius: 400,
+  radiusOffset: 12,
   angleOffset: 0.10, // slow spiral
   // Additional padding to prevent overlap
   spacingPadding: 4,
   // Blob area scale factors
-  boxScaleFactorX: 100,
-  boxScaleFactorY: 100
+  boxScaleFactorX: 110,
+  boxScaleFactorY: 110
 }

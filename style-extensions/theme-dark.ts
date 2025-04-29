@@ -34,8 +34,13 @@ export function createDarkPalette() {
   const { isDarkTheme } = options
 
   // Page text
+  const colorSettings = {
+    textValues: toLch('lch(80 10 260)'),
+    linkOffsets: { c: 100 },
+    hoverOffsets: { l: 10, c: 100 }
+  }
   const pageTextColors = createTextColors({
-    isDarkTheme,
+    ...colorSettings
   })
   colors.text = {
     value: pageTextColors.text
@@ -49,7 +54,7 @@ export function createDarkPalette() {
 
   // Surface text
   const surfaceTextColors = createTextColors({
-    isDarkTheme,
+    ...colorSettings
   })
   colors.surface.text = {
     value: surfaceTextColors.text

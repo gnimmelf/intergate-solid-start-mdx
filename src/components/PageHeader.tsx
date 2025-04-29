@@ -4,6 +4,7 @@ import { center, container } from "styled-system/patterns";
 import { usePageData } from "./PageDataContext";
 import { MenuBar } from "./MenuBar";
 import { useTheme } from "./ThemeProvider";
+import { SquaresBg } from "./SquaresBg";
 
 const styles = {
   menuBarPos: cx(
@@ -39,14 +40,14 @@ export function PageHeader() {
       </div>
 
       <div class={styles.content}>
-        <Show when={isFrontPage()}>
-          <div>Frontpage!</div>
-        </Show>
-
         <Show when={pageData()?.meta}>
           <div>
-            <h1>{pageData()?.meta.title}</h1>
-            <div>{pageData()?.meta.intro}</div>
+            <SquaresBg>
+              <h1>{pageData()?.meta.title}</h1>
+            </SquaresBg>
+            <SquaresBg>
+              <div>{pageData()?.meta.intro}</div>
+            </SquaresBg>
           </div>
         </Show>
       </div>

@@ -3,8 +3,8 @@
  *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
  */
 
-import { clampChroma } from 'culori'
-import { adjustHue, clamp, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue } from './color-utils'
+import { clampChroma, Color } from 'culori'
+import { adjustHue, clamp, clampLch, COLOR_MODE, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue } from './color-utils'
 
 type LCh = {
   l: number // 0-100 - Percieved brightness
@@ -92,78 +92,47 @@ export function createRangePalette(baseColor: LCh, options: {
  * @returns
 */
 export function createTextColors(options: {
-  isDarkTheme: boolean
   textValues?: Partial<LCh>
+  linkValues?: Partial<LCh>
+  hoverValues?: Partial<LCh>
+  // Offsets add or substract to values
   linkOffsets?: Partial<LCh>
   hoverOffsets?: Partial<LCh>
 }) {
 
-  // Use two flags to help devs not edit in the wrong place
-  const { isDarkTheme } = options
-  const isLightTheme = !isDarkTheme
+  console.assert(!(options.linkValues && options.linkOffsets), 'Pass either linkValues or linkOffsets')
+  console.assert(!(options.hoverValues && options.hoverOffsets), 'Pass either hoverValues or hoverOffsets')
 
-  // Color justifiers
-  const textValues = { l: 0, c: 0, h: 280 } // Default hue is deep blueish
-  const linkOffsets = { l: 0, c: 0, h: 0 }
-  const hoverOffsets = { l: 0, c: 0, h: 0 }
+  // Color values
+  const textValues = clampLch(Object.assign({ l: 0, c: 0, h: 280 }, options.textValues))
+  // Link and Hover uses text as base if not passed explicitly
+  const linkValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, options.linkValues, textValues))
+  const hoverValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, options.hoverValues, textValues))
 
-  if (isDarkTheme) {
-    // Dark type theme
-    Object.assign(textValues, {
-      l: 90,
-      c: 10,
-    }, options.textValues || {});
-    Object.assign(linkOffsets, {
-      l: -35,
-      c: 50,
-    }, options.linkOffsets || {});
-    Object.assign(hoverOffsets, {
-      l: 25,
-      c: 10,
-    }, options.hoverOffsets || {});
-  }
-
-  if (isLightTheme) {
-    // Light type theme
-    Object.assign(textValues, {
-      l: 10,
-      c: 10,
-    }, options.textValues || {});
-    Object.assign(linkOffsets, {
-      l: 20,
-      c: 50,
-    }, options.linkOffsets || {});
-    Object.assign(hoverOffsets, {
-      l: 20,
-      c: 40,
-    }, options.hoverOffsets || {});
-  }
-
-  // Create colors
-  const textColor = clampChroma({
-    mode: 'lch',
+  // Create and clamp colors
+  const textColor = ensureLchMode(clampLch({
     l: clamp(textValues.l, 0, 100),
     c: clamp(textValues.c, 0, 150),
     h: adjustHue(textValues.h)
-  });
+  })) as Color
 
-  const linkColor = clampChroma({
-    mode: 'lch',
-    l: clamp(textColor.l + linkOffsets.l, 0, 100),
-    c: clamp(textColor.c + linkOffsets.c, 0, 150),
-    h: adjustHue(textColor.h + linkOffsets.h)
-  });
+  const linkColor = ensureLchMode(clampLch({
+      l: linkValues.l + (options.linkOffsets?.l || 0),
+      c: linkValues.c + (options.linkOffsets?.c || 0),
+      h: linkValues.h + (options.linkOffsets?.h || 0)
+    })) as Color;
 
-  const hoverColor = clampChroma({
-    mode: 'lch',
-    l: clamp(linkColor.l + hoverOffsets.l, 0, 100),
-    c: clamp(linkColor.c + hoverOffsets.c, 0, 150),
-    h: adjustHue(linkColor.h + hoverOffsets.h)
-  });
+  const hoverColor = ensureLchMode(clampLch({
+    l: hoverValues.l + (options.hoverOffsets?.l || 0),
+    c: hoverValues.c + (options.hoverOffsets?.c || 0),
+    h: hoverValues.h + (options.hoverOffsets?.h || 0),
+  })) as Color;
 
-  return {
+  const colors = {
     text: defaultFormatFn(textColor),
     link: defaultFormatFn(linkColor),
     hover: defaultFormatFn(hoverColor),
   }
+
+  return colors
 }

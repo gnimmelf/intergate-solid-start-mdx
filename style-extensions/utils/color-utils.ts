@@ -5,7 +5,6 @@
 
 import {
   formatHex,
-  formatCss,
   parse,
   lch,
   clampChroma,
@@ -53,6 +52,15 @@ export function createRamp(palette: LCh[], formatFn = defaultFormatFn) {
 
 export function toLch(colorString: string) {
   return lch(parse(colorString), COLOR_MODE) as LCh
+}
+
+export function clampLch(color: LCh) {
+  return {
+    ...color,
+    l: clamp(color.l, 0, 100),
+    c: clamp(color.c, 0, 150),
+    h: adjustHue(color.h)
+  }
 }
 
 /**
