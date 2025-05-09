@@ -28,7 +28,7 @@ export const formControlRecipe = defineRecipe({
       backgroundColor: '{colors.dark.800}',
       color: '{colors.text}',
       _hover: {
-        borderColor: '{colors.dark.600}',
+        borderColor: '{colors.dark.accent}',
       },
       _focus: {
         borderColor: '{colors.dark.accent}',

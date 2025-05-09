@@ -6,7 +6,7 @@
     "dev": "vinxi dev",
     "build": "NODE_ENV=prod panda codegen && vinxi build",
     "start": "vinxi start",
-    "deploy": "cd .output && deployctl deploy --project=intergateio server/index.mjs"
+    "deploy": "cd .output && deployctl deploy --project=flemmingh server/index.mjs"
   },
   "dependencies": {
     "@mdx-js/mdx": "^2.3.0",

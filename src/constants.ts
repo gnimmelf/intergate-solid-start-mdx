@@ -4,7 +4,7 @@ export enum THEMES {
 }
 export const DEFAULT_THEME = THEMES.DARK
 
-export const SITE_TITLE = "Flemming H"
+export const SITE_TITLE = "Flemming Hansen"
 export const PRIMARY_MENU_LINKS = [
   {
     label: "Home",

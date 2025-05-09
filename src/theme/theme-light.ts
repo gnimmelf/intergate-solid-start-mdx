@@ -23,7 +23,7 @@ export function createLightPalette() {
         lightnessRange: -30,
       })
     },
-    accent: { value: '#db35f8' },
+    accent: { value: '#fff900' },
   }
 
   /**
@@ -65,8 +65,8 @@ export function createLightPalette() {
 
   // Menu link
   const menuTextColors = createTextColors({
-    textValues: toLch('lch(40.07 34.6 267.61)'),
-    hoverOffsets: { l: 10, c: 0 },
+    textValues: toLch('#003652'),
+    hoverOffsets: { l: 20, c: 0 }
   })
   colors.menuLink = {
     value: menuTextColors.link,

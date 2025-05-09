@@ -34,7 +34,7 @@ export function createDarkPalette() {
   const colorSettings = {
     textValues: toLch('lch(72.45 8.09 258.29)'),
     linkOffsets: { c: 100 },
-    hoverOffsets: { l: 10, c: 100 }
+    hoverOffsets: { l: 20, c: 70 }
   }
 
   // Page text
@@ -67,8 +67,8 @@ export function createDarkPalette() {
 
   // Menu link
   const menuTextColors = createTextColors({
-    textValues: toLch('lch(51 26.73 221.56)'),
-    hoverOffsets: { l: 20, c: 0 },
+    textValues: colorSettings.textValues,
+    hoverOffsets: { l: 20, c: 0 }
   })
   colors.menuLink = {
     value: menuTextColors.link,
