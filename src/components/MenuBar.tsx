@@ -9,7 +9,8 @@ import { CgDarkMode } from "solid-icons/cg";
 import { PRIMARY_MENU_LINKS, SITE_TITLE } from "~/constants";
 import { link } from "styled-system/recipes/link";
 import { linkScope } from "styled-system/recipes";
-import { SquaresBg } from "./SquaresBg";
+
+const LINK_AREA = 'menu'
 
 // The BlobMenu - Uses screen width to disperse menu blob items
 const BlobMenu = clientOnly(() => import("./BlobMenu"));
@@ -33,7 +34,7 @@ const styles = {
         margin: "0px",
       },
     }),
-    linkScope({ area: "page" })
+    linkScope({ area: LINK_AREA })
   ),
   menuButton: cx(
     center(),
@@ -43,7 +44,7 @@ const styles = {
       border: "none",
       fontSize: "1.5rem",
     }),
-    link({ area: "page" })
+    link({ area: LINK_AREA })
   ),
 };
 
@@ -72,7 +73,7 @@ export function MenuBar() {
           !menuIsOpen() &&
             /**
              * This filter interferes with the backdrop blur on menu open
-             * - So reverse toggle for when menu is open
+             * - So reverse toggle filter for when menu is open
              */
             css({
               backdropFilter: "auto",

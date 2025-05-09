@@ -2,7 +2,7 @@ export enum THEMES {
   DARK = 'dark',
   LIGHT = 'light'
 }
-export const DEFAULT_THEME = THEMES.LIGHT
+export const DEFAULT_THEME = THEMES.DARK
 
 export const SITE_TITLE = "Flemming H"
 export const PRIMARY_MENU_LINKS = [

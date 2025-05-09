@@ -54,8 +54,8 @@ const styles = {
     borderRadius: "40%",
     textDecoration: "none",
     pointerEvents: "auto",
-    background: "{colors.surface.background}",
-    color: "{colors.surface.text}",
+    background: "{colors.menu.background}",
+    color: "{colors.menu.link}",
     fontWeight: "bolder",
     opacity: "0",
     transform: "scale(0.5)",
@@ -74,8 +74,12 @@ const styles = {
   link: css({
     fontSize: "1rem",
     transition: "none",
+    color: "{colors.menu.link}",
     _hover: {
-      color: "{colors.surface.accent}",
+      color: '{colors.light.menuLink.hover}',
+      _dark: {
+        color: '{colors.dark.menuLink.hover}',
+      },
     },
   }),
 };

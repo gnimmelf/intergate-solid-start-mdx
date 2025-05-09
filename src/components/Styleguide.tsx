@@ -5,14 +5,14 @@ import { center, linkOverlay } from "styled-system/patterns";
 import { Card } from "./Card";
 import { CardContainer } from "./CardContainer";
 import { css, cx } from "styled-system/css";
-import {
-  toLch,
-  getContrastingLch,
-} from "../../style-extensions/utils/color-utils";
+import { toLch, getContrastingLch } from "../theme/utils/color-utils";
 import { formatCss, formatHex } from "culori";
 import { useTheme } from "./ThemeProvider";
 import { SquaresBg } from "./SquaresBg";
 import { extractPandaPalette } from "~/utils/extractPandaPalette";
+import { Input } from "./Input";
+import { Button } from "./Button";
+import { ExpandableDetails } from "./ExpandableDetails";
 
 function getContrastColor(hex: string) {
   const parsedLch = toLch(hex);
@@ -38,12 +38,18 @@ function formatLCh(hex: string): string {
  * @returns JSX.Element
  */
 function ThemePalette(props: { name: string }) {
-
   const palette = createMemo(() => {
-    const colors = extractPandaPalette(`colors.${props.name}`)
+    const colors = extractPandaPalette(`colors.${props.name}`);
 
     // Check for other colors
-    ;["accent", "text", "link", "link.hover"].forEach((colorName) => {
+    [
+      "accent",
+      "text",
+      "link",
+      "link.hover",
+      "menuLink",
+      "menuLink.hover",
+    ].forEach((colorName) => {
       const key = `colors.${props.name}.${colorName}`;
       const value = token(key as Token);
       if (value) {
@@ -107,15 +113,17 @@ function ThemePalette(props: { name: string }) {
   );
 }
 
-function SquaresBgs(props: {
-  themeName: string
-  depth: number
-}) {
-  const bgColors = createMemo(() => extractPandaPalette(`colors.${props.themeName}`).map(({value}) => value))
+function SquaresBgs(props: { themeName: string; depth: number }) {
   return (
     <For each={Array.from({ length: props.depth }, (_, i) => i + 1)}>
       {(level) => {
-        return <SquaresBg bgColors={bgColors()}><Dynamic component={`h${level}`}>Heading + SquaresBg {level}</Dynamic></SquaresBg>;
+        return (
+          <SquaresBg>
+            <Dynamic component={`h${level}`}>
+              Heading + SquaresBg {level}
+            </Dynamic>
+          </SquaresBg>
+        );
       }}
     </For>
   );
@@ -128,18 +136,31 @@ export function Styleguide() {
   return (
     <>
       <p class={center()}>--- Styleguide ---</p>
-      <SquaresBgs themeName={themeName()} depth={4} />
-      How easy can you find the <a href="#">link</a> in this line?
-      <CardContainer>
-        <Card title="Card title" footer={() => <p>Card Footer</p>}>
-          <p>Card content</p>
-          <p>
-            <a class={linkOverlay()} href="#">
-              Card Link
-            </a>
-          </p>
-        </Card>
-      </CardContainer>
+      <section>
+        <SquaresBgs themeName={themeName()} depth={4} />
+        How easy can you find the <a href="#">link</a> in this line?
+      </section>
+      <section>
+        <CardContainer>
+          <Card title="Card title" footer={() => <p>Card Footer</p>}>
+            <p>Card content</p>
+            <p>
+              <a class={linkOverlay()} href="#">
+                Card Link
+              </a>
+            </p>
+          </Card>
+        </CardContainer>
+      </section>
+      <section>
+        <ExpandableDetails summary="Expandable details">
+          <p>Lorem ipsum</p>
+        </ExpandableDetails>
+      </section>
+      <section>
+        <Input placeholder="placeholder" />
+        <Button>Button</Button>
+      </section>
       <section>
         <ThemePalette name={themeName()} />
         <ThemePalette name={`${themeName()}.surface`} />

@@ -32,6 +32,16 @@ const surfaceLink = {
   },
 }
 
+const menuLink = {
+  color: '{colors.menu.link}',
+  _hover: {
+    color: '{colors.light.menuLink.hover}',
+    _dark: {
+      color: '{colors.dark.menuLink.hover}',
+    },
+  },
+}
+
 /**
  * Link style reciepe, apply directly to links and link-like elements.
  */
@@ -46,6 +56,7 @@ export const linkRecipe = defineRecipe({
     area: {
       page: pageLink,
       surface: surfaceLink,
+      menu: menuLink
     }
   },
   defaultVariants: {
@@ -70,6 +81,7 @@ export const linkScopeRecipe = defineRecipe({
     area: {
       page: { '& a': pageLink },
       surface: { '& a': surfaceLink },
+      menu: { '& a': menuLink },
     }
   },
   defaultVariants: {

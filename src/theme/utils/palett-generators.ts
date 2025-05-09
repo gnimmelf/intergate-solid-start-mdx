@@ -4,7 +4,7 @@
  */
 
 import { clampChroma, Color } from 'culori'
-import { adjustHue, clamp, clampLch, COLOR_MODE, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue } from './color-utils'
+import { adjustHue, clamp, clampLch, COLOR_MODE, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue, toLch } from './color-utils'
 
 type LCh = {
   l: number // 0-100 - Percieved brightness
@@ -24,15 +24,15 @@ type LCh = {
 
 /**
  * Create a range of hues, starting with basColor and adding the range
- * @param baseColor LHC color
+ * @param baseColor Color-string
  * @param options.range range Number of steps to create palette
  * @param options.lightnessRange lightnessRange +/- value for lightness of final step
  * @param options.hueRange hueRange +/- value for hue of final step
  * @param options.chromaRange chromaRange +/- value for chroma of final step
- * @param options.baseColorPos 'end' reverses the order of palette hues, 'center' add range hues up and down
+ * @param options.baseColorPos 'end' reverses the order of palette hues, 'center' adds range hues up and down
  * @returns
  */
-export function createRangePalette(baseColor: LCh, options: {
+export function createRangePalette(baseColor: string, options: {
   range?: number
   lightnessRange?: number,
   hueRange?: number,
@@ -47,18 +47,19 @@ export function createRangePalette(baseColor: LCh, options: {
     baseColorPos: 'start'
   }, options);
 
+  const baseLch = toLch(baseColor)
   // Add base color
-  const palette = [ensureLchMode(baseColor)];
+  const palette = [ensureLchMode(baseLch)];
 
-  const chroma = baseColor.c;
+  const chroma = baseLch.c;
   const maxSteps = range + 1;
   for (let i = 1; i < maxSteps; i++) {
     // Interpolate hueValue
-    const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h + hueRange));
+    const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseLch.h, baseLch.h + hueRange));
     // Interpolate lightnessValue
-    const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, clamp(baseColor.l + lightnessRange, 0, 100));
-    // Interpolate lightnessValue
-    const chromaValue = lerpStepValue(i, maxSteps, baseColor.c, clamp(baseColor.c + chromaRange, 0, 150));
+    const lightnessValue = lerpStepValue(i, maxSteps, baseLch.l, clamp(baseLch.l + lightnessRange, 0, 100));
+    // Interpolate chromaValue
+    const chromaValue = lerpStepValue(i, maxSteps, baseLch.c, clamp(baseLch.c + chromaRange, 0, 150));
 
     palette[baseColorPos == 'start' ? 'push' : 'unshift'](ensureLchMode({
       l: lightnessValue,
@@ -68,13 +69,16 @@ export function createRangePalette(baseColor: LCh, options: {
 
     if (baseColorPos === 'center') {
       // Interpolate hueValue
-      const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseColor.h, baseColor.h - hueRange));
+      const hueValue = adjustHue(lerpStepValue(i, maxSteps, baseLch.h, baseLch.h - hueRange));
       // Interpolate lightnessValue
-      const lightnessValue = lerpStepValue(i, maxSteps, baseColor.l, baseColor.l - lightnessRange);
-      palette.unshift(ensureLchMode({
+      const lightnessValue = lerpStepValue(i, maxSteps, baseLch.l, clamp(baseLch.l - lightnessRange, 0, 100));
+      // Interpolate chromaValue
+      const chromaValue = lerpStepValue(i, maxSteps, baseLch.c, clamp(baseLch.c - chromaRange, 0, 150));
+      // Since baseColorPos
+      palette.push(ensureLchMode({
         l: lightnessValue,
         h: hueValue,
-        c: chroma,
+        c: chromaValue,
       }));
     }
   }
@@ -98,6 +102,7 @@ export function createTextColors(options: {
   // Offsets add or substract to values
   linkOffsets?: Partial<LCh>
   hoverOffsets?: Partial<LCh>
+  debugLabel?: string
 }) {
 
   console.assert(!(options.linkValues && options.linkOffsets), 'Pass either linkValues or linkOffsets')
@@ -105,9 +110,8 @@ export function createTextColors(options: {
 
   // Color values
   const textValues = clampLch(Object.assign({ l: 0, c: 0, h: 280 }, options.textValues))
-  // Link and Hover uses text as base if not passed explicitly
-  const linkValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, options.linkValues, textValues))
-  const hoverValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, options.hoverValues, textValues))
+  const linkValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, textValues, options.linkValues))
+  const hoverValues = clampLch(Object.assign({ l: 0, c: 0, h: 0 }, textValues, options.linkValues, options.hoverValues))
 
   // Create and clamp colors
   const textColor = ensureLchMode(clampLch({
@@ -117,10 +121,10 @@ export function createTextColors(options: {
   })) as Color
 
   const linkColor = ensureLchMode(clampLch({
-      l: linkValues.l + (options.linkOffsets?.l || 0),
-      c: linkValues.c + (options.linkOffsets?.c || 0),
-      h: linkValues.h + (options.linkOffsets?.h || 0)
-    })) as Color;
+    l: linkValues.l + (options.linkOffsets?.l || 0),
+    c: linkValues.c + (options.linkOffsets?.c || 0),
+    h: linkValues.h + (options.linkOffsets?.h || 0)
+  })) as Color;
 
   const hoverColor = ensureLchMode(clampLch({
     l: hoverValues.l + (options.hoverOffsets?.l || 0),
@@ -132,6 +136,22 @@ export function createTextColors(options: {
     text: defaultFormatFn(textColor),
     link: defaultFormatFn(linkColor),
     hover: defaultFormatFn(hoverColor),
+  }
+
+  if (options.debugLabel) {
+    console.log(options.debugLabel, {
+      options,
+      values: {
+        textValues,
+        linkValues,
+        hoverValues,
+      },
+      colors: {
+        textColor,
+        linkColor,
+        hoverColor,
+      }
+    })
   }
 
   return colors

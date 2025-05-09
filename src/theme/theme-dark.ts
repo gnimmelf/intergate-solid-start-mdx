@@ -6,40 +6,40 @@ import {
   createTextColors
 } from './utils/palett-generators'
 
-
 /**
- * LIGHT THEME
+ * DARK THEME
  * @returns theme colors
  */
-export function createLightPalette() {
-  const options = {
-    base: '#8FCEF1',
-    surfaceBase: '#A0C8EE',
-    accent: '#EE8CDE',
-    isDarkTheme: false
-  }
+export function createDarkPalette() {
   const colors = {
-    ...createRangePalette(toLch(options.base), {
-      range: 4,
-      lightnessRange: -30,
+    ...createRangePalette('#09121F', {
+      range: 8,
+      lightnessRange: 30,
+      baseColorPos: 'start'
     }),
     surface: {
-      ...createRangePalette(toLch(options.surfaceBase), {
+      ...createRangePalette('#57606D', {
         range: 4,
         lightnessRange: -30,
+        baseColorPos: 'start'
       })
     },
-    accent: { value: options.accent },
+    accent: { value: 'lch(92.77 56.05 137.02)' },
   }
 
-  // Page text
+  /**
+   * Text and links
+   */
+
   const colorSettings = {
-    textValues: toLch('lch(18 4 260)'),
+    textValues: toLch('lch(72.45 8.09 258.29)'),
     linkOffsets: { c: 100 },
     hoverOffsets: { l: 10, c: 100 }
   }
+
+  // Page text
   const pageTextColors = createTextColors({
-    ...colorSettings
+    ...colorSettings,
   })
   colors.text = {
     value: pageTextColors.text
@@ -64,5 +64,18 @@ export function createLightPalette() {
       value: surfaceTextColors.hover
     }
   }
+
+  // Menu link
+  const menuTextColors = createTextColors({
+    textValues: toLch('lch(51 26.73 221.56)'),
+    hoverOffsets: { l: 20, c: 0 },
+  })
+  colors.menuLink = {
+    value: menuTextColors.link,
+    hover: {
+      value: menuTextColors.hover
+    }
+  }
+
   return colors
 }

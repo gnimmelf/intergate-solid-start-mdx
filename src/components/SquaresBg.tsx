@@ -6,8 +6,8 @@ import { extractPandaPalette } from "~/utils/extractPandaPalette";
 
 const styles = {
   container: css({
-    "& *": {
-      textShadow: '0 0 4px {colors.background}'
+    "& > *": {
+      textShadow: '0 0 8px {colors.background}'
     },
   }),
 };
@@ -22,7 +22,7 @@ export function SquaresBg(props: {
 
   const bgColors = props.bgColors
     ? () => props.bgColors
-    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}`).map(({value}) => value))
+    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}.surface`).map(({value}) => value).slice(0, 4))
 
   let containerRef;
 

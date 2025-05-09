@@ -4,6 +4,7 @@ import { cardRecipe } from './recipe-card'
 import { linkRecipe, linkScopeRecipe, pageLink } from './recipe-link-scope'
 import { createLightPalette } from './theme-light'
 import { createDarkPalette } from './theme-dark'
+import { formControlRecipe } from './recipe-form-control'
 
 const palettes = {
   light: createLightPalette(),
@@ -62,12 +63,33 @@ export const themeiumPreset = definePreset({
                 _dark: '{colors.dark.surface.text}',
               },
             },
+          },
+          menu: {
+            link: {
+              value: {
+                base: '{colors.light.menuLink}',
+                _dark: '{colors.dark.menuLink}',
+              },
+              hover: {
+                value: {
+                  base: '{colors.light.menuLink.hover}',
+                  _dark: '{colors.dark.menuLink.hover}',
+                }
+              },
+            },
+            background: {
+              value: {
+                base: '{colors.light.surface.50}',
+                _dark: '{colors.dark.surface.200}',
+              }
+            }
           }
         },
       },
       recipes: {
         link: linkRecipe,
         linkScope: linkScopeRecipe,
+        formControl: formControlRecipe
       },
       slotRecipes: {
         card: cardRecipe,

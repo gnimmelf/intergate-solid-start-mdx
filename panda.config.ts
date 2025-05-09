@@ -1,6 +1,6 @@
 import { defineConfig } from '@pandacss/dev'
 import pandaPreset from '@pandacss/preset-panda'
-import themePreset from './style-extensions/preset-theme-ium';
+import themePreset from './src/theme/preset-theme-ium';
 
 //@ts-expect-error
 const isProd = process.env.NODE_ENV?.startsWith('prod');

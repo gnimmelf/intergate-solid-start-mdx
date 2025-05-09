@@ -1,4 +1,3 @@
-import { usePageData } from "./PageDataContext";
 import { createContext, useContext, JSXElement } from "solid-js";
 import { createStore, Store } from "solid-js/store";
 import { isServer } from "solid-js/web";
@@ -25,7 +24,6 @@ const ThemeContext = createContext(themeData);
 
 // Create the provider component
 export function ThemeProvider(props: { children: JSXElement }) {
-  const pageData = usePageData();
   return (
     <ThemeContext.Provider value={themeData}>
       {props.children}

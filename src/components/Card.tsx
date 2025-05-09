@@ -18,9 +18,7 @@ export function Card(props: {
           linkScope({ area: 'surface'})
         )}
       >
-        <SquaresBg asBlock={true} squareSize={8}>
-          <h3 class={cardStyles.header}>{props.title}</h3>
-        </SquaresBg>
+        <h3 class={cardStyles.header}>{props.title}</h3>
         <main class={cardStyles.content}>{props.children}</main>
         {props.footer && (
           <footer class={cardStyles.footer}>

@@ -22,9 +22,9 @@ export const cardRecipe = defineSlotRecipe({
     header: {
       padding: '4',
       fontWeight: 'bold',
-      borderBottom: '1px solid {colors.surface.text}',
     },
     content: {
+      borderTop: '1px solid {colors.surface.text}',
       padding: '4',
       color: 'text',
       flex: '1',
