@@ -2,6 +2,7 @@ import { defineRecipe } from '@pandacss/dev';
 
 export const formControlRecipe = defineRecipe({
   className: 'form-control',
+  description: 'Basis styling for formcontrols',
   base: {
     outline: 'none',
     fontSize: '{md}',
@@ -15,10 +16,10 @@ export const formControlRecipe = defineRecipe({
     backgroundColor: '{colors.light.200}',
     color: '{colors.text}',
     _hover: {
-      borderColor: '{colors.light.600}',
+      borderColor: '{colors.accent}',
     },
     _focus: {
-      borderColor: '{colors.light.800}',
+      borderColor: '{colors.accent}',
     },
     _disabled: {
       opacity: 0.5,

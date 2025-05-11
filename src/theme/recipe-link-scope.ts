@@ -47,6 +47,7 @@ const menuLink = {
  */
 export const linkRecipe = defineRecipe({
   className: 'link',
+  description: "Link style reciepe, apply directly to links and link-like elements",
   base: linkBase,
   variants: {
     cursor: {
@@ -70,6 +71,7 @@ export const linkRecipe = defineRecipe({
  */
 export const linkScopeRecipe = defineRecipe({
   className: 'link-scope',
+  description: "Same as `recipe-link`, but applies styles to all child `a` elements",
   base: {
     '& a': linkBase
   },

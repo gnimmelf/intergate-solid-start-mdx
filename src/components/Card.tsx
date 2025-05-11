@@ -1,8 +1,7 @@
 import { JSXElement } from "solid-js";
-import { cx } from "styled-system/css";
+import { css, cx } from "styled-system/css";
 import { box } from "styled-system/patterns";
-import { card, linkScope } from "styled-system/recipes";
-import { SquaresBg } from "./SquaresBg";
+import { card, linkScope, shine } from "styled-system/recipes";
 
 export function Card(props: {
   title: string;
@@ -11,11 +10,12 @@ export function Card(props: {
 }) {
   const cardStyles = card();
   return (
-    <div class={box({ minW: "xs", maxW: "md" })}>
+    <div class={cx(box({ minW: "xs", maxW: "md" }))}>
       <div
         class={cx(
           cardStyles.root,
-          linkScope({ area: 'surface'})
+          linkScope({ area: "surface" }),
+          shine()
         )}
       >
         <h3 class={cardStyles.header}>{props.title}</h3>
