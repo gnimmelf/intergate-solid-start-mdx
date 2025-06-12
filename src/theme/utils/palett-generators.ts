@@ -2,25 +2,8 @@
  * See:
  *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
  */
-
-import { clampChroma, Color } from 'culori'
-import { adjustHue, clamp, clampLch, COLOR_MODE, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue, toLch } from './color-utils'
-
-type LCh = {
-  l: number // 0-100 - Percieved brightness
-  c: number // 0-150 - Chroma (roughly representing the "amount of color")
-  h: number // 0-360 - Hue angle, see https://luncheon.github.io/lch-color-wheel/
-  mode?: string
-  /**
-   * LCh 40 deg samples
-   * lch(80% 150 30deg)
-   * lch(80% 150 60deg)
-   * lch(80% 150 120deg)
-   * lch(80% 150 180deg)
-   * lch(80% 150 240deg)
-   * lch(80% 150 360deg)
-   */
-}
+import { LCh } from './types'
+import { adjustHue, clamp, clampLch, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue, toLch } from './color-utils'
 
 /**
  * Create a range of hues, starting with basColor and adding the range
@@ -51,7 +34,6 @@ export function createRangePalette(baseColor: string, options: {
   // Add base color
   const palette = [ensureLchMode(baseLch)];
 
-  const chroma = baseLch.c;
   const maxSteps = range + 1;
   for (let i = 1; i < maxSteps; i++) {
     // Interpolate hueValue
@@ -118,19 +100,19 @@ export function createTextColors(options: {
     l: clamp(textValues.l, 0, 100),
     c: clamp(textValues.c, 0, 150),
     h: adjustHue(textValues.h)
-  })) as Color
+  }))
 
   const linkColor = ensureLchMode(clampLch({
     l: linkValues.l + (options.linkOffsets?.l || 0),
     c: linkValues.c + (options.linkOffsets?.c || 0),
     h: linkValues.h + (options.linkOffsets?.h || 0)
-  })) as Color;
+  }));
 
   const hoverColor = ensureLchMode(clampLch({
     l: hoverValues.l + (options.hoverOffsets?.l || 0),
     c: hoverValues.c + (options.hoverOffsets?.c || 0),
     h: hoverValues.h + (options.hoverOffsets?.h || 0),
-  })) as Color;
+  }));
 
   const colors = {
     text: defaultFormatFn(textColor),

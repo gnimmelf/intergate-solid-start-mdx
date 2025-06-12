@@ -22,7 +22,7 @@ export function SquaresBg(props: {
 
   const bgColors = props.bgColors
     ? () => props.bgColors
-    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}.surface`).map(({value}) => value).slice(0, 4))
+    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}`).map(({value}) => value).slice(0, 4))
 
   let containerRef;
 

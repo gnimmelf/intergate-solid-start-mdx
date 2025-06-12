@@ -1,5 +1,7 @@
 import {
+  getContrastingLch,
   toLch,
+  formatHex,
 } from './utils/color-utils'
 import {
   createRangePalette,
@@ -13,25 +15,26 @@ import {
  */
 export function createLightPalette() {
   const colors = {
-    ...createRangePalette('#8FCEF1', {
+    ...createRangePalette('#F1DA8F', {
       range: 8,
       lightnessRange: -60,
     }),
     surface: {
-      ...createRangePalette('#A0C8EE', {
+      ...createRangePalette('#F7E4A5', {
         range: 4,
         lightnessRange: -30,
       })
     },
-    accent: { value: '#fff900' },
   }
+  colors.accent = { value: '#A8FF9D' }
+  colors.border = { value:  formatHex(getContrastingLch(toLch(colors.accent.value))) }
 
   /**
    * Text and links
    */
   const colorSettings = {
-    textValues: toLch('lch(18 4 260)'),
-    linkOffsets: { c: 100 },
+    textValues: toLch('#292C32'),
+    linkOffsets: { l: -10, c: 100 },
     hoverOffsets: { l: 10, c: 100 }
   }
 

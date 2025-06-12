@@ -5,7 +5,6 @@ import { linkRecipe, linkScopeRecipe, pageLink } from './recipe-link-scope'
 import { createLightPalette } from './theme-light'
 import { createDarkPalette } from './theme-dark'
 import { formControlRecipe } from './recipe-form-control'
-import { keyframes, animationStyles } from './keyframe-animations'
 import { shineRecipe } from './recipe-shine'
 
 const palettes = {
@@ -24,8 +23,6 @@ export const themeiumPreset = definePreset({
   // Theme configuration
   theme: {
     extend: {
-      keyframes,
-      animationStyles,
       tokens: {
         colors: palettes,
         cursor: {

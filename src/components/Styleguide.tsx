@@ -5,8 +5,12 @@ import { center, linkOverlay } from "styled-system/patterns";
 import { Card } from "./Card";
 import { CardContainer } from "./CardContainer";
 import { css, cx } from "styled-system/css";
-import { toLch, getContrastingLch } from "../theme/utils/color-utils";
-import { formatCss, formatHex } from "culori";
+import {
+  toLch,
+  getContrastingLch,
+  formatHex,
+  formatCss,
+} from "../theme/utils/color-utils";
 import { useTheme } from "./ThemeProvider";
 import { SquaresBg } from "./SquaresBg";
 import { extractPandaPalette } from "~/utils/extractPandaPalette";
@@ -26,7 +30,6 @@ function formatLCh(hex: string): string {
     c: parseFloat(Number(parsedLch.c).toFixed(2)),
     h:
       parsedLch.h == undefined ? 0 : parseFloat(Number(parsedLch.h).toFixed(2)),
-    mode: "lch",
   });
 }
 
@@ -47,6 +50,7 @@ function ThemePalette(props: { name: string }) {
       "text",
       "link",
       "link.hover",
+      "border",
       "menuLink",
       "menuLink.hover",
     ].forEach((colorName) => {

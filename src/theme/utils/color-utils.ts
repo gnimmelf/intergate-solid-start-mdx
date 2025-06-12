@@ -3,31 +3,25 @@
  *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
  */
 
-import {
-  formatHex,
-  parse,
-  lch,
-  clampChroma,
-
-} from "culori"
-
-type LCh = {
-  l: number // 0-100 - Percieved brightness
-  c: number // 0-150 - Chroma (roughly representing the "amount of color")
-  h: number // 0-360 - Hue angle, see https://luncheon.github.io/lch-color-wheel/
-  /**
-   * LCh 40 deg samples
-   * lch(80% 150 30deg)
-   * lch(80% 150 60deg)
-   * lch(80% 150 120deg)
-   * lch(80% 150 180deg)
-   * lch(80% 150 240deg)
-   * lch(80% 150 360deg)
-   */
-}
+import chroma from 'chroma-js';
+import { LCh, HexColor } from './types';
 
 export const COLOR_MODE = 'lch'
-export const defaultFormatFn = formatHex
+export const defaultFormatFn = (color: LCh) => chroma.lch(color.l, color.c, color.h).hex()
+
+export const formatHex = (color: LCh | string) => {
+  if (typeof color === 'string') {
+    return chroma(color).hex();
+  }
+  return chroma.lch(color.l, color.c, color.h).hex();
+};
+
+export const formatCss = (color: LCh | string) => {
+  if (typeof color === 'string') {
+    return chroma(color).css();
+  }
+  return chroma.lch(color.l, color.c, color.h).css();
+};
 
 /**
  * Create a ramp of colors by accending integer keys starting at 50 then index * 100
@@ -41,8 +35,7 @@ export function createRamp(palette: LCh[], formatFn = defaultFormatFn) {
     return [
       `${index}`,
       {
-        //@ts-expect-error
-        value: formatFn(ensureLchMode(color))
+        value: formatFn(color)
       },
     ];
   });
@@ -50,11 +43,16 @@ export function createRamp(palette: LCh[], formatFn = defaultFormatFn) {
   return ramp
 }
 
-export function toLch(colorString: string) {
-  return lch(parse(colorString), COLOR_MODE) as LCh
+export function toLch(colorString: string): LCh {
+  const [l, c, h] = chroma(colorString).lch();
+  return {
+    l: l || 0,
+    c: c || 0,
+    h: h || 0
+  }
 }
 
-export function clampLch(color: LCh) {
+export function clampLch(color: LCh): LCh {
   return {
     ...color,
     l: clamp(color.l, 0, 100),
@@ -114,11 +112,11 @@ export function clamp(value: number, min: number, max: number): number {
 }
 
 /**
- *
+ * Get a contrasting LCh color
  * @param input
  * @returns
  */
-export function getContrastingLch(input: LCh) {
+export function getContrastingLch(input: LCh): LCh {
   const contrast = 50;
 
   const newL = input.l > 50
@@ -126,17 +124,64 @@ export function getContrastingLch(input: LCh) {
     : Math.min(100, input.l + contrast);
   const newH = (input.h + 180) % 360;
 
-  // build an LCh object
-  const target: LCh & { mode: 'lch' } = {
-    mode: 'lch',
+  // Create the target color
+  const target: LCh = {
     l: newL,
     c: input.c,
     h: newH
   };
 
-  // clampChroma will find the highest c ≤ input.c
-  // that stays in sRGB gamut :contentReference[oaicite:0]{index=0}
-  const safeLch = clampChroma(target);
-
-  return safeLch;
+  // chroma-js automatically clamps to valid gamut when creating colors
+  // We'll use chroma to ensure the color is valid and then convert back to LCh
+  try {
+    const chromaColor = chroma.lch(target.l, target.c, target.h);
+    const [l, c, h] = chromaColor.lch();
+    return {
+      l: l || target.l,
+      c: c || target.c,
+      h: h || target.h
+    };
+  } catch (error) {
+    // If the color is out of gamut, reduce chroma until it's valid
+    let adjustedC = target.c;
+    while (adjustedC > 0) {
+      try {
+        const chromaColor = chroma.lch(target.l, adjustedC, target.h);
+        const [l, c, h] = chromaColor.lch();
+        return {
+          l: l || target.l,
+          c: c || adjustedC,
+          h: h || target.h
+        };
+      } catch {
+        adjustedC -= 5;
+      }
+    }
+    // Fallback to grayscale if all else fails
+    return {
+      l: target.l,
+      c: 0,
+      h: target.h
+    };
+  }
 }
+
+/**
+ * Get the lightness from a HEX color
+ *
+ * @param hex The hex color
+ */
+export const getLightnessFromHex = (hex: HexColor) => {
+  const [l] = chroma(hex).lch();
+  return l;
+};
+
+/**
+ * Get the luminance value from a lightness value
+ *
+ * @param lightness The lightness value
+ */
+export const getLuminanceFromLightness = (lightness: number) => {
+  // Create a neutral gray color with the given lightness (c=0, h=0 for gray)
+  return chroma.lch(lightness, 0, 0).luminance();
+};
