@@ -22,10 +22,9 @@ export function SquaresBg(props: {
 
   const bgColors = props.bgColors
     ? () => props.bgColors
-    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}`).map(({value}) => value).slice(0, 4))
+    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}.ramp`).map(({value}) => value).slice(0, 4))
 
   let containerRef;
-
 
   createEffect(() => {
     const container: HTMLDivElement = containerRef!;

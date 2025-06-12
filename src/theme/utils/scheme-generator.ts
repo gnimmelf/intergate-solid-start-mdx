@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
 import { setProperty } from 'dot-prop';
 import { colorMetadata, getColorMetadataByNumber } from './scheme-color-meta-data';
-import type { CssColor, Color, ColorNumber, ColorScheme, ThemeInfo } from './types';
+import type { CssColor, Color, ColorNumber, ColorScheme, ThemeInfo, ColorMetadata } from './types';
 import { getLightnessFromHex, getLuminanceFromLightness } from './color-utils';
 
 export const RESERVED_COLORS = [
@@ -18,31 +18,33 @@ export const RESERVED_COLORS = [
 ];
 
 /**
- * Generates scheme colors based on a base color.
+ * Generates scheme color tokens based on a base color.
  *
  * @param color The base color that is used to generate the color scale
  * @returns
  */
-export function createSchemeColors(color: CssColor) {
+export function createSchemeColorTokens(color: CssColor) {
   const schemes: ThemeInfo = {
     light: genereateColorScheme(color, 'light'),
     dark: genereateColorScheme(color, 'dark'),
   }
-  const colors: Record<string, any> = {}
 
-  for (const scheme in schemes) {
-    const schemeName = scheme as keyof ThemeInfo;
-    colors[schemeName] = schemes[schemeName].reduce((acc, color: Color) => {
-      const dotPath = color.name.replaceAll('-', '.')
-      setProperty(acc, dotPath, {
-        value: color.hex ,
-        description: color.description,
-      })
-      return acc
-    }, {})
-  }
+  console.log(schemes.light)
 
-  return colors
+  const colorTokens = Object.values(colorMetadata).reduce((acc, meta: ColorMetadata) => {
+    console.log(meta)
+    const token = {
+      base: schemes.light.find(({ name }) => name == meta.name)!.hex,
+      _dark: schemes.dark.find(({ name }) => name == meta.name)!.hex,
+      description: meta.description
+    }
+    const dotPath = meta.name.replaceAll('-', '.')
+    setProperty(acc, dotPath, { value: token })
+    return acc
+  }, {})
+
+
+  return colorTokens
 }
 
 

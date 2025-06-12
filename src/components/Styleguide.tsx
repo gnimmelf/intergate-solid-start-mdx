@@ -33,38 +33,18 @@ function formatLCh(hex: string): string {
   });
 }
 
+
+
 /**
- * Color tokens are semantic tokens retrived by dot-prop key from `token(dotPropKey)`.
+ * Color tokens are retrived by dot-prop key from `token(dotPropKey)`.
  * This means we have to know the keys forehand, which is impossible unless they
  * follow a well-known pattern. The pattern must be `colors.{palettename}.{50|index*100}.
  * @param props.name palette-name
  * @returns JSX.Element
  */
-function ThemePalette(props: { name: string }) {
+function ColorPalette(props: { name: string }) {
   const palette = createMemo(() => {
     const colors = extractPandaPalette(`colors.${props.name}`);
-
-    // Check for other colors
-    [
-      "accent",
-      "text",
-      "link",
-      "link.hover",
-      "border",
-      "menuLink",
-      "menuLink.hover",
-    ].forEach((colorName) => {
-      const key = `colors.${props.name}.${colorName}`;
-      const value = token(key as Token);
-      if (value) {
-        colors.push({
-          key,
-          value,
-          contrast: formatHex(getContrastColor(value)),
-        });
-      }
-    });
-
     return colors;
   });
 
@@ -86,14 +66,10 @@ function ThemePalette(props: { name: string }) {
         fallback={<div>Palette "{props.name}" not found!</div>}
       >
         {(color) => {
-          const textColorValue =
-            color.contrast || token(`colors.${props.name}.text` as Token);
-
           return (
             <div
               style={{
                 background: color.value,
-                color: textColorValue,
               }}
               class={css({
                 display: "grid",
@@ -166,8 +142,7 @@ export function Styleguide() {
         <Button>Button</Button>
       </section>
       <section>
-        <ThemePalette name={themeName()} />
-        <ThemePalette name={`${themeName()}.surface`} />
+        <ColorPalette name={`${themeName()}.ramp`} />
       </section>
     </>
   );

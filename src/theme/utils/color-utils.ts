@@ -20,7 +20,7 @@ export const formatCss = (color: LCh | string) => {
   if (typeof color === 'string') {
     return chroma(color).css();
   }
-  return chroma.lch(color.l, color.c, color.h).css();
+  return chroma.lch(color.l, color.c, color.h).css('lch');
 };
 
 /**
@@ -59,18 +59,6 @@ export function clampLch(color: LCh): LCh {
     c: clamp(color.c, 0, 150),
     h: adjustHue(color.h)
   }
-}
-
-/**
- * Add 'mode' prop to `LCh` param
- * @param color LCh
- * @returns LCh with prop `mode`
- */
-export function ensureLchMode(color: LCh) {
-  return {
-    ...color,
-    mode: COLOR_MODE
-  } as LCh & { mode: string }
 }
 
 /**
