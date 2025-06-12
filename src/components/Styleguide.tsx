@@ -1,5 +1,4 @@
 import { createMemo, For } from "solid-js";
-import { Token, token } from "styled-system/tokens";
 import { Dynamic } from "solid-js/web";
 import { center, linkOverlay } from "styled-system/patterns";
 import { Card } from "./Card";
@@ -7,20 +6,30 @@ import { CardContainer } from "./CardContainer";
 import { css, cx } from "styled-system/css";
 import {
   toLch,
-  getContrastingLch,
-  formatHex,
   formatCss,
 } from "../theme/utils/color-utils";
 import { useTheme } from "./ThemeProvider";
 import { SquaresBg } from "./SquaresBg";
-import { extractPandaPalette } from "~/utils/extractPandaPalette";
+import { extractPandaPalette, extractPandaToken } from "~/utils/extractPandaPalette";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import { ExpandableDetails } from "./ExpandableDetails";
+import { ColorMetadata } from "~/theme/utils/types";
+import { colorMetadata } from "~/theme/utils/scheme-color-meta-data";
 
-function getContrastColor(hex: string) {
+function createContrastColor(hex: string) {
   const parsedLch = toLch(hex);
-  return getContrastingLch(parsedLch);
+  const contrast = 50;
+
+    const newL = parsedLch.l > 50
+      ? parsedLch.l - contrast
+      : Math.min(100, parsedLch.l + contrast);
+
+    // Create the target color
+    return formatCss({
+      ...parsedLch,
+      l: newL,
+    })
 }
 
 function formatLCh(hex: string): string {
@@ -32,8 +41,6 @@ function formatLCh(hex: string): string {
       parsedLch.h == undefined ? 0 : parseFloat(Number(parsedLch.h).toFixed(2)),
   });
 }
-
-
 
 /**
  * Color tokens are retrived by dot-prop key from `token(dotPropKey)`.
@@ -70,6 +77,7 @@ function ColorPalette(props: { name: string }) {
             <div
               style={{
                 background: color.value,
+                color: createContrastColor(color.value)
               }}
               class={css({
                 display: "grid",

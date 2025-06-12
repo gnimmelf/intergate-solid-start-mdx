@@ -1,4 +1,5 @@
 // panda.config.ts or similar preset file
+import chroma from 'chroma-js';
 import { definePreset } from "@pandacss/dev";
 import { cardRecipe } from "./recipe-card";
 import { linkRecipe, linkScopeRecipe, pageLink } from "./recipe-link-scope";
@@ -8,21 +9,24 @@ import { createSchemeColorTokens } from "./utils/scheme-generator";
 import { createRangeColors } from "./utils/color-generators";
 
 
-const schemeColorTokens = createSchemeColorTokens("#22ccaa");
+const basecolor = "#3E9F5E"
+const schemeColorTokens = createSchemeColorTokens(basecolor);
 
 const schemeColors = {
   light: {
-    ramp: createRangeColors('#78A59C', {
+    ramp: createRangeColors(chroma(basecolor).set('hsl.l', 0.65).hex(), {
       range: 8,
-      lightnessRange: 30,
+      lightnessRange: 60,
       baseColorPos: "end",
+      chromaRange: -50,
     }),
   },
   dark: {
-    ramp: createRangeColors('#22ccaa', {
+    ramp: createRangeColors(chroma(basecolor).set('hsl.l', 0.2).hex(), {
       range: 8,
-      lightnessRange: -80,
-      baseColorPos: "end"
+      lightnessRange: -60,
+      baseColorPos: "start",
+      chromaRange: -50,
     }),
   }
 };

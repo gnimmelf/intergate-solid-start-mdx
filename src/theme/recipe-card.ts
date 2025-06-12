@@ -9,25 +9,24 @@ export const cardRecipe = defineSlotRecipe({
       position: "relative", // Important when using `linkOverlay` in children
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: '{colors.surface}',
-      color: '{colors.surface.text}',
+      backgroundColor: '{colors.surface.tinted}',
       borderRadius: 'lg',
       boxShadow: '{shadows.2xl}',
       overflow: 'hidden',
-      border: "1px solid {colors.border.subtle}",
+      border: "1px solid {colors.border.default}",
     },
     header: {
       padding: '4',
       fontWeight: 'bold',
+      color: '{colors.text.default}'
     },
     content: {
-      borderTop: '1px solid {colors.surface.text}',
+      borderTop: '1px solid {colors.border.subtle}',
       padding: '4',
-      color: 'text',
       flex: '1',
     },
     footer: {
-      borderTop: '1px solid {colors.surface.text}',
+      borderTop: '1px solid {colors.border.subtle}',
       padding: '4',
       fontSize: 'sm',
     },

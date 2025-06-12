@@ -4,19 +4,6 @@ import { colorMetadata, getColorMetadataByNumber } from './scheme-color-meta-dat
 import type { CssColor, Color, ColorNumber, ColorScheme, ThemeInfo, ColorMetadata } from './types';
 import { getLightnessFromHex, getLuminanceFromLightness } from './color-utils';
 
-export const RESERVED_COLORS = [
-  'neutral',
-  'success',
-  'warning',
-  'danger',
-  'info',
-  'blue',
-  'green',
-  'orange',
-  'purple',
-  'red',
-];
-
 /**
  * Generates scheme color tokens based on a base color.
  *
@@ -28,9 +15,6 @@ export function createSchemeColorTokens(color: CssColor) {
     light: genereateColorScheme(color, 'light'),
     dark: genereateColorScheme(color, 'dark'),
   }
-
-  console.log(schemes.light)
-
   const colorTokens = Object.values(colorMetadata).reduce((acc, meta: ColorMetadata) => {
     console.log(meta)
     const token = {

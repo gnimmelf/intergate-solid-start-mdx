@@ -5,16 +5,13 @@ export const shineRecipe = defineRecipe({
   description: "Shine effect with 45-degree wave passing through on hover",
   base: {
     "--color1": "transparent",
-    "--color2": "{colors.light.500}",
+    "--color2": "{colors.base.hover}",
     backgroundImage: "linear-gradient(125deg, var(--color1) 25%, var(--color2) 50%, var(--color1) 75%)",
     backgroundRepeat: 'no-repeat',
     backgroundSize: "300% 100%", // Larger size for wave effect
     backgroundPosition: "150% 0%", // Start outside the element
-    transition: "background-position 700ms ease-out",
-    _dark: {
-      "--color2": "{colors.dark.50}",
-    },
     _hover: {
+      transition: "background-position 700ms",
       backgroundPosition: "-50% 0%", // Move to opposite side, outside the element
     },
   },

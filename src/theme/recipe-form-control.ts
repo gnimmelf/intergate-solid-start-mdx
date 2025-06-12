@@ -13,29 +13,18 @@ export const formControlRecipe = defineRecipe({
     borderStyle: 'solid',
     borderColor: 'transparent',
     borderRadius: '{lg}',
-    backgroundColor: '{colors.light.200}',
-    color: '{colors.text}',
+    backgroundColor: '{colors.surface.tinted}',
+    color: '{colors.text.default}',
     _hover: {
-      borderColor: '{colors.accent}',
+      borderColor: '{colors.surface.hover}',
     },
     _focus: {
-      borderColor: '{colors.accent}',
+      borderColor: '{colors.surface.active}',
     },
     _disabled: {
       opacity: 0.5,
       cursor: 'not-allowed'
     },
-    _dark: {
-      backgroundColor: '{colors.dark.800}',
-      color: '{colors.text}',
-      _hover: {
-        borderColor: '{colors.dark.accent}',
-      },
-      _focus: {
-        borderColor: '{colors.dark.accent}',
-      },
-    },
-
   },
   variants: {
     cursor: {

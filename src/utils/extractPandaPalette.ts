@@ -1,5 +1,9 @@
 import { Token, token } from "styled-system/tokens";
 
+export function extractPandaToken(key: string) {
+  return token(key as Token)
+}
+
 export function extractPandaPalette(colorPrefix: string) {
   // Extract colors from Panda CSS tokens based on colorPrefix prop
   return [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]

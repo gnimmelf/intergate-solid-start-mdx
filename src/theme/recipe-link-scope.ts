@@ -7,39 +7,21 @@ const linkBase = {
 }
 
 export const pageLink = {
-  color: '{colors.light.link}',
-  _dark: {
-    color: '{colors.dark.link}',
-  },
+  textDecoration: 'underline',
+  color: '{colors.text.tinted}',
   _hover: {
-    color: '{colors.light.link.hover}',
-    _dark: {
-      color: '{colors.dark.link.hover}',
-    },
+    color: '{colors.text.default}',
   },
 }
 
 const surfaceLink = {
-  color: '{colors.light.surface.link}',
-  _dark: {
-    color: '{colors.dark.surface.link}',
-  },
-  _hover: {
-    color: '{colors.light.surface.link.hover}',
-    _dark: {
-      color: '{colors.dark.surface.link.hover}',
-    },
-  },
+  ...pageLink
 }
 
 const menuLink = {
-  color: '{colors.menu.link}',
-  _hover: {
-    color: '{colors.light.menuLink.hover}',
-    _dark: {
-      color: '{colors.dark.menuLink.hover}',
-    },
-  },
+  ...pageLink,
+  textDecoration: 'none',
+  color: '{colors.text.subtle}',
 }
 
 /**
