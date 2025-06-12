@@ -6,11 +6,17 @@ import { createLightPalette } from './theme-light'
 import { createDarkPalette } from './theme-dark'
 import { formControlRecipe } from './recipe-form-control'
 import { shineRecipe } from './recipe-shine'
+import { createSchemeColors } from './utils/scheme-generator'
 
-const palettes = {
-  light: createLightPalette(),
-  dark: createDarkPalette()
-}
+const schemeColors = createSchemeColors('#22ccaa')
+
+Object.assign(schemeColors.light, createLightPalette())
+Object.assign(schemeColors.dark, createDarkPalette())
+
+console.dir({
+  schemeColors,
+  // palettes
+}, { depth: null })
 
 export const themeiumPreset = definePreset({
   name: 'themeium-preset',
@@ -24,7 +30,7 @@ export const themeiumPreset = definePreset({
   theme: {
     extend: {
       tokens: {
-        colors: palettes,
+        colors: schemeColors,
         cursor: {
           click: { value: 'pointer' },
           disabled: { value: 'not-allowed' },

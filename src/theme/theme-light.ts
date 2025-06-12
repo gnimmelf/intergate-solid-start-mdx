@@ -4,9 +4,9 @@ import {
   formatHex,
 } from './utils/color-utils'
 import {
-  createRangePalette,
+  createRangeColors,
   createTextColors
-} from './utils/palett-generators'
+} from './utils/color-generators'
 
 
 /**
@@ -15,12 +15,12 @@ import {
  */
 export function createLightPalette() {
   const colors = {
-    ...createRangePalette('#F1DA8F', {
+    ...createRangeColors('#F1DA8F', {
       range: 8,
       lightnessRange: -60,
     }),
     surface: {
-      ...createRangePalette('#F7E4A5', {
+      ...createRangeColors('#F7E4A5', {
         range: 4,
         lightnessRange: -30,
       })

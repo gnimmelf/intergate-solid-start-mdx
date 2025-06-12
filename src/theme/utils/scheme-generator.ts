@@ -1,5 +1,6 @@
 import chroma from 'chroma-js';
-import { colorMetadata, getColorMetadataByNumber } from './color-meta-data';
+import { setProperty } from 'dot-prop';
+import { colorMetadata, getColorMetadataByNumber } from './scheme-color-meta-data';
 import type { CssColor, Color, ColorNumber, ColorScheme, ThemeInfo } from './types';
 import { getLightnessFromHex, getLuminanceFromLightness } from './color-utils';
 
@@ -17,12 +18,41 @@ export const RESERVED_COLORS = [
 ];
 
 /**
- * Generates a color scale based on a base color and a color mode.
+ * Generates scheme colors based on a base color.
+ *
+ * @param color The base color that is used to generate the color scale
+ * @returns
+ */
+export function createSchemeColors(color: CssColor) {
+  const schemes: ThemeInfo = {
+    light: genereateColorScheme(color, 'light'),
+    dark: genereateColorScheme(color, 'dark'),
+  }
+  const colors: Record<string, any> = {}
+
+  for (const scheme in schemes) {
+    const schemeName = scheme as keyof ThemeInfo;
+    colors[schemeName] = schemes[schemeName].reduce((acc, color: Color) => {
+      const dotPath = color.name.replaceAll('-', '.')
+      setProperty(acc, dotPath, {
+        value: color.hex ,
+        description: color.description,
+      })
+      return acc
+    }, {})
+  }
+
+  return colors
+}
+
+
+/**
+ * Generates a color scheme based on a base color and a color mode.
  *
  * @param color The base color that is used to generate the color scale
  * @param colorScheme The color scheme to generate a scale for
  */
-export const generateColorScale = (color: CssColor, colorScheme: ColorScheme): Color[] => {
+export const genereateColorScheme = (color: CssColor, colorScheme: ColorScheme): Color[] => {
   let interpolationColor = color;
 
   // Reduce saturation in dark mode for the interpolation colors
@@ -58,16 +88,6 @@ export const generateColorScale = (color: CssColor, colorScheme: ColorScheme): C
 
   return Object.values(colors)
 };
-
-/**
- * Generates color schemes based on a base color. Light, Dark and Contrast scales are included.
- *
- * @param color The base color that is used to generate the color schemes
- */
-export const generateColorSchemes = (color: CssColor): ThemeInfo => ({
-  light: generateColorScale(color, 'light'),
-  dark: generateColorScale(color, 'dark'),
-});
 
 /**
  * Returns the base colors for a color and color scheme.

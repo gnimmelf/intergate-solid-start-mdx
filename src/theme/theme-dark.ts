@@ -4,9 +4,9 @@ import {
   formatHex,
 } from "./utils/color-utils";
 import {
-  createRangePalette,
+  createRangeColors,
   createTextColors,
-} from "./utils/palett-generators";
+} from "./utils/color-generators";
 
 /**
  * DARK THEME
@@ -14,13 +14,13 @@ import {
  */
 export function createDarkPalette() {
   const colors = {
-    ...createRangePalette("#09121F", {
+    ...createRangeColors("#09121F", {
       range: 8,
       lightnessRange: 30,
       baseColorPos: "start",
     }),
     surface: {
-      ...createRangePalette("#57606D", {
+      ...createRangeColors("#57606D", {
         range: 4,
         lightnessRange: -30,
         baseColorPos: "start",

@@ -1,7 +1,3 @@
-/**
- * See:
- *  https://tympanus.net/codrops/2021/12/07/coloring-with-code-a-programmatic-approach-to-design/
- */
 import { LCh } from './types'
 import { adjustHue, clamp, clampLch, createRamp, defaultFormatFn, ensureLchMode, lerpStepValue, toLch } from './color-utils'
 
@@ -15,7 +11,7 @@ import { adjustHue, clamp, clampLch, createRamp, defaultFormatFn, ensureLchMode,
  * @param options.baseColorPos 'end' reverses the order of palette hues, 'center' adds range hues up and down
  * @returns
  */
-export function createRangePalette(baseColor: string, options: {
+export function createRangeColors(baseColor: string, options: {
   range?: number
   lightnessRange?: number,
   hueRange?: number,
