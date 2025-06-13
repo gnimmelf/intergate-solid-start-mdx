@@ -3,23 +3,25 @@ import { css, cx } from "styled-system/css";
 import { card, shine } from "styled-system/recipes";
 
 const styles = {
+  container: css({
+    marginBottom: '{2}',
+    '&[open] .icon': {
+      transform: "rotate(180deg)",
+    },
+  }),
   summary: css({
     listStyle: "none",
     cursor: "pointer",
     position: "relative",
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-    '&::after': {
-      color: '{colors.accent}',
-      content: '"▼"',
-      position: "absolute",
-      right: "0.5em",
-      transition: "transform 0.2s ease",
+    '& .text': {
+      flexGrow: 1,
     },
-    //@ts-expect-error
-    'details[open] &::after': {
-      transform: "rotate(180deg)",
+    '& .icon': {
+      flexGrow: 0,
+      color: '{colors.accent}',
+      transition: "transform 0.2s ease",
     },
   }),
   content: css({
@@ -28,18 +30,19 @@ const styles = {
     height: "0px",
   }),
 };
-export function ExpandableDetails(props: { summary: string; children: JSXElement }) {
+export function ExpandableDetails(props: { summary: string; children: JSXElement, centerContent?: boolean }) {
   // TODO! Setting default isOpen from a passed prop will fail.
   const [isOpen, setIsOpen] = createSignal(Boolean(false));
-  const cardStyles = card();
+  const cardStyles = card({ centerContent: props.centerContent});
   return (
     <details
-      class={cardStyles.root}
+      class={cx(cardStyles.root, styles.container)}
       open={isOpen()}
       onToggle={() => setIsOpen(!isOpen())}
     >
       <summary class={cx(cardStyles.header, styles.summary, shine())}>
-        {props.summary}
+        <span class='text'>{props.summary}</span>
+        <span class='icon'>▼</span>
       </summary>
       <div class={cardStyles.content}>{props.children}</div>
     </details>

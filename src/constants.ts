@@ -15,6 +15,10 @@ export const PRIMARY_MENU_LINKS = [
     href: "/resume",
   },
   {
+    label: "About",
+    href: "/about",
+  },
+  {
     label: "Articles",
     href: "/articles",
   },

@@ -1,16 +1,15 @@
 ---
-title: Flemming Hansen
-intro: Full stack, frontend heavy, engineer with over 15 years of professional experience
+title: Resume
+intro: Full stack, frontend heavy developer with over 15 years of professional experience
 ---
 import { ExpandableDetails } from "../components/ExpandableDetails"
+import Experiences from './(partials)/experiences.mdx'
+import Employments from './(partials)/employments.mdx'
 
+<ExpandableDetails summary='Highlighted Experiences' centerContent={true}>
+  <Experiences />
+</ExpandableDetails>
 
-# About me
-
-This is `about.mdx`.
-
-<ExpandableDetails summary='JS test'>
-```js
-console.log("!")
-```
+<ExpandableDetails summary='Employment history' centerContent={true}>
+  <Employments />
 </ExpandableDetails>

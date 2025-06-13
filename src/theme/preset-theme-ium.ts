@@ -100,6 +100,17 @@ export const themeiumPreset = definePreset({
       marginBottom: "2",
     },
     a: pageLink,
+    p: {
+      marginY: '{2}',
+      overflow: 'auto',
+      minWidth: '{xs}'
+    },
+    'h1, h2, h3, h4': {
+      whiteSpace: 'normal',
+      wordWrap: 'break-word',
+      overflowWrap: 'break-word',
+      hyphens: 'auto',
+    }
   },
 });
 

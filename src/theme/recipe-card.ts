@@ -31,4 +31,14 @@ export const cardRecipe = defineSlotRecipe({
       fontSize: 'sm',
     },
   },
+  variants: {
+    centerContent: {
+      true: {
+        root: { textAlign: 'center' },
+      },
+    },
+  },
+  defaultVariants: {
+    centerContent: false, // Set default value
+  },
 })
