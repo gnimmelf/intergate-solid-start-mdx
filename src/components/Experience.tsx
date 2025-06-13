@@ -3,25 +3,41 @@ import { css, cx } from "styled-system/css";
 import { box } from "styled-system/patterns";
 import { card, linkScope } from "styled-system/recipes";
 
-const styles = {};
+const styles = {
+  entry: css({
+    marginBottom: "{2}",
+  }),
+  separator: css({
+    borderColor: '{colors.border.subtle}',
+    marginTop: "{2}",
+  })
+};
 
 export function Experience(props: {
-  title: string;
-  company: string;
+  primary: string;
+  secondary: string;
   period: string;
-  skillsList: string[]
-  children: JSXElement
+  children: JSXElement;
+  skillsList?: string[];
+  hideSeparator?: boolean
 }) {
   return (
     <>
-      <h3>{props.title}</h3>
-      <div>{props.company}, {props.period}</div>
-      <Show when={props.children}>
+      <div class={styles.entry}>
+        <h3>{props.primary}</h3>
+        <div>
+          {props.secondary}, {props.period}
+        </div>
         <div>{props.children}</div>
-      </Show>
-      <Show when={props.skillsList?.length}>
-        <div>Skills: <i>{props.skillsList.join(" / ")}</i></div>
-      </Show>
+        <Show when={props.skillsList}>
+          <div>
+            Skills: <i>{props.skillsList?.join(" / ")}</i>
+          </div>
+        </Show>
+        <Show when={!props.hideSeparator}>
+          <hr class={styles.separator} />
+        </Show>
+      </div>
     </>
   );
 }
