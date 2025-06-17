@@ -25,6 +25,9 @@ const styles = {
       paddingTop: "80px",
     })
   ),
+  intro: css({
+    textStyle: 'intro'
+  })
 };
 
 export function PageHeader() {
@@ -45,9 +48,11 @@ export function PageHeader() {
             <SquaresBg>
               <h1>{pageData()?.meta.title}</h1>
             </SquaresBg>
-            <SquaresBg>
-              <div>{pageData()?.meta.intro}</div>
-            </SquaresBg>
+            <Show when={pageData()?.meta.intro}>
+              <SquaresBg>
+                <div class={styles.intro}>{pageData()!.meta.intro}</div>
+              </SquaresBg>
+            </Show>
           </div>
         </Show>
       </div>

@@ -1,10 +1,11 @@
 ---
 title: Resume
-intro: Full stack, frontend heavy developer with over 15 years of professional experience
+intro: Full stack, frontend heavy developer with over 15 years of professional experience. At your service.
 ---
 import { ExpandableDetails } from "../components/ExpandableDetails"
 import Experiences from './(partials)/experiences.mdx'
 import Employments from './(partials)/employments.mdx'
+import Educations from './(partials)/educations.mdx'
 
 <ExpandableDetails summary='Highlighted Experiences' centerContent={true}>
   <Experiences />
@@ -12,4 +13,8 @@ import Employments from './(partials)/employments.mdx'
 
 <ExpandableDetails summary='Employment history' centerContent={true}>
   <Employments />
+</ExpandableDetails>
+
+<ExpandableDetails summary='Education' centerContent={true}>
+  <Educations />
 </ExpandableDetails>

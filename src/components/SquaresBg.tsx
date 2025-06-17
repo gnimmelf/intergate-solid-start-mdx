@@ -7,7 +7,7 @@ import { extractPandaPalette } from "~/utils/extractPandaPalette";
 const styles = {
   container: css({
     "& > *": {
-      textShadow: '0 0 8px {colors.background}'
+      textShadow: '0 0 8px {colors.background.default}'
     },
   }),
 };

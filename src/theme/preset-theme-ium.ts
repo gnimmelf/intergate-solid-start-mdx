@@ -1,6 +1,6 @@
 // panda.config.ts or similar preset file
 import chroma from 'chroma-js';
-import { definePreset } from "@pandacss/dev";
+import { definePreset, defineTextStyles } from "@pandacss/dev";
 import { cardRecipe } from "./recipe-card";
 import { linkRecipe, linkScopeRecipe, pageLink } from "./recipe-link-scope";
 import { formControlRecipe } from "./recipe-form-control";
@@ -31,10 +31,21 @@ const schemeColors = {
   }
 };
 
-console.dir({
-  // schemeColors,
-  schemeColorTokens
-}, { depth: null });
+const textStyles = defineTextStyles({
+  intro: {
+    description: 'The intro text - used on frontmatter-intro prop',
+    value: {
+      fontFamily: 'Inter',
+      fontWeight: '500',
+      fontSize: '16px',
+      fontStyle: 'italic',
+      lineHeight: '24px',
+      letterSpacing: '0',
+      textDecoration: 'None',
+      textTransform: 'None'
+    }
+  }
+})
 
 export const themeiumPreset = definePreset({
   name: "themeium-preset",
@@ -46,6 +57,7 @@ export const themeiumPreset = definePreset({
 
   // Theme configuration
   theme: {
+    textStyles,
     extend: {
       tokens: {
         colors: schemeColors,
@@ -70,31 +82,47 @@ export const themeiumPreset = definePreset({
     },
   },
 
-  // Global CSS to apply the theme
+  // Theme Global Styles
   globalCss: {
+    ':root': {
+      fontSize: '16px', // NOTE! Basis for all fontsizes
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+    },
     html: {
-      fontFamily: "sans-serif",
       color: "text.subtle",
       backgroundColor: "background.tinted",
     },
     body: {
       margin: 0,
       padding: 0,
+      fontSize: {
+        base: "{fontSizes.lg}",
+        mdToXl: "{fontSizes.md}",
+      },
     },
     h1: {
-      fontSize: "4xl", // Maps to preset-panda's fontSizes.4xl
+      fontSize: {
+        base: "{fontSizes.3xl}",
+        mdToXl: "{fontSizes.4xl}",
+      },
       fontWeight: "bold",
       lineHeight: "1.2",
       marginBottom: "4",
     },
     h2: {
-      fontSize: "2xl", // Maps to preset-panda's fontSizes.2xl
+      fontSize: {
+        base: "{fontSizes.2xl}",
+        mdToXl: "{fontSizes.3xl}",
+      },
       fontWeight: "semibold",
       lineHeight: "1.3",
       marginBottom: "3",
     },
     h3: {
-      fontSize: "xl",
+      fontSize: {
+        base: "{fontSizes.xl}",
+        mdToXl: "{fontSizes.2xl}",
+      },
       fontWeight: "medium",
       lineHeight: "1.4",
       marginBottom: "2",

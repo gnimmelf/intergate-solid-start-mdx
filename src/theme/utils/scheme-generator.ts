@@ -16,7 +16,6 @@ export function createSchemeColorTokens(color: CssColor) {
     dark: genereateColorScheme(color, 'dark'),
   }
   const colorTokens = Object.values(colorMetadata).reduce((acc, meta: ColorMetadata) => {
-    console.log(meta)
     const token = {
       base: schemes.light.find(({ name }) => name == meta.name)!.hex,
       _dark: schemes.dark.find(({ name }) => name == meta.name)!.hex,
@@ -26,7 +25,6 @@ export function createSchemeColorTokens(color: CssColor) {
     setProperty(acc, dotPath, { value: token })
     return acc
   }, {})
-
 
   return colorTokens
 }

@@ -5,6 +5,7 @@ export enum THEMES {
 export const DEFAULT_THEME = THEMES.LIGHT
 
 export const SITE_TITLE = "Flemming Hansen"
+export const SITE_SUB_TITLE = "ECMAScript (/ˈɛkməskrɪpt/; ES)"
 export const PRIMARY_MENU_LINKS = [
   {
     label: "Home",
