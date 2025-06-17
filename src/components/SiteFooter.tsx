@@ -56,7 +56,7 @@ export function SiteFooter() {
       </SquaresBg>
 
       <div>
-        © {SITE_TITLE} {new Date().getFullYear()}
+        © {SITE_TITLE} {new Date().getFullYear()} - Ceasefire now! 🕊️
       </div>
       <div class={styles.spacer}></div>
     </section>

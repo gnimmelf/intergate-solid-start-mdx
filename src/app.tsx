@@ -7,7 +7,9 @@ import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { Article } from "./components/Article";
 import { ThemeProvider} from "./components/ThemeProvider";
+
 import "./app.css";
+import { MdxComponentProvider } from "./components/MdxComponentProvider";
 
 export default function App() {
   return (
@@ -18,7 +20,9 @@ export default function App() {
             <Suspense>
               <ThemeProvider>
                 <SiteHeader />
-                <Article>{props.children}</Article>
+                <MdxComponentProvider>
+                  <Article>{props.children}</Article>
+                </MdxComponentProvider>
                 <SiteFooter />
               </ThemeProvider>
             </Suspense>
