@@ -19,6 +19,7 @@ const styles = {
       flexGrow: 1,
     },
     '& .icon': {
+      fontSize: '{lg}',
       flexGrow: 0,
       color: '{colors.accent}',
       transition: "transform 0.2s ease",
@@ -42,7 +43,7 @@ export function ExpandableDetails(props: { summary: string; children: JSXElement
     >
       <summary class={cx(cardStyles.header, styles.summary)}>
         <span class='text'>{props.summary}</span>
-        <span class='icon'>▼</span>
+        <span class='icon'>∴</span>
       </summary>
       <div class={cardStyles.content}>{props.children}</div>
     </details>

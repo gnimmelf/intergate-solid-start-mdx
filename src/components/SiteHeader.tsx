@@ -30,7 +30,7 @@ const styles = {
   })
 };
 
-export function PageHeader() {
+export function SiteHeader() {
   const theme = useTheme();
   const pageData = usePageData();
 

@@ -3,29 +3,35 @@ import { css, cx } from "styled-system/css";
 import { linkScope } from "styled-system/recipes";
 import { useTheme } from "./ThemeProvider";
 import { extractPandaPalette } from "~/utils/extractPandaPalette";
+import { center } from "styled-system/patterns";
 
 const styles = {
   container: css({
     "& > *": {
-      textShadow: '0 0 8px {colors.background.default}'
+      textShadow: "0 0 8px {colors.background.default}",
     },
   }),
   fullWidth: css({
-    width: "100%"
-  })
+    width: "100%",
+  }),
 };
 
 export function SquaresBg(props: {
-  children: JSXElement
+  children: JSXElement;
   bgColors?: string[];
-  squareSize?: number
-  useFullWidth?: boolean
+  squareSize?: number;
+  useFullWidth?: boolean;
+  useCenter?: boolean;
 }) {
   const theme = useTheme();
 
   const bgColors = props.bgColors
     ? () => props.bgColors
-    : createMemo(() => extractPandaPalette(`colors.${theme.currentTheme()}.ramp`).map(({value}) => value).slice(0, 4))
+    : createMemo(() =>
+        extractPandaPalette(`colors.${theme.currentTheme()}.ramp`)
+          .map(({ value }) => value)
+          .slice(0, 4)
+      );
 
   let containerRef;
 
@@ -68,10 +74,15 @@ export function SquaresBg(props: {
   });
 
   return (
-    <div class={cx(props.useFullWidth && styles.fullWidth)}>
+    <div
+      class={cx(
+        props.useFullWidth && styles.fullWidth,
+        props.useCenter && center()
+      )}
+    >
       <div
         ref={containerRef}
-        style={{display: props.useFullWidth ? 'unset' : 'inline-block'}}
+        style={{ display: props.useFullWidth ? "block" : "inline-block" }}
         class={cx(linkScope({ area: "surface" }), styles.container)}
       >
         {props.children}

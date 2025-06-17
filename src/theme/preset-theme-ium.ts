@@ -164,6 +164,13 @@ export const themeiumPreset = definePreset({
         }
       }
     },
+    blockquote: {
+      borderLeft: "4px solid {colors.base.contrast.subtle}",
+      margin: "1.5em 0",
+      padding: "0.5em 1em",
+      fontStyle: "italic",
+      color: "{colors.base.contrast.subtle}"
+    }
   },
 });
 
