@@ -10,6 +10,9 @@ const styles = {
   separator: css({
     borderColor: '{colors.border.subtle}',
     marginTop: "{2}",
+  }),
+  secondary: css({
+    fontStyle: 'italic'
   })
 };
 
@@ -25,7 +28,7 @@ export function Experience(props: {
     <>
       <div class={styles.entry}>
         <h3>{props.primary}</h3>
-        <div>
+        <div class={styles.secondary}>
           {props.secondary}, {props.period}
         </div>
         <div>{props.children}</div>

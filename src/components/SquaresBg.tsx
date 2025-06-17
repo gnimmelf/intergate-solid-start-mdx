@@ -10,13 +10,16 @@ const styles = {
       textShadow: '0 0 8px {colors.background.default}'
     },
   }),
+  fullWidth: css({
+    width: "100%"
+  })
 };
 
 export function SquaresBg(props: {
   children: JSXElement
   bgColors?: string[];
-  asBlock?: boolean
   squareSize?: number
+  useFullWidth?: boolean
 }) {
   const theme = useTheme();
 
@@ -65,10 +68,10 @@ export function SquaresBg(props: {
   });
 
   return (
-    <div>
+    <div class={cx(props.useFullWidth && styles.fullWidth)}>
       <div
         ref={containerRef}
-        style={{display: props.asBlock ? '' : 'inline-block'}}
+        style={{display: props.useFullWidth ? 'unset' : 'inline-block'}}
         class={cx(linkScope({ area: "surface" }), styles.container)}
       >
         {props.children}

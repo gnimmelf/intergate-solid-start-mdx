@@ -14,8 +14,8 @@ const styles = {
       position: "fixed",
       width: "100%",
       "& > *": {
+        // Make the actual menubar element fill the width of the container
         width: "100%",
-        maxWidth: "calc(var(--sizes-8xl) + 2rem)",
       },
     })
   ),

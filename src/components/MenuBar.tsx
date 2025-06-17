@@ -13,6 +13,7 @@ import { CgDarkMode } from "solid-icons/cg";
 import { CgMenu } from "solid-icons/cg";
 import { SiLinkedin } from "solid-icons/si";
 import { SiGithub } from "solid-icons/si";
+import { SquaresBg } from "./SquaresBg";
 
 const LINK_AREA = "menu";
 
@@ -25,7 +26,9 @@ const styles = {
       padding: "2px",
       display: "flex",
       justifyContent: "space-between",
-      borderBottom: "1px solid {colors.background}",
+      // borderBottom: "1px solid {colors.border.subtle}",
+      width: "100%",
+      background: "{colors.background.tinted}"
     })
   ),
   menuFirstLast: cx(
@@ -99,21 +102,8 @@ export function MenuBar() {
   }
 
   return (
-    <>
-      <div
-        class={cx(
-          styles.menuBar,
-          !menuIsOpen() &&
-            /**
-             * This filter interferes with the backdrop blur on menu open
-             * - So reverse toggle filter for when menu is open
-             */
-            css({
-              backdropFilter: "auto",
-              backdropBlur: "md",
-            })
-        )}
-      >
+    <div class={styles.menuBar}>
+      <SquaresBg>
         <div class={styles.menuFirstLast}>
           <button
             ref={setMenuToggleRef}
@@ -127,17 +117,19 @@ export function MenuBar() {
             <CgMenu size={26} />
           </button>
         </div>
+      </SquaresBg>
 
-        <div style={{ position: "absolute" }}>
-          <BlobMenu
-            zIndex={9}
-            links={PRIMARY_MENU_LINKS}
-            isOpen={menuIsOpen}
-            setIsOpen={setMenuIsOpen}
-            menuToggleRef={menuToggleRef}
-          />
-        </div>
+      <div style={{ position: "absolute" }}>
+        <BlobMenu
+          zIndex={9}
+          links={PRIMARY_MENU_LINKS}
+          isOpen={menuIsOpen}
+          setIsOpen={setMenuIsOpen}
+          menuToggleRef={menuToggleRef}
+        />
+      </div>
 
+      <SquaresBg>
         <div class={styles.menuCenter}>
           <div class={styles.siteTitle}>
             <a href="/">
@@ -146,7 +138,9 @@ export function MenuBar() {
           </div>
           <div class={styles.subTitleText}>{SITE_SUB_TITLE}</div>
         </div>
+      </SquaresBg>
 
+      <SquaresBg>
         <div class={styles.menuFirstLast}>
           <a
             href="https://www.github.com/gnimmelf/"
@@ -173,7 +167,7 @@ export function MenuBar() {
             <CgDarkMode size={27} />
           </button>
         </div>
-      </div>
-    </>
+      </SquaresBg>
+    </div>
   );
 }
