@@ -2,6 +2,7 @@ import { defineConfig } from "@solidjs/start/config";
 /* @ts-ignore */
 import pkgMdx from "@vinxi/plugin-mdx";
 import remarkBehead from 'remark-behead';
+import rehypeHighlight from 'rehype-highlight'
 import remarkParseFrontmatter from './scripts/remarkParseFrontmatter';
 
 const { default: mdx } = pkgMdx;
@@ -24,6 +25,9 @@ export default defineConfig({
         remarkPlugins: [
           [remarkBehead, {minDepth: 2}],
           [remarkParseFrontmatter, {dataKey: 'meta'}],
+        ],
+        rehypePlugins: [
+          rehypeHighlight,
         ],
         jsx: true,
         jsxImportSource: "solid-js",

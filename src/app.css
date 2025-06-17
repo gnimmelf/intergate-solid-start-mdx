@@ -1,2 +1,5 @@
-/* Import panda layers */
+/* Import panda layers - see `panda.config.ts` */
 @layer reset, base, tokens, recipes, utilities;
+
+/* Code formatting - see `app.config.ts` */
+@import 'highlight.js/styles/night-owl.css';

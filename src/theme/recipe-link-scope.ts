@@ -8,6 +8,7 @@ const linkBase = {
 
 export const pageLink = {
   textDecoration: 'underline',
+  textUnderlineOffset: '3px',
   color: '{colors.text.tinted}',
   _hover: {
     color: '{colors.text.default}',

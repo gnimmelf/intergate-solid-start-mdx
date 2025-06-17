@@ -107,7 +107,8 @@ export const themeiumPreset = definePreset({
       },
       fontWeight: "bold",
       lineHeight: "1.2",
-      marginBottom: "4",
+      marginTop: "{5}",
+      marginBottom: "{4}",
     },
     h2: {
       fontSize: {
@@ -116,7 +117,8 @@ export const themeiumPreset = definePreset({
       },
       fontWeight: "semibold",
       lineHeight: "1.3",
-      marginBottom: "3",
+      marginTop: "{4}",
+      marginBottom: "{3}",
     },
     h3: {
       fontSize: {
@@ -125,20 +127,43 @@ export const themeiumPreset = definePreset({
       },
       fontWeight: "medium",
       lineHeight: "1.4",
-      marginBottom: "2",
+      marginTop: "{3}",
+      marginBottom: "{2}",
     },
     a: pageLink,
     p: {
       marginY: '{2}',
       overflow: 'auto',
-      minWidth: '{xs}'
+      minWidth: '{xs}',
+
     },
     'h1, h2, h3, h4': {
       whiteSpace: 'normal',
       wordWrap: 'break-word',
       overflowWrap: 'break-word',
       hyphens: 'auto',
-    }
+    },
+    strong: {
+      fontWeight: '500',
+    },
+    'pre code': {
+      marginY: '{4}',
+      borderRadius: '{md}'
+    },
+    'ul, ol': {
+      padding: '0.5em',
+      'li': {
+        position: 'relative',
+        paddingLeft: '1.5em',
+        marginBottom: '0.5em',
+        _before: {
+          content: '"∴"',
+          position: 'absolute',
+          left: '5px',
+          color: '{colors.text.default}'
+        }
+      }
+    },
   },
 });
 

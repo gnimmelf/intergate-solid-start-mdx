@@ -1,7 +1,9 @@
-import { createMemo } from "solid-js/types/server/reactive.js";
 import { getRoutesPageData } from "~/utils/getRoutesPageData";
 
-
+/**
+ *
+ * @returns
+ */
 export function useCategorizedArticles() {
   const routesData = getRoutesPageData("/");
 
