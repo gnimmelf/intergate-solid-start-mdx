@@ -1,0 +1,83 @@
+---
+title: Technical Debt
+intro: The stuff in your system that you really wish wasn't there.
+---
+
+
+# Technical Debt Overview
+
+Technical Debt (TD) falls into two main categories:
+
+- **Architectural Debt**: Involves hardware, operating systems, and deployment infrastructure. Often driven by high-level business decisions and budget constraints.
+- **Code Debt**: Issues and inefficiencies that accumulate in the codebase over time due to developer practices.
+
+# Technical Debt vs. Tactical Debt
+
+**Technical Debt** is intentional, planned with management awareness, and includes:
+- Infrastructure costs, tracked as regular expenses.
+- Deliberate coding choices, like hardcoding or bypassing architecture for efficiency.
+
+**Tactical Debt** is visible and tracked. If untracked, it becomes Technical Debt.
+
+# Simplified Definitions
+
+- **Architectural Debt**: System components too costly to change now.
+- **Technical Debt**: Undesirable elements in the system, whether known or unknown.
+
+These definitions highlight that assessing debt requires deep system insight, often beyond management's immediate understanding.
+
+## Cost and Time
+
+Architectural Debt ties directly to cost, as effort over time. Tight deadlines can make changes impractical, requiring a phased plan to address them.
+
+# Identifying Code Debt
+
+The challenge with Technical Debt is its discovery. Issues often go unnoticed because processes to identify problematic code are lacking.
+
+## Rule #1: Use TODO! Comments
+
+TODO! comments are valuable. Developers review many files during tasks, and TODO! notes highlight issues across contexts. Example:
+
+```ts
+// TODO! Simplify this logic. See #23456.
+```
+
+These comments persist in the codebase, ensuring visibility unlike forgotten task systems.
+
+## Rule #2: Standardize TODO!
+
+Use only "TODO!" (all caps, with exclamation). Avoid variations like "Fixme!" or "To do" for consistency.
+
+## Rule #3: Convert TODOs to Tasks Regularly
+
+Enterprise codebases are complex, and top-down approaches miss subtle issues. Regularly review TODOs and convert them into tasks. A tech lead or senior developer should:
+- Assess TODOs in the codebase.
+- Create well-described task items in the backlog.
+- Update TODOs with task IDs, e.g.:
+
+```ts
+// TODO#23456! Simplify TS types for better reuse.
+```
+
+Examples of effective TODOs:
+
+```ts
+// TODO! Rewrite using new framework.
+// TODO! Unclear logic, needs clarification.
+// TODO! Move to /utils/helpers.
+// TODO! Refactor into smaller components.
+// TODO! Update for API change.
+// TODO! Clean up TypeScript types.
+```
+
+## Rule #4: Centralize TODOs
+
+Create a "Tech Debt Bucket" in the task management system (one per repository) to collect all TODOs.
+
+## Rule #5: Manage the Tech Debt Bucket
+
+The Tech Debt Bucket is a developer-driven space, free from strict Scrum rules. Developers should:
+- Regularly groom TODOs into actionable Tech Debt Items.
+- Ensure items are clear enough for management to understand and prioritize.
+
+This process fosters collaboration and ensures Technical Debt is addressed systematically.

@@ -20,8 +20,8 @@ export const PRIMARY_MENU_LINKS = [
     href: "/about",
   },
   {
-    label: "Articles",
-    href: "/articles",
+    label: "Writings",
+    href: "/writings",
   },
 ];
 export const BLOB_MENU_PARAMS ={

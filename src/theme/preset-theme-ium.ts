@@ -102,8 +102,8 @@ export const themeiumPreset = definePreset({
     },
     h1: {
       fontSize: {
-        base: "{fontSizes.3xl}",
-        mdToXl: "{fontSizes.4xl}",
+        base: "{fontSizes.2xl}",
+        mdToXl: "{fontSizes.3xl}",
       },
       fontWeight: "bold",
       lineHeight: "1.2",
@@ -111,8 +111,8 @@ export const themeiumPreset = definePreset({
     },
     h2: {
       fontSize: {
-        base: "{fontSizes.2xl}",
-        mdToXl: "{fontSizes.3xl}",
+        base: "{fontSizes.xl}",
+        mdToXl: "{fontSizes.2xl}",
       },
       fontWeight: "semibold",
       lineHeight: "1.3",
@@ -120,8 +120,8 @@ export const themeiumPreset = definePreset({
     },
     h3: {
       fontSize: {
-        base: "{fontSizes.xl}",
-        mdToXl: "{fontSizes.2xl}",
+        base: "{fontSizes.lg}",
+        mdToXl: "{fontSizes.xl}",
       },
       fontWeight: "medium",
       lineHeight: "1.4",

@@ -1,6 +1,6 @@
 import { createSignal, JSXElement } from "solid-js";
 import { css, cx } from "styled-system/css";
-import { card, shine } from "styled-system/recipes";
+import { card } from "styled-system/recipes";
 
 const styles = {
   container: css({
@@ -40,7 +40,7 @@ export function ExpandableDetails(props: { summary: string; children: JSXElement
       open={isOpen()}
       onToggle={() => setIsOpen(!isOpen())}
     >
-      <summary class={cx(cardStyles.header, styles.summary, shine())}>
+      <summary class={cx(cardStyles.header, styles.summary)}>
         <span class='text'>{props.summary}</span>
         <span class='icon'>▼</span>
       </summary>

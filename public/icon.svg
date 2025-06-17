@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="61.491993mm"
+   height="71.464523mm"
+   viewBox="0 0 61.491993 71.464523"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath11">
+      <path
+         id="path11"
+         style="font-size:34.1038px;line-height:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';text-align:start;text-decoration-color:#000000;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:256.869;stroke-miterlimit:0;stroke-dashoffset:171.233;paint-order:fill markers stroke"
+         d="m 129.16703,148.36751 c -6.12165,0 -10.59169,1.24734 -13.40963,3.74277 -2.81789,2.46642 -4.2276,6.41275 -4.2276,11.83886 v 3.39566 h -8.55026 v 6.22401 h 8.55026 v 42.52396 l 9.02316,3.95127 -0.0343,-46.47523 h 11.70285 v 47.26924 l 6.35959,0.18375 v -25.1652 c 0,-3.36767 0.98683,-6.02641 2.95812,-7.97721 1.97126,-1.95078 4.66449,-2.92561 8.07984,-2.92561 2.84229,0 4.97307,0.81037 6.39422,2.43263 1.42114,1.62223 2.1319,4.06656 2.1319,7.33156 v 20.63728 h 6.32636 v -20.82231 c 0,-4.76404 -1.13516,-8.36873 -3.40439,-10.81233 -2.26928,-2.46414 -5.61448,-3.69551 -10.03838,-3.69551 -2.68186,0 -5.05498,0.51306 -7.11792,1.53979 -2.04003,1.02674 -3.81693,2.57782 -5.32975,4.65181 l 0.0186,-18.87883 c -6.02088,0.003 -12.05878,0.0408 -18.07952,0.008 v -4.31008 c 0,-3.01771 0.61463,-5.10658 1.84543,-6.26722 1.2632,-1.16066 3.49822,-1.74104 6.70483,-1.74104 h 8.55174 v -6.65895 z" />
+    </clipPath>
+  </defs>
+  <path
+     id="path4"
+     style="stroke-width:51.4735;stroke-miterlimit:0;stroke-dashoffset:171.233;paint-order:fill markers stroke"
+     d="m 174.41026,179.04966 a 40.782374,40.782374 0 0 1 -40.78237,40.78237 40.782374,40.782374 0 0 1 -40.782376,-40.78237 40.782374,40.782374 0 0 1 40.782376,-40.78237 40.782374,40.782374 0 0 1 40.78237,40.78237 z"
+     clip-path="url(#clipPath11)"
+     transform="translate(-102.97954,-148.36751)" />
+</svg>
