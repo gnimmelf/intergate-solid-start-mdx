@@ -1,5 +1,5 @@
 import { JSXElement } from "solid-js";
-//@ts-expect-error - No typedef?
+//@ts-expect-error - No typedef? Check for other packages?
 import { MDXProvider } from "solid-mdx";
 import { CgExternal } from "solid-icons/cg";
 
