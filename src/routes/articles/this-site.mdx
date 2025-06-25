@@ -1,0 +1,182 @@
+---
+title: This site
+intro: How it's made.
+---
+import { Card } from '~/components/Card'
+
+# Overview
+
+This site is a hobby project based on [solid-start](https://start.solidjs.com/), with inspiration from [SolidBase](https://solidbase.dev/).
+
+- All content is [MDX](https://mdxjs.com/)
+
+- [Yaml Frontmatter](https://mdxjs.com/guides/frontmatter/) is used for all pages
+
+- A custom plugin is used to add frontmatter data as exports for each mdx-file
+
+- [Panda CSS](https://panda-css.com/) is used for styling in conjunction with [digdir/designsystemet](https://designsystemet.no)
+
+- Various other MDX-plugins are used to further format the mdx-content
+
+# MDX
+
+MDX in static websites is a blessing, and it is finally mature enough, even for other frameworks than react.
+
+That does not mean it is simple. It is actually quite complex, and really an entire domain of its own.
+
+<Card title='MDX pipeline' aside={false}>
+```
+Markdown (.md / .mdx)
+   ↓
+Parse → MDAST (Markdown AST)
+   ↓   [REMARK PLUGINS run here]
+Transform MDAST
+   ↓
+Convert → HAST (HTML AST)
+   ↓   [REHYPE PLUGINS run here]
+Transform HAST
+   ↓
+Convert → ESTree (JS AST)
+   ↓   [RECMA PLUGINS run here]
+Transform JS AST
+   ↓
+Generate JS code (a component)
+```
+</Card>
+
+For this site I got it working by a bit of trial and error. Fortunately for a static site like this,
+if it compiles and renders, then that is good enough.
+
+I have a set of 3. party plugins doing standard frontmatter stuff, and then a custom `mdast` transformer
+adding the frontmatter data as module exports.
+
+```js
+import {
+  frontmatterFromMarkdown,
+  frontmatterToMarkdown
+} from 'mdast-util-frontmatter'
+import { parse as parseYaml } from 'yaml'
+import { define } from 'unist-util-mdx-define'
+import { valueToEstree } from 'estree-util-value-to-estree'
+import { frontmatter } from 'micromark-extension-frontmatter'
+
+/**
+* Initializes frontmatter parsing extensions for MDX.
+ * @param {*} extentions
+ */
+function initializePlugin(pluginInstance, format = 'yaml') {
+  const data = pluginInstance.data();
+
+  data.micromarkExtensions = data.micromarkExtensions || [];
+  data.fromMarkdownExtensions = data.fromMarkdownExtensions || [];
+  data.toMarkdownExtensions = data.toMarkdownExtensions || [];
+
+  data.micromarkExtensions.push(frontmatter(format));
+  data.fromMarkdownExtensions.push(frontmatterFromMarkdown(format));
+  data.toMarkdownExtensions.push(frontmatterToMarkdown(format));
+}
+
+export default function parseFrontmatter(options = {}) {
+  const self = this
+  options = Object.assign({
+    dataKey: 'frontmatter',
+    format: 'yaml',
+    parser: parseYaml
+  }, options)
+
+  initializePlugin(self, options.format)
+
+  return function transformer(mdast, vfile) {
+    const node = mdast.children.find((child) => options.format === child.type)
+    if (node) {
+      const data = options.parser(node.value)
+      if (data) {
+        // Add data to vfile
+        vfile.data = data
+          // Add data as an export to the mdast
+        define(mdast, vfile, { [options.dataKey]: valueToEstree(data, { preserveReferences: true }) })
+      }
+    }
+
+  };
+};
+```
+
+# Styling
+
+---
+
+<center>⚠ Disclaimer! I'm a Panda CSS fan.</center>
+
+---
+
+For styling I've used [Panda CSS](panda-css.com).
+
+> CSS-in-JS with build time generated styles, RSC compatible, multi-variant support,
+and best-in-class developer experience.
+
+CSS is in my opinion the *final piece* missing from the frontend DX.
+Css by itself is notoriously difficult to keep lean and clean. Modularisation
+has been an issue since forever, and `css-in-js` solutions are a difficult thing
+to implement due to runtime vs compiletime.
+
+The `atomic` or `utility` css trend is, again in my opinion, an stepping-stone solution
+for all of these issues. By overburdening the non-semantic atomic classes into
+the markup, the markup both becomes tightly coupled the styling system, and cluttered.
+
+Browser standards aim for semantic clarity for a reason. SPA authors should do the same ***if***
+we want a long lived product. -If a long lived product is not the goal, then no problem.
+
+Here is an exellent writup on the challenges of css and its paradigms on Smashing Magazine:
+
+- [CSS Cascade Layers - Specificity Control](https://www.smashingmagazine.com/2025/06/css-cascade-layers-bem-utility-classes-specificity-control/)
+
+Panda CSS takes the atomic css trend one step further and, conceptually speaking,
+making atomic classes the foundation for semantic classes.
+This is achievable with most atomic libraries like Tailwind by using the `@apply` directive,
+but in Panda the idiomatic way is to *not* use atomic css. Big difference.
+
+Still, the Panda `css-in-js` code needs to live somewhere, and there are limitations on where we
+can put it due to Panda's way of analysing code. But the separation from the markup / jsx is there, and
+the style-code *is* pure Js/Ts, so it has enough separation to make the domain code much (c)leaner and less locked in.
+
+Still, for Panda, there is a learning curve and a scope that needs to be weighted.
+
+## Designsystemet.no
+
+With Panda CSS as the "Styling Engine", I was looking to explore how to make a styling system.
+Using `LHC` instead of hex-colors is a given. The end result may be in hex, but all the
+computations are better done in the most easily understandable color system, and that is `LHC` and variants.
+
+I always fear this because I am not a designer. Good design is difficult, and colors are the first hurdle.
+
+I have long imagined a system where I set one base color, and the rest is computed. I had a go at this
+and the result was ok. There are always two-three big, interdependent challenges when making a system like this:
+
+1. Deciding on the semantic tokens
+
+2. Tweaking the colors to match and contrast one-another
+
+3. Make 1) and 2) work with as few tokens as possible
+
+This can only be solved with tons of experience or tons of tweaking. Both take time.
+
+While doing this I can across [Digdir/Designsytemet](https://designsystemet.no)
+which is an effort to make a common designsystem for Norwegian government departments.
+And of course they allready had solved the fine-tuning adequatly.
+
+So I kept my ramps and calculations for where I needed those, and just imported the color-schema generators from Designsystemet.
+
+The result from this is wrapped to Panda token specs, and I only needed to swap out usage of the old base tokens for
+the ones from Designsystemet, and voila, automatic color schemes - tuned by professionals - based on one single base color.
+-And due to Panda's tokens, like `multi-theme Tokens`, it just works in a multitude of ways.
+
+# Build and Deploy
+
+This site is deployed with `deno deploy`.
+
+To minimize code, Panda CSS is built with hashing, which means that all atomic css is obfuscated into as few css classes as possible.
+
+The production ready artifacts from `vinxi build` is then uploaded to Deno Deploy on free tier via Deno's `deployctl`.
+
+I went with Deno Deploy just because it's simple and worked.
